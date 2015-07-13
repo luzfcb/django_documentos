@@ -25,14 +25,15 @@ class DocumentoCreateView(generic.CreateView):
 class DocumentoDetailView(generic.DetailView):
     model = models.Documento
 
+
 class DocumentoUpdateView(generic.UpdateView):
     model = models.Documento
     form_class = forms.DocumentoForm
     success_url = reverse_lazy('documento_list')
 
+
 class DocumentoHistoryView(HistoryRecordListViewMixin, generic.DetailView):
     model = models.Documento
-
 
 
 class DocumentoRevertView(RevertFromHistoryRecordViewMixin, generic.UpdateView):

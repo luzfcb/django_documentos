@@ -1,57 +1,112 @@
-from __future__ import absolute_import, unicode_literals, print_function
+#! /usr/bin/env python
+from __future__ import print_function
 
+import os
+import subprocess
 import sys
 
-try:
-    from django.conf import settings
+import pytest
 
-    settings.configure(
-        DEBUG=True,
-        USE_TZ=True,
-        DATABASES={
-            "default": {
-                "ENGINE": "django.db.backends.sqlite3",
-            }
-        },
-        ROOT_URLCONF="django_documentos.urls",
-        INSTALLED_APPS=[
-            "django.contrib.auth",
-            "django.contrib.contenttypes",
-            "django.contrib.sites",
-            "django_documentos",
-        ],
-        SITE_ID=1,
-        NOSE_ARGS=['-s'],
-        MIDDLEWARE_CLASSES=(),
-    )
+PYTEST_ARGS = {
+    'default': ['tests', '--tb=short'],
+    'fast': ['tests', '--tb=short', '-q'],
+}
+
+FLAKE8_ARGS = ['django_documentos', 'tests', '--ignore=E501']
+
+ISORT_ARGS = ['--recursive', '--check-only', 'django_documentos', 'tests']
+
+#a= sys.path.append(os.path.dirname(__file__))
+#print("\n\n\n\n\n",a, '\n\n\n\n\n')
+
+
+def exit_on_failure(ret, message=None):
+    if ret:
+        sys.exit(ret)
+
+
+def flake8_main(args):
+    print('Running flake8 code linting')
+    ret = subprocess.call(['flake8'] + args)
+    print('flake8 failed' if ret else 'flake8 passed')
+    return ret
+
+
+def isort_main(args):
+    print('Running isort code checking')
+    ret = subprocess.call(['isort'] + args)
+
+    if ret:
+        print('isort failed: Some modules have incorrectly ordered imports. Fix by running `isort --recursive .`')
+    else:
+        print('isort passed')
+
+    return ret
+
+
+def split_class_and_function(string):
+    class_string, function_string = string.split('.', 1)
+    return "%s and %s" % (class_string, function_string)
+
+
+def is_function(string):
+    # `True` if it looks like a test function is included in the string.
+    return string.startswith('test_') or '.test_' in string
+
+
+def is_class(string):
+    # `True` if first character is uppercase - assume it's a class name.
+    return string[0] == string[0].upper()
+
+
+if __name__ == "__main__":
+    try:
+        sys.argv.remove('--nolint')
+    except ValueError:
+        run_flake8 = True
+        run_isort = True
+    else:
+        run_flake8 = False
+        run_isort = False
 
     try:
-        import django
-        setup = django.setup
-    except AttributeError:
-        pass
+        sys.argv.remove('--lintonly')
+    except ValueError:
+        run_tests = True
     else:
-        setup()
+        run_tests = False
 
-    from django_nose import NoseTestSuiteRunner
-except ImportError:
-    import traceback
-    traceback.print_exc()
-    raise ImportError("To fix this error, run: pip install -r requirements-test.txt")
+    try:
+        sys.argv.remove('--fast')
+    except ValueError:
+        style = 'default'
+    else:
+        style = 'fast'
+        run_flake8 = False
+        run_isort = False
 
+    if len(sys.argv) > 1:
+        pytest_args = sys.argv[1:]
+        first_arg = pytest_args[0]
+        if first_arg.startswith('-'):
+            # `runtests.py [flags]`
+            pytest_args = ['tests'] + pytest_args
+        elif is_class(first_arg) and is_function(first_arg):
+            # `runtests.py TestCase.test_function [flags]`
+            expression = split_class_and_function(first_arg)
+            pytest_args = ['tests', '-k', expression] + pytest_args[1:]
+        elif is_class(first_arg) or is_function(first_arg):
+            # `runtests.py TestCase [flags]`
+            # `runtests.py test_function [flags]`
+            pytest_args = ['tests', '-k', pytest_args[0]] + pytest_args[1:]
+    else:
+        pytest_args = PYTEST_ARGS[style]
 
-def run_tests(*test_args):
-    if not test_args:
-        test_args = ['tests']
+    if run_tests:
+        exit_on_failure(pytest.main(pytest_args))
 
-    # Run tests
-    test_runner = NoseTestSuiteRunner(verbosity=1)
+    if run_flake8:
+        exit_on_failure(flake8_main(FLAKE8_ARGS))
 
-    failures = test_runner.run_tests(test_args)
-
-    if failures:
-        sys.exit(failures)
-
-
-if __name__ == '__main__':
-    run_tests(*sys.argv[1:])
+    if run_isort:
+        exit_on_failure(isort_main(ISORT_ARGS))

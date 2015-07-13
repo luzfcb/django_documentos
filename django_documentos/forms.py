@@ -9,6 +9,7 @@ from . import models
 
 
 class SaveHelper(FormHelper):
+
     def __init__(self, form=None):
         super(SaveHelper, self).__init__(form)
         self.layout.append(Submit(name='save', value='Salvar'))
@@ -17,12 +18,14 @@ class SaveHelper(FormHelper):
 
 
 class SaveHelperFormMixin(object):
+
     def __init__(self, *args, **kwargs):
         super(SaveHelperFormMixin, self).__init__(*args, **kwargs)
         self.helper = SaveHelper(self)
 
 
 class RevertHelper(FormHelper):
+
     def __init__(self, form=None):
         super(RevertHelper, self).__init__(form)
         self.layout.append(Submit(name='revert', value='Reverter'))
@@ -31,18 +34,21 @@ class RevertHelper(FormHelper):
 
 
 class RevertHelperFormMixin(object):
+
     def __init__(self, *args, **kwargs):
         super(RevertHelperFormMixin, self).__init__(*args, **kwargs)
         self.helper = RevertHelper(self)
 
 
 class DocumentoForm(SaveHelperFormMixin, forms.ModelForm):
+
     class Meta:
         model = models.Documento
         fields = '__all__'
 
 
 class DocumentoRevertForm(RevertHelperFormMixin, forms.ModelForm):
+
     class Meta:
         model = models.Documento
         fields = '__all__'

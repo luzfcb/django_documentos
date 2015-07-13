@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import, unicode_literals, print_function
+
 
 import os
 import sys
@@ -21,14 +21,38 @@ if sys.argv[-1] == 'publish':
     print("  git push --tags")
     sys.exit()
 
-readme = open('README.rst').read()
-history = open('HISTORY.rst').read().replace('.. :changelog:', '')
+with open('README.rst') as readme_file:
+    readme = readme_file.read()
+
+with open('HISTORY.rst') as history_file:
+    history = history_file.read().replace('.. :changelog:', '')
+
+requirements = [
+    # 'django-simple-history',
+    # 'django-model-utils',
+]
+# django-model-utils
+# -e git://github.com/luzfcb/django-simple-history.git@patch-2#egg=django-simple-history
+# -e git://github.com/maraujop/django-crispy-forms.git@dev#egg=django-crispy-forms
+
+test_requirements = [
+    'pytest',
+    'pytest-django',
+]
+
+long_description = readme + '\n\n' + history
+
+if sys.argv[-1] == 'readme':
+    print(long_description)
+    sys.exit()
+
+
 
 setup(
     name='django_documentos',
     version=version,
     description="""Simples sistema de gerenciamento de documentos digitais""",
-    long_description=readme + '\n\n' + history,
+    long_description=long_description,
     author='Fabio C. Barrionuevo da Luz',
     author_email='bnafta@gmail.com',
     url='https://github.com/luzfcb/django_documentos',
@@ -36,8 +60,7 @@ setup(
         'django_documentos',
     ],
     include_package_data=True,
-    install_requires=[
-    ],
+    install_requires=requirements,
     license="BSD",
     zip_safe=False,
     keywords='django_documentos',

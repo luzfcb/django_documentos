@@ -41,10 +41,10 @@ coverage:
 docs:
 	rm -f docs/django_documentos.rst
 	rm -f docs/modules.rst
-	sphinx-apidoc -o docs/ django_documentos
+	sphinx-apidoc -o docs/ django_documentos django_documentos/migrations
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html
-	open docs/_build/html/index.html
+	#open docs/_build/html/index.html
 
 release: clean
 	python setup.py sdist upload

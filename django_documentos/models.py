@@ -85,6 +85,8 @@ class Documento(BaseModeloVersionado):
     versoes = HistoricalRecords()
 
 # basically is this:
+
+
 class DocumentConteudo(BaseModeloVersionado):
     documento = models.OneToOneField('Documento', related_name="conteudo", null=True, on_delete=models.SET_NULL,
                                      editable=False)

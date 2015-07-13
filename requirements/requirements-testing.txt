@@ -1,0 +1,9 @@
+# PyTest for running the tests.
+pytest==2.7.2
+pytest-django==2.8.0
+coverage
+codecov
+
+django-model-utils
+-e git://github.com/luzfcb/django-simple-history.git@patch-2#egg=django-simple-history
+-e git://github.com/maraujop/django-crispy-forms.git@dev#egg=django-crispy-forms
