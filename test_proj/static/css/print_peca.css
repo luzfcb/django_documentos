@@ -1,0 +1,104 @@
+body {
+    font-size:100%;
+    font-family: Arial;
+    line-height: 100%;
+}
+
+h1 {
+    font-size: 12px;
+    text-align: left;
+    text-transform: uppercase;
+    margin: 25px 0;
+}
+
+
+#folhaA4{
+    font-size: 12px;
+    margin: 5px;
+    border: 0px solid #000000;
+
+}
+
+#folhaA4 tr{
+    margin: 0;
+    padding: 0;
+}
+
+#folhaA4 pre{
+    margin-left: 4.00cm;
+    padding: 0;
+}
+
+
+#logodpe {
+    border: 1px solid #FFFFFF;
+    text-align: center;
+    line-height:1%;
+    margin: 0 auto;
+}
+
+#logodpe p {     
+    font-weight: bold;
+    border: 1px solid #FFFFFF;
+    text-indent: 0px;
+}
+
+#corpo{
+    text-indent: 2.5cm;
+    margin: 35px 0;
+    text-align: justify;
+    padding: 0 0 20px 0;
+}
+
+#corpo span.box p{
+    text-indent: 0!important;
+    background-color: #D5D5D5;
+}
+
+#corpo span.box{
+    font-size:90%!important;
+    background:#f8f8f8!important;
+    border:1px solid #ddd!important;
+    border-radius:3px!important;
+    padding:1em!important;
+    overflow:auto;
+    display: block;
+    line-height: 20px;
+    margin: 0 0 10px;
+    white-space: pre-wrap;
+    word-break: break-all;
+    word-wrap: break-word;
+    width: 90%;
+    text-align: center;
+}
+
+#corpo p{
+    text-indent: 4.45cm;
+}
+
+#corpo blockquote {
+    text-indent: 0;
+    border: 0;
+    margin-left: 4.00cm;
+}
+
+
+
+
+#footer{
+    text-align: center;
+    font-size: 12px;
+    margin: 0px;    
+    border: 0 solid #000000;
+    line-height:100%;
+}
+
+
+@media print {
+    #footer{
+        position: fixed;
+        bottom: 0;
+        margin-top: 115px !!important ; 
+
+    }
+}

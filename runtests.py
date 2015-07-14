@@ -8,7 +8,7 @@ import sys
 import pytest
 
 PYTEST_ARGS = {
-    'default': ['tests', '--tb=short'],
+    'default': ['--cov', 'django_documentos', 'tests', '--tb=short'],
     'fast': ['tests', '--tb=short', '-q'],
 }
 

@@ -20,6 +20,14 @@ django_documentos.apps module
     :undoc-members:
     :show-inheritance:
 
+django_documentos.django_documentos_urls module
+-----------------------------------------------
+
+.. automodule:: django_documentos.django_documentos_urls
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 django_documentos.forms module
 ------------------------------
 
@@ -32,14 +40,6 @@ django_documentos.models module
 -------------------------------
 
 .. automodule:: django_documentos.models
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-django_documentos.urls module
------------------------------
-
-.. automodule:: django_documentos.urls
     :members:
     :undoc-members:
     :show-inheritance:

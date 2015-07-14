@@ -6,6 +6,7 @@ from django.db import models
 from django.db.models import Max
 from django.utils import timezone
 from model_utils import tracker
+
 from simple_history.models import HistoricalRecords
 from simple_history.views import MissingHistoryRecordsField
 

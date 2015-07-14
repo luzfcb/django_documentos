@@ -1,0 +1,233 @@
+.actions-m18{margin:18px 10px;}
+.actions-m5{margin:5px 0;}
+.actions-m3{margin:3px;}
+.block{display:block;}
+.actions-f12{font-size:12px!important;}
+td{vertical-align:middle!important;}
+.navbar-mb0{margin-bottom:0!important;}
+.btn-group > .tooltip + .btn,.btn-group > .popover + .btn{margin-left:-1px;}
+.btn-group > .btn:last-of-type{border-top-right-radius:4px;border-bottom-right-radius:4px;}
+select{margin-bottom:10px;}
+
+.alert-success div.alert-info,
+.alert-error div.alert-info {
+	color: #468847;
+	background-color: #fff;
+	border-color: #468847;
+	margin-bottom: 7px;
+}
+
+.alert-success div.alert-info h4,
+.alert-error div.alert-info h4 {
+	color: #468847;
+	font-size: 14px;
+}
+
+.alert-success div.alert-info .badge,
+.alert-error div.alert-info .badge {
+	background-color: #468847;
+}
+
+.alert-error div.alert-error {
+	color: #b94a48;
+	background-color: #fff;
+	border-color: #b94a48;
+	margin-bottom: 7px;
+}
+
+.alert-error div.alert-error h4 {
+	color: #b94a48;
+	font-size: 14px;
+}
+
+.alert-error div.alert-error .badge {
+	background-color: #b94a48;
+}
+
+.alert-success a.more:hover {
+	background-color: #d6e9c6;	
+}
+
+.alert-error a.more:hover {
+	background-color: #eed3d7;	
+}
+
+
+/*** ERRORS FOR FORMS */
+ul.errorlist {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.errorlist li {
+    font-size: 12px !important;
+    font-weight: bold;
+    display: inline-block;
+    padding: 4px 5px 4px 25px;
+    margin: 0 0 3px 0;
+    color: #b94a48;
+    background:  5px .3em no-repeat;
+}
+
+.errorlist li a {
+ 	color: white;
+    text-decoration: underline;
+}
+
+
+.checkbox.input-error,
+.radio.input-error,
+input.input-error,
+select.input-error,
+textarea.input-error  {
+  color: #b94a48;
+}
+
+input.input-error,
+select.input-error,
+textarea.input-error{
+  border-color: #b94a48;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+     -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+input:focus.input-error,
+select:focus.input-error,
+textarea:focus.input-error{
+	 border-color: #953b39;
+  	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #d59392;
+    -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #d59392;
+     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #d59392;
+}
+
+
+
+/*************/
+a.more {
+	display:block;
+	text-align:center;
+}
+
+a.more i.icofont-arrow-up{
+	display: inline-block;
+}
+
+a.more i.icofont-arrow-down{
+	display: none;
+}
+
+a.more.collapsed i.icofont-arrow-up{
+	display: none;
+}
+
+a.more.collapsed i.icofont-arrow-down{
+	display: inline-block;
+}
+
+.talkbg{
+	float:left;
+	background:url(../img/talk_bg.png) no-repeat;
+	width:10px;
+	height:21px;
+	margin:0 0 0 -15px;
+}
+.teste{
+	border-left: solid 1px #7B7B7B;
+	padding-left: 20px;
+	margin-left: -20px;
+	padding-bottom: 1px;
+}
+
+.numero{
+	width: 10px !important;
+}
+
+.linear_list ul {
+    list-style:none;
+}
+.linear_list ul li{
+    display: inline-block;
+    padding: 5px;
+}
+
+.bola{
+	background: #7B7B7B;
+	width: 7px;
+	height: 7px;
+	line-height: 7px;
+	vertical-align: middle;
+	text-align: center;
+	display: block;
+	margin-top: 12px;
+	margin-left: -23px;
+	float: left;
+	border-radius: 50%;
+	-moz-border-radius: 50%;
+	-webkit-border-radius: 50%;
+}
+
+.bt-social{
+	margin-top:15px;
+	margin-bottom:10px;
+	display: inline-block;
+    padding-left: 5px;
+}
+
+.text-center {
+    text-align: center !important;
+}
+.text-left {
+    text-align: left !important;
+}
+.text-right {
+    text-align: right !important;
+    float: right;
+}
+form.large-input input{
+	width: 500px;
+}
+
+.anexos li{
+	padding: 3px;
+	list-style-type: none;
+}
+
+.no-space [class*="span"] {
+    margin-left: 0;
+    margin-right: 5px;
+}
+
+.msg-producao {
+	position: fixed;
+	left: 10px;
+	top: 0px;
+	z-index: 100;
+	margin: 0 25%;
+	width: 50%;
+	border-radius: 0 0 4px 4px;
+	border-color: #FFD479;
+	border-width: 0 2px 2px 2px;
+	text-align: center;
+}
+
+.input-icon-append, .input-icon-prepend{
+	margin-top: 5px;
+}
+
+.tab-pane > div.alert{
+	margin-bottom: 0;
+}
+
+.sub-sidebar > li{
+	width: auto !important;
+}
+
+.alerta_tarefa{
+    background-color: #FFFAC3 !important;
+    border: 1px solid #A63737 !important;
+}
+
+.alerta_tarefa_atender > td{
+    background-color: #FFFAC3 !important;
+}

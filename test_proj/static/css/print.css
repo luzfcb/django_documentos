@@ -1,0 +1,87 @@
+body {
+    font-size:100%;
+    font-family: Arial;
+    line-height: 150%;
+}
+
+#folhaA4 {
+    font-size: 12px;
+    margin: 5px;
+    /*min-height: 25.7cm;*/
+    width: 21cm;
+    border: 0px solid #000000;
+}
+
+#folhaA4 #area_util {
+    margin: 0.75cm 3cm 2.5cm 3cm;
+}
+
+
+h1 {
+    font-size: 12px;
+    text-align: left;
+    text-transform: uppercase;
+    margin: 25px 0;
+}
+
+h1.portaria {
+    text-align: center;
+}
+
+#logodpe {
+    /*background: url('/static/img/logo100.jpg') no-repeat center top;    */
+    border: 1px solid #FFFFFF;
+    text-align: center;   
+}
+
+#logodpe p {     
+    font-weight: bold;
+    text-transform: capitalize;
+    font-variant: small-caps;
+    border: 1px solid #FFFFFF;
+}
+
+#cidade_data {
+    text-align: right;
+    margin: 25px 0;
+}
+
+#saudacao_final {
+    text-indent: 2.5cm;
+    margin-bottom: 10px;
+}
+
+.negrito {
+    font-weight: bold;
+}
+
+ 
+ 
+.assinaturas {    
+    text-align: center;        
+}
+
+.assinatura {
+    padding-top: 60px;
+    padding-left: 23px;
+    text-align: center;
+}
+
+.assinatura .assinante {
+    border-top: 1px solid #000000;
+    padding: 0 20px;
+    font-weight: bold;
+}
+
+#corpo {
+    text-indent: 2.5cm;
+    margin: 35px 0;
+
+    text-align: justify;
+}
+
+.ui-pnotify.stack-bar-top {
+    position:absolute;
+    right: 0;
+    top: 0;
+}

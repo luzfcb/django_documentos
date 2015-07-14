@@ -4,6 +4,7 @@ from django.core.urlresolvers import NoReverseMatch
 
 
 class UsingURLPatterns(object):
+
     """
     Isolates URL patterns used during testing on the test class itself.
     For example:
@@ -26,6 +27,7 @@ class UsingURLPatterns(object):
 
 
 class MockObject(object):
+
     def __init__(self, **kwargs):
         self._kwargs = kwargs
         for key, val in kwargs.items():
@@ -40,6 +42,7 @@ class MockObject(object):
 
 
 class MockQueryset(object):
+
     def __init__(self, iterable):
         self.items = iterable
 
@@ -54,11 +57,13 @@ class MockQueryset(object):
 
 
 class BadType(object):
+
     """
     When used as a lookup with a `MockQueryset`, these objects
     will raise a `TypeError`, as occurs in Django when making
     queryset lookups with an incorrect type for the lookup value.
     """
+
     def __eq__(self):
         raise TypeError()
 

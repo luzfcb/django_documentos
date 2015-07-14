@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function, unicode_literals
 
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit
 from django import forms
 
-from . import models
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit
+
+from .models import Documento
 
 
 class SaveHelper(FormHelper):
@@ -43,12 +44,12 @@ class RevertHelperFormMixin(object):
 class DocumentoForm(SaveHelperFormMixin, forms.ModelForm):
 
     class Meta:
-        model = models.Documento
+        model = Documento
         fields = '__all__'
 
 
 class DocumentoRevertForm(RevertHelperFormMixin, forms.ModelForm):
 
     class Meta:
-        model = models.Documento
+        model = Documento
         fields = '__all__'
