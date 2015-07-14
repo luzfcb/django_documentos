@@ -1,18 +1,31 @@
 # Config file for automatic testing at travis-ci.org
 
 language: python
-python: 2.7
-env:
-    - TOX_ENV=py27
-    - TOX_ENV=py34
-    - TOX_ENV=py27-lint
 
-script: tox -e $TOX_ENV
+sudo: false
+
+env:
+    - TOX_ENV=py27-lint
+    # - TOX_ENV=py27-docs
+    - TOX_ENV=py34-django18
+    - TOX_ENV=py27-django18
+    - TOX_ENV=py27-djangomaster
+    - TOX_ENV=py34-djangomaster
+
+matrix:
+  fast_finish: true
+  allow_failures:
+    - env: TOX_ENV=py27-djangomaster
+    - env: TOX_ENV=py34-djangomaster
 
 install:
-    - pip install tox
+  - pip install tox
+
+script:
+    - tox -e $TOX_ENV
+
+before_install:
+  pip install codecov
 
 after_success:
-    # Report coverage results to codecov.io
-    - pip install codecov
-    - codecov
+  codecov
