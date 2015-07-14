@@ -1,3 +1,15 @@
 [run]
 omit = tests/*
        */migrations/*
+branch = True
+source = django_documentos
+[report]
+exclude_lines =
+    pragma: no cover
+    def __repr__
+    if self\.debug
+    raise AssertionError
+    raise NotImplementedError
+    if 0:
+    if __name__ == .__main__.:
+ignore_errors = True
