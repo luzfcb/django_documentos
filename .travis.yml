@@ -5,6 +5,7 @@ language: python
 sudo: false
 
 env:
+    - TOX_ENV=py27-coverage
     - TOX_ENV=py27-lint
     # - TOX_ENV=py27-docs
     - TOX_ENV=py34-django18
