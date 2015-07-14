@@ -2,7 +2,8 @@
 omit = tests/*
        */migrations/*
 branch = True
-source = django_documentos
+plugins =
+    django_coverage_plugin
 [report]
 exclude_lines =
     pragma: no cover

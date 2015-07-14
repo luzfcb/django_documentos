@@ -9,7 +9,7 @@ import pytest
 
 PYTEST_ARGS = {
     'default': ['--cov', 'django_documentos', 'tests', '--tb=short'],
-    'fast': ['tests', '--tb=short', '-q'],
+    'fast': ['--cov', 'django_documentos', 'tests', '--tb=short', '-q'],
 }
 
 FLAKE8_ARGS = ['django_documentos', 'tests', '--ignore=E501']

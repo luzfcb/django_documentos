@@ -4,6 +4,7 @@ pytest-django==2.8.0
 pytest-cov
 pytest-sugar
 coverage
+django_coverage_plugin
 codecov
 
 
