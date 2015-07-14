@@ -1,6 +1,9 @@
 [run]
 omit = tests/*
        */migrations/*
+       .tox
+       runtests.py
+
 branch = True
 plugins =
     django_coverage_plugin

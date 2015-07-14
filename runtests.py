@@ -8,8 +8,8 @@ import sys
 import pytest
 
 PYTEST_ARGS = {
-    'default': ['--cov', 'django_documentos', 'tests', '--tb=short'],
-    'fast': ['--cov', 'django_documentos', 'tests', '--tb=short', '-q'],
+    'default': ['tests', '--tb=short'],
+    'fast': ['tests', '--tb=short', '-q'],
 }
 
 FLAKE8_ARGS = ['django_documentos', 'tests', '--ignore=E501']
@@ -103,7 +103,7 @@ if __name__ == "__main__":
         pytest_args = PYTEST_ARGS[style]
 
     if run_tests:
-        exit_on_failure(pytest.main(pytest_args))
+        exit_on_failure(pytest.main(pytest_args, plugins=['cov', 'sugar']))
 
     if run_flake8:
         exit_on_failure(flake8_main(FLAKE8_ARGS))
