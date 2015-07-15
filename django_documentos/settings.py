@@ -1,0 +1,3 @@
+from django.conf import settings
+
+DJANGO_DOCUMENTOS_ENABLE_GENERAL_DASHBOARD = getattr(settings, 'DJANGO_DOCUMENTOS_ENABLE_GENERAL_DASHBOARD', False)

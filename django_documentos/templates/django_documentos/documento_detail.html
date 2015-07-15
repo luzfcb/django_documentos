@@ -1,0 +1,21 @@
+{% extends "django_documentos/base.html" %}
+{% load bootstrap3 django_documentos_tags %}
+
+{% block titulo %}
+    Criar Documento
+{% endblock titulo %}
+
+
+
+
+{% block conteudo_app %}
+    {{ block.super }}
+
+
+    {% if object %}
+        {{ object|as_form }}
+    {% else %}
+        Nada para mostrar
+    {% endif %}
+
+{% endblock conteudo_app %}

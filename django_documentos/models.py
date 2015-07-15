@@ -5,6 +5,7 @@ from django.conf import settings
 from django.db import models
 from django.db.models import Max
 from django.utils import timezone
+from django.utils.six import python_2_unicode_compatible
 from model_utils import tracker
 
 from simple_history.models import HistoricalRecords
@@ -80,11 +81,13 @@ class BaseModeloVersionado(models.Model):
     class Meta:
         abstract = True
 
-
+@python_2_unicode_compatible
 class Documento(BaseModeloVersionado):
     titulo = models.CharField(blank=True, max_length=500)
     versoes = HistoricalRecords()
 
+    def __str__(self):
+        return self.titulo
 # basically is this:
 
 

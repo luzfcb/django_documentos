@@ -9,38 +9,47 @@ from simple_history.views import HistoryRecordListViewMixin, RevertFromHistoryRe
 
 from .models import Documento
 
+class DocumentoGeneralDashboardView(generic.TemplateView):
+    template_name = 'django_documentos/dashboard_general.html'
 
-class DocumentoHomeView(generic.TemplateView):
-    template_name = 'django_documentos/home.html'
+
+class DocumentoDashboardView(generic.TemplateView):
+    template_name = 'django_documentos/dashboard.html'
 
 
 class DocumentoListView(generic.ListView):
+    template_name = 'django_documentos/documento_list.html'
     model = Documento
 
 
 class DocumentoCreateView(generic.CreateView):
+    template_name = 'django_documentos/documento_create.html'
     model = Documento
     form_class = DocumentoForm
-    success_url = reverse_lazy('documento_list')
+    success_url = reverse_lazy('documentos:list')
 
 
 class DocumentoDetailView(generic.DetailView):
+    template_name = 'django_documentos/documento_detail.html'
     model = Documento
 
 
 class DocumentoUpdateView(generic.UpdateView):
+    template_name = 'django_documentos/documento_update.html'
     model = Documento
     form_class = DocumentoForm
-    success_url = reverse_lazy('documento_list')
+    success_url = reverse_lazy('documentos:list')
 
 
 class DocumentoHistoryView(HistoryRecordListViewMixin, generic.DetailView):
+    template_name = 'django_documentos/documento_update_with_versions.html'
     model = Documento
 
 
 class DocumentoRevertView(RevertFromHistoryRecordViewMixin, generic.UpdateView):
+    template_name = 'django_documentos/documento_update_with_versions.html'
     model = Documento
     form_class = DocumentoRevertForm
 
     def get_success_url(self):
-        return reverse_lazy('documento_detail', {'pk': self.get_object().pk})
+        return reverse_lazy('documentos:detail', {'pk': self.get_object().pk})

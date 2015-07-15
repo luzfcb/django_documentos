@@ -19,6 +19,9 @@ from django_documentos import django_documentos_urls
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'', include(django_documentos_urls, namespace='documentos')),
+
+    url(r'', include(django_documentos_urls,
+                     namespace='documentos')
+        ),
     url(r'', include('django.contrib.auth.urls')),
 ]

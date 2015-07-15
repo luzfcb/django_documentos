@@ -2,40 +2,49 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 from django.conf.urls import url
+from .settings import DJANGO_DOCUMENTOS_ENABLE_GENERAL_DASHBOARD
 
 from django_documentos.views import (
-    DocumentoCreateView, DocumentoDetailView, DocumentoHistoryView, DocumentoHomeView, DocumentoListView,
+    DocumentoCreateView, DocumentoDetailView, DocumentoHistoryView, DocumentoDashboardView, DocumentoListView,
     DocumentoRevertView, DocumentoUpdateView,
-)
+    DocumentoGeneralDashboardView)
 
 urlpatterns = [
     url(r'^$',
-        DocumentoHomeView.as_view(),
-        name='documento_home'
+        DocumentoDashboardView.as_view(),
+        name='dashboard'
         ),
     url(r'^list/$',
         DocumentoListView.as_view(),
-        name='documento_list'
+        name='list'
         ),
     url(r'^create/$',
         DocumentoCreateView.as_view(),
-        name='documento_create'
+        name='create'
         ),
     url(r'^detail/(?P<pk>\d+)/$',
         DocumentoDetailView.as_view(),
-        name='documento_detail'
+        name='detail'
         ),
     url(r'^update/(?P<pk>\d+)/$',
         DocumentoUpdateView.as_view(),
-        name='documento_update'
+        name='update'
         ),
     url(r'^history/(?P<pk>\d+)/$',
         DocumentoHistoryView.as_view(),
-        name='documento_history'
+        name='history'
         ),
     url(r'^revert/(?P<pk>\d+)/$',
         DocumentoRevertView.as_view(),
-        name='documento_revert'
+        name='revert'
         ),
 
 ]
+
+if DJANGO_DOCUMENTOS_ENABLE_GENERAL_DASHBOARD:
+    urlpatterns += [
+        url(r'^all$',
+            DocumentoGeneralDashboardView.as_view(),
+            name='dashboard_general'
+            ),
+    ]

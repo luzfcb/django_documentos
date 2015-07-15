@@ -15,12 +15,6 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-print(BASE_DIR)
-print(BASE_DIR)
-print(BASE_DIR)
-print(BASE_DIR)
-print(BASE_DIR)
-print(BASE_DIR)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
@@ -46,6 +40,8 @@ INSTALLED_APPS = (
 
     'simple_history',
     'django_documentos',
+    'bootstrap3',
+    'django_extensions',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -79,7 +75,7 @@ TEMPLATES = [
     },
 ]
 
-#WSGI_APPLICATION = 'test_proj.wsgi.application'
+# WSGI_APPLICATION = 'test_proj.wsgi.application'
 
 
 # Database
@@ -115,3 +111,5 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
+
+DJANGO_DOCUMENTOS_ENABLE_GENERAL_DASHBOARD = True

@@ -26,7 +26,7 @@ class TestDjango_documentos(TestCase):
 
     def setUp(self):
         from django_documentos import views
-        self.view = views.DocumentoHomeView.as_view()
+        self.view = views.DocumentoDashboardView.as_view()
 
     def test_something(self):
         pass

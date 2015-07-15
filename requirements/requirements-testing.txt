@@ -6,7 +6,8 @@ pytest-sugar
 coverage
 django_coverage_plugin
 codecov
-
+django-bootstrap3
+django-extensions
 
 django-model-utils
 django-debug-toolbar

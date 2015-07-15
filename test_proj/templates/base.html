@@ -43,7 +43,7 @@
             <div class="span3">
                 <div class="panel-sitename">
                     <h1>
-                        <a href="{% url "documentos:documento_home" %}" title="Solução Avançada em Atendimento de Referência">
+                        <a href="{% url 'documentos:dashboard' %}" title="Solução Avançada em Atendimento de Referência">
                             SOLAR
                         </a>
                     </h1>
@@ -294,6 +294,8 @@
                             </ul>
                         </li>
                     {% endif %}
+                    {% block left_menu %}
+                    {% endblock left_menu %}
 
                 </ul>
             </aside>
