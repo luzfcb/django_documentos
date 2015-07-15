@@ -1,0 +1,18 @@
+doc-warnings: yes
+test-warnings: no
+strictness: veryhigh
+max-line-length: 120
+uses:
+    - django
+    - celery
+autodetect: yes
+requirements:
+    - requirements.txt
+
+ignore-paths:
+    - docs
+    - django_documentos/migrations
+
+#ignore-patterns:
+#    - ^example/doc_.*\.py$
+#    - (^|/)docs(/|$)
