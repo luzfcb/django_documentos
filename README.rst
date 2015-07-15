@@ -11,6 +11,10 @@ django_documentos
 .. image:: https://img.shields.io/codecov/c/github/luzfcb/django_documentos/master.svg
    :target: http://codecov.io/github/luzfcb/django_documentos?branch=master
 
+.. image:: https://landscape.io/github/luzfcb/django_documentos/master/landscape.svg?style=flat
+   :target: https://landscape.io/github/luzfcb/django_documentos/master
+   :alt: Code Health
+
 .. image:: https://badge.waffle.io/luzfcb/django_documentos.png?label=ready&title=Ready
    :target: https://waffle.io/luzfcb/django_documentos
    :alt: 'Stories in Ready'
