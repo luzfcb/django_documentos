@@ -5,7 +5,7 @@ max-line-length: 120
 uses:
     - django
     - celery
-autodetect: yes
+autodetect: no
 requirements:
     - requirements.txt
 
