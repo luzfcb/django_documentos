@@ -30,9 +30,20 @@ Install django_documentos::
 
     pip install django_documentos
 
-Then use it in a project::
+Then use it in a Django Project, put on settings file, into ``INSTALLED_APPS``::
 
-    import django_documentos
+        'simple_history',
+        'django_documentos',
+
+and ``urls`` file::
+
+    from django.conf.urls import include, url
+    from django_documentos import django_documentos_urls
+
+    urlpatterns = [
+        ...
+        url(r'', include(django_documentos_urls, namespace='documentos')),
+    ]
 
 Features
 --------

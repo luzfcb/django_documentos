@@ -10,9 +10,14 @@
 #
 # All configuration values have a default; values that are commented out
 # serve to show the default.
+# isort:skip_file
 
 import os
 import sys
+
+cwd = os.getcwd()
+parent = os.path.dirname(cwd)
+sys.path.append(parent)
 
 import sphinx_rtd_theme
 import django_documentos
@@ -22,9 +27,7 @@ import django_documentos
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #sys.path.insert(0, os.path.abspath('.'))
 
-cwd = os.getcwd()
-parent = os.path.dirname(cwd)
-sys.path.append(parent)
+
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "test_proj.settings")
 
