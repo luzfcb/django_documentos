@@ -44,4 +44,5 @@ docs/_build
 # Pycharm
 .idea
 
+*.sqlite3
 
