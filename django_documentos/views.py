@@ -9,12 +9,18 @@ from simple_history.views import HistoryRecordListViewMixin, RevertFromHistoryRe
 
 from .models import Documento
 
+
 class DocumentoGeneralDashboardView(generic.TemplateView):
     template_name = 'django_documentos/dashboard_general.html'
 
 
 class DocumentoDashboardView(generic.TemplateView):
     template_name = 'django_documentos/dashboard.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(DocumentoDashboardView, self).get_context_data(**kwargs)
+        context['quantidade_documentos_cadastrados'] = Documento.objects.all().count()
+        return context
 
 
 class DocumentoListView(generic.ListView):
@@ -42,12 +48,13 @@ class DocumentoUpdateView(generic.UpdateView):
 
 
 class DocumentoHistoryView(HistoryRecordListViewMixin, generic.DetailView):
-    template_name = 'django_documentos/documento_update_with_versions.html'
+    template_name = 'django_documentos/documento_detail_with_versions.html'
     model = Documento
+    history_records_paginate_by = 2
 
 
 class DocumentoRevertView(RevertFromHistoryRecordViewMixin, generic.UpdateView):
-    template_name = 'django_documentos/documento_update_with_versions.html'
+    template_name = 'django_documentos/documento_revert.html'
     model = Documento
     form_class = DocumentoRevertForm
 

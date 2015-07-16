@@ -81,6 +81,7 @@ class BaseModeloVersionado(models.Model):
     class Meta:
         abstract = True
 
+
 @python_2_unicode_compatible
 class Documento(BaseModeloVersionado):
     titulo = models.CharField(blank=True, max_length=500)

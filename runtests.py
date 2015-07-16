@@ -1,7 +1,6 @@
 #! /usr/bin/env python
 from __future__ import print_function
 
-import os
 import subprocess
 import sys
 
@@ -15,9 +14,6 @@ PYTEST_ARGS = {
 FLAKE8_ARGS = ['django_documentos', 'tests', '--ignore=E501']
 
 ISORT_ARGS = ['--recursive', '--check-only', 'django_documentos', 'tests']
-
-#a= sys.path.append(os.path.dirname(__file__))
-#print("\n\n\n\n\n",a, '\n\n\n\n\n')
 
 
 def exit_on_failure(ret, message=None):

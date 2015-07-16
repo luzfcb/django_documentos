@@ -46,8 +46,6 @@ if sys.argv[-1] == 'readme':
     print(long_description)
     sys.exit()
 
-
-
 setup(
     name='django_documentos',
     version=version,

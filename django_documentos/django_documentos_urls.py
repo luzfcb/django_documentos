@@ -2,12 +2,13 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 from django.conf.urls import url
-from .settings import DJANGO_DOCUMENTOS_ENABLE_GENERAL_DASHBOARD
 
 from django_documentos.views import (
-    DocumentoCreateView, DocumentoDetailView, DocumentoHistoryView, DocumentoDashboardView, DocumentoListView,
-    DocumentoRevertView, DocumentoUpdateView,
-    DocumentoGeneralDashboardView)
+    DocumentoCreateView, DocumentoDashboardView, DocumentoDetailView, DocumentoGeneralDashboardView,
+    DocumentoHistoryView, DocumentoListView, DocumentoRevertView, DocumentoUpdateView,
+)
+
+from .settings import DJANGO_DOCUMENTOS_ENABLE_GENERAL_DASHBOARD
 
 urlpatterns = [
     url(r'^$',

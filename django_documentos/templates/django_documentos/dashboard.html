@@ -1,1 +1,16 @@
 {% extends "django_documentos/base.html" %}
+{% block titulo %}
+    Dashboard
+{% endblock titulo %}
+
+{% block conteudo_app %}
+    {{ block.super }}
+
+    <h3>
+    {% if quantidade_documentos_cadastrados %}
+            {{ quantidade_documentos_cadastrados }}
+    {% endif %}
+
+    </h3>
+
+{% endblock conteudo_app %}
