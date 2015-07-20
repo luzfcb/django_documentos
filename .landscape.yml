@@ -16,3 +16,7 @@ ignore-paths:
 #ignore-patterns:
 #    - ^example/doc_.*\.py$
 #    - (^|/)docs(/|$)
+pylint:
+  disable:
+    - E1002
+    - C1001
