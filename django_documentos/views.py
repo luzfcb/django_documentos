@@ -3,10 +3,9 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 from django.core.urlresolvers import reverse_lazy
 from django.views import generic
-
-from django_documentos.forms import DocumentoForm, DocumentoRevertForm
 from simple_history.views import HistoryRecordListViewMixin, RevertFromHistoryRecordViewMixin
 
+from .forms import DocumentoFormCreate, DocumentoRevertForm
 from .models import Documento
 
 
@@ -20,6 +19,7 @@ class DocumentoDashboardView(generic.TemplateView):
     def get_context_data(self, **kwargs):
         context = super(DocumentoDashboardView, self).get_context_data(**kwargs)
         context['quantidade_documentos_cadastrados'] = Documento.objects.all().count()
+        context['quantidade_meus_documentos'] = Documento.objects.all().filter(criado_por=self.request.user).count()
         return context
 
 
@@ -31,8 +31,13 @@ class DocumentoListView(generic.ListView):
 class DocumentoCreateView(generic.CreateView):
     template_name = 'django_documentos/documento_create.html'
     model = Documento
-    form_class = DocumentoForm
+    form_class = DocumentoFormCreate
     success_url = reverse_lazy('documentos:list')
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.criado_por = self.request.user
+        return super(DocumentoCreateView, self).form_valid(form)
 
 
 class DocumentoDetailView(generic.DetailView):
@@ -43,8 +48,13 @@ class DocumentoDetailView(generic.DetailView):
 class DocumentoUpdateView(generic.UpdateView):
     template_name = 'django_documentos/documento_update.html'
     model = Documento
-    form_class = DocumentoForm
+    form_class = DocumentoFormCreate
     success_url = reverse_lazy('documentos:list')
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.modificado_por = self.request.user
+        return super(DocumentoUpdateView, self).form_valid(form)
 
 
 class DocumentoHistoryView(HistoryRecordListViewMixin, generic.DetailView):
@@ -59,4 +69,12 @@ class DocumentoRevertView(RevertFromHistoryRecordViewMixin, generic.UpdateView):
     form_class = DocumentoRevertForm
 
     def get_success_url(self):
-        return reverse_lazy('documentos:detail', {'pk': self.get_object().pk})
+        sucess_url = reverse_lazy('documentos:detail', {'pk': self.get_object().pk})
+        print(sucess_url)
+        return sucess_url
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.revertido_por = self.request.user
+        obj.revertido_da_versao = obj.versao_numero
+        return super(DocumentoRevertView, self).form_valid(form)

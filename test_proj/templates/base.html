@@ -166,7 +166,7 @@
                     </li>
                     {% if perms.atendimento.view_129 %}
                         <li>
-                            <a href="{% url "precadastro_index" %}" title="129">
+                            <a href="" title="129">
                                 <div class="helper-font-24">
                                     <i class="icofont-phone"></i>
                                 </div>
@@ -176,7 +176,7 @@
                     {% endif %}
                     {% if perms.atendimento.view_recepcao %}
                         <li>
-                            <a href="{% url "recepcao_index" %}" title="Recepção">
+                            <a href="" title="Recepção">
                                 <div class="helper-font-24">
                                     <i class="icofont-book"></i>
                                 </div>
@@ -185,7 +185,7 @@
                             </a>
                             <ul class="sub-sidebar corner-top shadow-silver-dark">
                                 <li>
-                                    <a href="{% url "atendimento_documentos_pendentes" %}" title="">
+                                    <a href="" title="">
                                         <div class="helper-font-24">
                                             <i class="elusive-file-new"></i>
                                         </div>
@@ -218,7 +218,7 @@
                                 </li>
                                 <li class="divider"></li>
                                 <li>
-                                    <a href="{% url 'processo_audiencias' %}" title="">
+                                    <a href="" title="">
                                         <div class="helper-font-24">
                                             <i class="icofont-legal"></i>
                                         </div>
@@ -230,7 +230,7 @@
                     {% endif %}
                     {% if perms.nadep.view_atendimento %}
                         <li>
-                            <a href="{% url 'nadep_index' %}" title="Sistema de Atendimento ao Preso">
+                            <a href="" title="Sistema de Atendimento ao Preso">
                                 <div class="helper-font-24">
                                     <i class="icofont-lock"></i>
                                 </div>
@@ -240,7 +240,7 @@
                     {% endif %}
                     {% if perms.relatorios.view_relatorios %}
                         <li>
-                            <a href="{% url 'relatorios_index' %}" title="Relatórios">
+                            <a href="" title="Relatórios">
                                 <div class="helper-font-24">
                                     <i class="icofont-bar-chart"></i>
                                 </div>
@@ -259,7 +259,7 @@
                             <ul class="sub-sidebar corner-top shadow-silver-dark">
                                 {% if perms.evento.add_evento %}
                                     <li>
-                                        <a href="{% url "evento_index" %}" title="">
+                                        <a href="" title="">
                                             <div class="helper-font-24">
                                                 <i class="icofont-calendar"></i>
                                             </div>
@@ -272,7 +272,7 @@
                                 {% endif %}
                                 {% if perms.defensor.add_atuacao %}
                                     <li>
-                                        <a href="{% url "defensor_atuacao" %}" title="">
+                                        <a href="" title="">
                                             <div class="helper-font-24">
                                                 <i class="icofont-comments-alt"></i>
                                             </div>
@@ -283,7 +283,7 @@
                                 {% endif %}
                                 {% if perms.contrib.change_servidor %}
                                     <li>
-                                        <a href="{% url "listar_servidor" %}" title="">
+                                        <a href="" title="">
                                             <div class="helper-font-24">
                                                 <i class="icofont-group"></i>
                                             </div>
@@ -318,8 +318,105 @@
                 <!-- /bloco para o menu interno -->
                 <div class="content-body">
                     <!-- bloco para o conteudo -->
-                    {% block conteudo_app %}
-                    {% endblock %}
+
+<div class="row-fluid">
+    <div class="span12">
+
+        <!-- =========================================
+                            ELEMENT
+        =========================================== -->
+        <!--element-->
+        <div id="element" class="row-fluid">
+            <!--span-->
+            <div class="span12">
+                <!--box-->
+                <div class="box corner-all">
+                    <!--box header-->
+                    <div class="box-header grd-white color-silver-dark corner-top">
+                        <div class="header-control">
+                            <a data-box="collapse"><i class="icofont-caret-up"></i></a>
+                            <a data-box="close">×</a>
+                        </div>
+                        <span>Elements</span>
+                    </div>
+                    <!--/box header-->
+                    <!--box body-->
+                    <div class="box-body">
+                        <!--element-->
+
+                        {% block conteudo_app %}
+
+                            <div class="shortcut-group">
+                                <ul class="a-btn-group">
+                                    <li>
+                                        <a href="{% url "documentos:create" %}" class="a-btn grd-white" rel="tooltip"
+                                           data-original-title="Criar novo Documento">
+                                            <span></span>
+                                            <span><i class="icofont-edit color-silver-dark"></i></span>
+                                            <span class="color-silver-dark"><i
+                                                    class="icofont-file color-silver-dark"></i></span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="a-btn grd-white" rel="tooltip"
+                                           data-original-title="upload something">
+                                            <span></span>
+                                            <span><i class="icofont-upload color-silver-dark"></i></span>
+                                            <span class="color-silver-dark"><i
+                                                    class="icofont-upload-alt color-silver-dark"></i></span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="a-btn grd-white" rel="tooltip" data-original-title="message">
+                                            <span></span>
+                                            <span><i class="icofont-envelope color-silver-dark"></i></span>
+                                            <span class="color-silver-dark"><i
+                                                    class="icofont-envelope-alt color-teal"></i></span>
+
+                                            <div class="badge badge-info">9</div>
+                                            <!--don't use span here!-->
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="a-btn grd-white" rel="tooltip" data-original-title="invoice">
+                                            <span></span>
+                                            <span><i class="icofont-barcode color-silver-dark"></i></span>
+                                            <span class="color-silver-dark"><i
+                                                    class="icofont-shopping-cart color-red"></i></span>
+
+                                            <div class="label label-important">2</div>
+                                            <!--don't use span here!-->
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="a-btn grd-white" rel="tooltip"
+                                           data-original-title="check statistics">
+                                            <span></span>
+                                            <span><i class="icofont-bar-chart color-silver-dark"></i></span>
+                                            <span class="color-silver-dark"><i class="typicn-lineChart"></i></span>
+                                        </a>
+                                    </li>
+                                    <li class="clearfix"></li>
+                                </ul>
+                            </div>
+                            <div class="divider-content"><span></span></div>
+
+
+                        {% endblock %}
+                        <!--/element-->
+                    </div>
+                    <!--/box body-->
+                </div>
+                <!--/box-->
+            </div>
+            <!--/span-->
+        </div>
+        <!--/element-->
+
+    </div>
+    <!--/span-->
+</div>
+
                     <!-- /bloco para o conteudo -->
                 </div>
             </div>

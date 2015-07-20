@@ -18,12 +18,18 @@ class BaseModeloVersionado(models.Model):
     criado_em = models.DateTimeField(default=timezone.now, blank=True, editable=False)
     criado_por = models.ForeignKey(to=USER_MODEL,
                                    related_name="%(app_label)s_%(class)s_criado_por", null=True,
-                                   blank=True, on_delete=models.SET_NULL)
+                                   blank=True, on_delete=models.SET_NULL, editable=False)
 
-    modificado_em = models.DateField(auto_now=True, blank=True, editable=False)
+    modificado_em = models.DateField(auto_now=True, blank=True, null=True, editable=False)
     modificado_por = models.ForeignKey(to=USER_MODEL,
                                        related_name="%(app_label)s_%(class)s_modificado_por", null=True,
-                                       blank=True, on_delete=models.SET_NULL)
+                                       blank=True, on_delete=models.SET_NULL, editable=False)
+
+    revertido_em = models.DateField(auto_now=True, blank=True, null=True, editable=False)
+    revertido_por = models.ForeignKey(to=USER_MODEL,
+                                      related_name="%(app_label)s_%(class)s_revertido_por", null=True,
+                                      blank=True, on_delete=models.SET_NULL, editable=False)
+    revertido_da_versao = models.IntegerField(null=True, default=None, auto_created=True, editable=False, blank=True)
 
     esta_ativo = models.NullBooleanField(default=True, editable=False)
     esta_bloqueado = models.NullBooleanField(default=False, editable=False)
@@ -89,6 +95,8 @@ class Documento(BaseModeloVersionado):
 
     def __str__(self):
         return self.titulo
+
+
 # basically is this:
 
 
