@@ -3,6 +3,7 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 from django.core.urlresolvers import reverse_lazy
 from django.views import generic
+
 from simple_history.views import HistoryRecordListViewMixin, RevertFromHistoryRecordViewMixin
 
 from .forms import DocumentoFormCreate, DocumentoRevertForm

@@ -12,5 +12,5 @@ django-extensions
 
 django-model-utils
 django-debug-toolbar
--e git://github.com/luzfcb/django-simple-history.git@patch-2#egg=django-simple-history
+-e git://github.com/luzfcb/django-simple-history.git@wip-generic-views#egg=django-simple-history
 -e git://github.com/maraujop/django-crispy-forms.git@dev#egg=django-crispy-forms

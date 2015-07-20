@@ -10,7 +10,10 @@ from . import models
 
 @admin.register(models.Documento)
 class DocumentContentAdmin(SimpleHistoryAdmin):
-    list_display = ('titulo', 'criado_em', 'criado_por', 'modificado_em', 'modificado_por', 'revertido_em', 'revertido_por',
-                       'revertido_da_versao', 'esta_ativo', 'esta_bloqueado', 'versao_numero')
+    list_display = (
+        'titulo', 'criado_em', 'criado_por', 'modificado_em', 'modificado_por', 'revertido_em', 'revertido_por',
+        'revertido_da_versao', 'esta_ativo', 'esta_bloqueado', 'versao_numero'
+    )
     readonly_fields = ('criado_em', 'criado_por', 'modificado_em', 'modificado_por', 'revertido_em', 'revertido_por',
-                       'revertido_da_versao',)
+                       'revertido_da_versao',
+                       )
