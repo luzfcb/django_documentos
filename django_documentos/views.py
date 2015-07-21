@@ -19,8 +19,14 @@ class DocumentoDashboardView(generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(DocumentoDashboardView, self).get_context_data(**kwargs)
-        context['quantidade_documentos_cadastrados'] = Documento.objects.all().count()
-        context['quantidade_meus_documentos'] = Documento.objects.all().filter(criado_por=self.request.user).count()
+        quantidade_documentos_cadastrados = None
+        quantidade_meus_documentos = None
+        # if self.request.user.is_active():
+        quantidade_documentos_cadastrados = Documento.objects.all().count()
+        quantidade_meus_documentos = Documento.objects.all().filter(criado_por=self.request.user).count()
+
+        context['quantidade_documentos_cadastrados'] = quantidade_documentos_cadastrados
+        context['quantidade_meus_documentos'] = quantidade_meus_documentos
         return context
 
 
@@ -29,16 +35,19 @@ class DocumentoListView(generic.ListView):
     model = Documento
 
 
-class DocumentoCreateView(generic.CreateView):
+class AuditavelViewMixin(object):
+    def form_valid(self, form):
+        if not form.instance.criado_por:
+            form.instance.criado_por = self.request.user
+        form.instance.modificado_por = self.request.user
+        return super(AuditavelViewMixin, self).form_valid(form)
+
+
+class DocumentoCreateView(AuditavelViewMixin, generic.CreateView):
     template_name = 'django_documentos/documento_create.html'
     model = Documento
     form_class = DocumentoFormCreate
     success_url = reverse_lazy('documentos:list')
-
-    def form_valid(self, form):
-        obj = form.save(commit=False)
-        obj.criado_por = self.request.user
-        return super(DocumentoCreateView, self).form_valid(form)
 
 
 class DocumentoDetailView(generic.DetailView):
@@ -46,16 +55,11 @@ class DocumentoDetailView(generic.DetailView):
     model = Documento
 
 
-class DocumentoUpdateView(generic.UpdateView):
+class DocumentoUpdateView(AuditavelViewMixin, generic.UpdateView):
     template_name = 'django_documentos/documento_update.html'
     model = Documento
     form_class = DocumentoFormCreate
     success_url = reverse_lazy('documentos:list')
-
-    def form_valid(self, form):
-        obj = form.save(commit=False)
-        obj.modificado_por = self.request.user
-        return super(DocumentoUpdateView, self).form_valid(form)
 
 
 class DocumentoHistoryView(HistoryRecordListViewMixin, generic.DetailView):
@@ -64,7 +68,7 @@ class DocumentoHistoryView(HistoryRecordListViewMixin, generic.DetailView):
     history_records_paginate_by = 2
 
 
-class DocumentoRevertView(RevertFromHistoryRecordViewMixin, generic.UpdateView):
+class DocumentoRevertView(RevertFromHistoryRecordViewMixin, AuditavelViewMixin, generic.UpdateView):
     template_name = 'django_documentos/documento_revert.html'
     model = Documento
     form_class = DocumentoRevertForm
@@ -75,7 +79,6 @@ class DocumentoRevertView(RevertFromHistoryRecordViewMixin, generic.UpdateView):
         return sucess_url
 
     def form_valid(self, form):
-        obj = form.save(commit=False)
-        obj.revertido_por = self.request.user
-        obj.revertido_da_versao = obj.versao_numero
+        form.instance.revertido_por = self.request.user
+        form.instance.revertido_da_versao = form.instance.versao_numero
         return super(DocumentoRevertView, self).form_valid(form)

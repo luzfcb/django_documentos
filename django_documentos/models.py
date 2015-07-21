@@ -25,7 +25,7 @@ class BaseModeloVersionado(models.Model):
                                        related_name="%(app_label)s_%(class)s_modificado_por", null=True,
                                        blank=True, on_delete=models.SET_NULL, editable=False)
 
-    revertido_em = models.DateField(auto_now=True, blank=True, null=True, editable=False)
+    revertido_em = models.DateField(blank=True, null=True, editable=False)
     revertido_por = models.ForeignKey(to=USER_MODEL,
                                       related_name="%(app_label)s_%(class)s_revertido_por", null=True,
                                       blank=True, on_delete=models.SET_NULL, editable=False)
