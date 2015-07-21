@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import absolute_import, print_function, unicode_literals
+
 from django import template
 from django.forms.models import ModelFormMetaclass, ModelFormOptions, modelform_factory
 from django.utils import six

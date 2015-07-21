@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Django settings for test_proj project.
 
@@ -9,8 +10,8 @@ https://docs.djangoproject.com/en/1.8/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.8/ref/settings/
 """
+from __future__ import absolute_import, print_function, unicode_literals
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
