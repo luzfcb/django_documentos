@@ -24,7 +24,10 @@ django_documentos
      :alt: 'Stories in Ready'
 
 
-WIP - Simples sistema de gerenciamento de documentos digitais
+Note:
+    WIP - incomplete and non-functional work !!!
+
+Simples sistema de gerenciamento de documentos digitais
 
 Documentation
 -------------
