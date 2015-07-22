@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function, unicode_literals
+from braces.views import LoginRequiredMixin
 
 from django.core.urlresolvers import reverse_lazy
 from django.views import generic
+from extra_views import CreateWithInlinesView, InlineFormSet, UpdateWithInlinesView
 
 from simple_history.views import HistoryRecordListViewMixin, RevertFromHistoryRecordViewMixin
 
 from .forms import DocumentoFormCreate, DocumentoRevertForm
-from .models import Documento
+from .models import Documento, DocumentoConteudo
 
 
 class DocumentoGeneralDashboardView(generic.TemplateView):
@@ -21,10 +23,9 @@ class DocumentoDashboardView(generic.TemplateView):
         context = super(DocumentoDashboardView, self).get_context_data(**kwargs)
         quantidade_documentos_cadastrados = None
         quantidade_meus_documentos = None
-        # if self.request.user.is_active():
-        quantidade_documentos_cadastrados = Documento.objects.all().count()
-        quantidade_meus_documentos = Documento.objects.all().filter(criado_por=self.request.user).count()
-
+        if self.request.user.is_authenticated():
+            quantidade_meus_documentos = Documento.objects.all().filter(criado_por=self.request.user).count()
+            quantidade_documentos_cadastrados = Documento.objects.all().count()
         context['quantidade_documentos_cadastrados'] = quantidade_documentos_cadastrados
         context['quantidade_meus_documentos'] = quantidade_meus_documentos
         return context
@@ -43,11 +44,17 @@ class AuditavelViewMixin(object):
         return super(AuditavelViewMixin, self).form_valid(form)
 
 
-class DocumentoCreateView(AuditavelViewMixin, generic.CreateView):
+class DocumentoConteudoInline(InlineFormSet):
+    model = DocumentoConteudo
+    can_delete = False
+
+
+class DocumentoCreateView(AuditavelViewMixin, CreateWithInlinesView):
     template_name = 'django_documentos/documento_create.html'
     model = Documento
     form_class = DocumentoFormCreate
     success_url = reverse_lazy('documentos:list')
+    inlines = [DocumentoConteudoInline, ]
 
 
 class DocumentoDetailView(generic.DetailView):
@@ -55,11 +62,12 @@ class DocumentoDetailView(generic.DetailView):
     model = Documento
 
 
-class DocumentoUpdateView(AuditavelViewMixin, generic.UpdateView):
+class DocumentoUpdateView(AuditavelViewMixin, UpdateWithInlinesView):
     template_name = 'django_documentos/documento_update.html'
     model = Documento
     form_class = DocumentoFormCreate
     success_url = reverse_lazy('documentos:list')
+    inlines = [DocumentoConteudoInline, ]
 
 
 class DocumentoHistoryView(HistoryRecordListViewMixin, generic.DetailView):
@@ -68,13 +76,14 @@ class DocumentoHistoryView(HistoryRecordListViewMixin, generic.DetailView):
     history_records_paginate_by = 2
 
 
-class DocumentoRevertView(RevertFromHistoryRecordViewMixin, AuditavelViewMixin, generic.UpdateView):
+class DocumentoRevertView(RevertFromHistoryRecordViewMixin, AuditavelViewMixin, UpdateWithInlinesView):
     template_name = 'django_documentos/documento_revert.html'
     model = Documento
     form_class = DocumentoRevertForm
+    inlines = [DocumentoConteudoInline, ]
 
     def get_success_url(self):
-        sucess_url = reverse_lazy('documentos:detail', {'pk': self.get_object().pk})
+        sucess_url = reverse_lazy('documentos:detail', {'pk': self.get_object().pk}, )
         print(sucess_url)
         return sucess_url
 

@@ -44,6 +44,8 @@ INSTALLED_APPS = (
     'bootstrap3',
     'django_extensions',
     'bootstrap_pagination',
+    'extra_views',
+    'braces',
 )
 
 MIDDLEWARE_CLASSES = (

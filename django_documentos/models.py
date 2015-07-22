@@ -100,7 +100,7 @@ class Documento(BaseModeloVersionado):
 # basically is this:
 
 
-class DocumentConteudo(BaseModeloVersionado):
+class DocumentoConteudo(BaseModeloVersionado):
     documento = models.OneToOneField('Documento', related_name="conteudo", null=True, on_delete=models.SET_NULL,
                                      editable=False)
     titulo = models.CharField(blank=True, max_length=500)

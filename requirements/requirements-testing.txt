@@ -9,6 +9,8 @@ codecov
 django-bootstrap3
 django-bootstrap-pagination
 django-extensions
+django-extra-views
+django-braces
 
 django-model-utils
 django-debug-toolbar

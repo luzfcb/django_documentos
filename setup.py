@@ -30,6 +30,7 @@ with open('HISTORY.rst') as history_file:
 requirements = [
     # 'django-simple-history',
     # 'django-model-utils',
+    # 'django-extra-views',
 ]
 # django-model-utils
 # -e git://github.com/luzfcb/django-simple-history.git@patch-2#egg=django-simple-history
