@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function, unicode_literals
-from braces.views import LoginRequiredMixin
 
 from django.core.urlresolvers import reverse_lazy
 from django.views import generic
