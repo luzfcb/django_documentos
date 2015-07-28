@@ -37,16 +37,34 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'debug_toolbar',
+    # 'debug_toolbar',
 
     'simple_history',
-    'django_documentos',
+
     'bootstrap3',
     'django_extensions',
     'bootstrap_pagination',
     'extra_views',
     'braces',
+    'redactor',
+    'ckeditor',
+    'django_documentos',
 )
+
+CKEDITOR_UPLOAD_PATH = 'uploads/'
+CKEDITOR_CONFIGS = {
+    'awesome_ckeditor': {
+        'toolbar': 'Basic',
+    },
+}
+
+
+REDACTOR_UPLOAD_HANDLER = 'redactor.handlers.UUIDUploader'
+# REDACTOR_AUTH_DECORATOR = 'django.contrib.auth.decorators.login_required'
+REDACTOR_OPTIONS = {'lang': 'pt_br'}
+REDACTOR_UPLOAD = 'uploads/'
+
+
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',

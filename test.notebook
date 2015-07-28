@@ -1,0 +1,257 @@
+{
+ "worksheets": [
+  {
+   "cells": [
+    {
+     "cell_type": "code",
+     "execution_count": null,
+     "metadata": {},
+     "outputs": [],
+     "input": [
+      "import qrcode"
+     ],
+     "language": "python",
+     "prompt_number": 65
+    },
+    {
+     "cell_type": "code",
+     "execution_count": null,
+     "metadata": {},
+     "outputs": [],
+     "input": [
+      "img = qrcode.make('http://stackoverflow.com/questions/14452824/saving-image-in-python-pil')"
+     ],
+     "language": "python",
+     "prompt_number": 66
+    },
+    {
+     "cell_type": "code",
+     "execution_count": null,
+     "metadata": {},
+     "outputs": [],
+     "input": [
+      ""
+     ],
+     "language": "python",
+     "prompt_number": 65
+    },
+    {
+     "cell_type": "code",
+     "execution_count": null,
+     "metadata": {},
+     "outputs": [
+      {
+       "output_type": "stream",
+       "stream": "stdout",
+       "text": [
+        "<class 'qrcode.image.pil.PilImage'>\n"
+       ]
+      }
+     ],
+     "input": [
+      "print(type(img))"
+     ],
+     "language": "python",
+     "prompt_number": 67
+    },
+    {
+     "cell_type": "code",
+     "execution_count": null,
+     "metadata": {},
+     "outputs": [],
+     "input": [
+      "img.save('adeus.png')\n",
+      "qr = qrcode.QRCode(\n",
+      "    version=3,\n",
+      "    error_correction=qrcode.constants.ERROR_CORRECT_L,\n",
+      "    box_size=3,\n",
+      "    border=1,\n",
+      ")\n",
+      "qr.add_data('http://stackoverflow.com/questions/14452824/saving-image-in-python-pil')\n",
+      "qr.make(fit=True)\n",
+      "img2 = qr.make_image()"
+     ],
+     "language": "python",
+     "prompt_number": 34
+    },
+    {
+     "cell_type": "code",
+     "execution_count": null,
+     "metadata": {},
+     "outputs": [],
+     "input": [
+      ""
+     ],
+     "language": "python",
+     "prompt_number": 69
+    },
+    {
+     "cell_type": "code",
+     "execution_count": null,
+     "metadata": {},
+     "outputs": [
+      {
+       "output_type": "display_data",
+       "png": "iVBORw0KGgoAAAANSUhEUgAAAGkAAABpAQAAAAAR+TCXAAABxElEQVR4nI1UsWrbUBQ9VxIoUKrn\nNfQ5MmTo7E2GgLT5O9oviN0lkyVvnurmA0KX/kBHbTYYnM30D56iBx4bGQJPEPl2beKU27sdzuFy\n77nnPWL8VXMPL+o1rIhsQ0FDmFNwwr6CPrvuIuyKxCo2khjzLJ4mJtpdMb3BnkJVptN28y/2Jaym\nMN+3+n/E+cp/3FW/M0ssijs6w93E7w3R0EAQg5nrAs/KMTMXks+9dbd0l0XYp0zyOfDz8RNCyyNL\n5TtxQWr8h1Zjp98rccHzfNz/CpDbf3HPcufSNmpdZQb3Yjb2xc5ECWhxhVb2+WGo0aZqBKRikOKL\nMDgAUbIBtGSd/dxCbe2Hn4juJbHX9cfcWw9uF4NDK5078OdDe0h0c6NnMHeiz3l3hIla25yJM4PK\nj7/GPw6huXVWPMqn8SZqR8vFABAjaiYOM+gojZlrIaLgY6qRxEvWUSjlGUatEKXcMJDGYmfmmrc6\nd/UxlMbwKqLzycRXGb7JQfLZ7eMFaDW4DiU3PMwz3WTrKuu8t9gT2BWppqWZJfJfB1gqL9VNXIhB\n8pCvcA2osprupDcIA9THsG5W/qNoXRAzAAekz3DSgn8A9du/X+wFvQUAAAAASUVORK5CYII=\n",
+       "text": [
+        "<qrcode.image.pil.PilImage at 0x7f3359bcdd10>"
+       ],
+       "metadata": {}
+      }
+     ],
+     "input": [
+      "img2"
+     ],
+     "language": "python",
+     "prompt_number": 69
+    },
+    {
+     "cell_type": "code",
+     "execution_count": null,
+     "metadata": {},
+     "outputs": [
+      {
+       "output_type": "display_data",
+       "png": "iVBORw0KGgoAAAANSUhEUgAAAGkAAABpAQAAAAAR+TCXAAABxElEQVR4nI1UsWrbUBQ9VxIoUKrn\nNfQ5MmTo7E2GgLT5O9oviN0lkyVvnurmA0KX/kBHbTYYnM30D56iBx4bGQJPEPl2beKU27sdzuFy\n77nnPWL8VXMPL+o1rIhsQ0FDmFNwwr6CPrvuIuyKxCo2khjzLJ4mJtpdMb3BnkJVptN28y/2Jaym\nMN+3+n/E+cp/3FW/M0ssijs6w93E7w3R0EAQg5nrAs/KMTMXks+9dbd0l0XYp0zyOfDz8RNCyyNL\n5TtxQWr8h1Zjp98rccHzfNz/CpDbf3HPcufSNmpdZQb3Yjb2xc5ECWhxhVb2+WGo0aZqBKRikOKL\nMDgAUbIBtGSd/dxCbe2Hn4juJbHX9cfcWw9uF4NDK5078OdDe0h0c6NnMHeiz3l3hIla25yJM4PK\nj7/GPw6huXVWPMqn8SZqR8vFABAjaiYOM+gojZlrIaLgY6qRxEvWUSjlGUatEKXcMJDGYmfmmrc6\nd/UxlMbwKqLzycRXGb7JQfLZ7eMFaDW4DiU3PMwz3WTrKuu8t9gT2BWppqWZJfJfB1gqL9VNXIhB\n8pCvcA2osprupDcIA9THsG5W/qNoXRAzAAekz3DSgn8A9du/X+wFvQUAAAAASUVORK5CYII=\n",
+       "text": [
+        "<qrcode.image.pil.PilImage at 0x7f3359bcdd10>"
+       ],
+       "metadata": {}
+      }
+     ],
+     "input": [
+      "img2"
+     ],
+     "language": "python",
+     "prompt_number": 70
+    },
+    {
+     "cell_type": "code",
+     "execution_count": null,
+     "metadata": {},
+     "outputs": [
+      {
+       "output_type": "display_data",
+       "png": "iVBORw0KGgoAAAANSUhEUgAAAGkAAABpAQAAAAAR+TCXAAABxElEQVR4nI1UsWrbUBQ9VxIoUKrn\nNfQ5MmTo7E2GgLT5O9oviN0lkyVvnurmA0KX/kBHbTYYnM30D56iBx4bGQJPEPl2beKU27sdzuFy\n77nnPWL8VXMPL+o1rIhsQ0FDmFNwwr6CPrvuIuyKxCo2khjzLJ4mJtpdMb3BnkJVptN28y/2Jaym\nMN+3+n/E+cp/3FW/M0ssijs6w93E7w3R0EAQg5nrAs/KMTMXks+9dbd0l0XYp0zyOfDz8RNCyyNL\n5TtxQWr8h1Zjp98rccHzfNz/CpDbf3HPcufSNmpdZQb3Yjb2xc5ECWhxhVb2+WGo0aZqBKRikOKL\nMDgAUbIBtGSd/dxCbe2Hn4juJbHX9cfcWw9uF4NDK5078OdDe0h0c6NnMHeiz3l3hIla25yJM4PK\nj7/GPw6huXVWPMqn8SZqR8vFABAjaiYOM+gojZlrIaLgY6qRxEvWUSjlGUatEKXcMJDGYmfmmrc6\nd/UxlMbwKqLzycRXGb7JQfLZ7eMFaDW4DiU3PMwz3WTrKuu8t9gT2BWppqWZJfJfB1gqL9VNXIhB\n8pCvcA2osprupDcIA9THsG5W/qNoXRAzAAekz3DSgn8A9du/X+wFvQUAAAAASUVORK5CYII=\n",
+       "text": [
+        "<qrcode.image.pil.PilImage at 0x7f3359bcdd10>"
+       ],
+       "metadata": {}
+      }
+     ],
+     "input": [
+      "img2"
+     ],
+     "language": "python",
+     "prompt_number": 71
+    },
+    {
+     "cell_type": "code",
+     "execution_count": null,
+     "metadata": {},
+     "outputs": [
+      {
+       "output_type": "display_data",
+       "png": "iVBORw0KGgoAAAANSUhEUgAAAGkAAABpAQAAAAAR+TCXAAABxElEQVR4nI1UsWrbUBQ9VxIoUKrn\nNfQ5MmTo7E2GgLT5O9oviN0lkyVvnurmA0KX/kBHbTYYnM30D56iBx4bGQJPEPl2beKU27sdzuFy\n77nnPWL8VXMPL+o1rIhsQ0FDmFNwwr6CPrvuIuyKxCo2khjzLJ4mJtpdMb3BnkJVptN28y/2Jaym\nMN+3+n/E+cp/3FW/M0ssijs6w93E7w3R0EAQg5nrAs/KMTMXks+9dbd0l0XYp0zyOfDz8RNCyyNL\n5TtxQWr8h1Zjp98rccHzfNz/CpDbf3HPcufSNmpdZQb3Yjb2xc5ECWhxhVb2+WGo0aZqBKRikOKL\nMDgAUbIBtGSd/dxCbe2Hn4juJbHX9cfcWw9uF4NDK5078OdDe0h0c6NnMHeiz3l3hIla25yJM4PK\nj7/GPw6huXVWPMqn8SZqR8vFABAjaiYOM+gojZlrIaLgY6qRxEvWUSjlGUatEKXcMJDGYmfmmrc6\nd/UxlMbwKqLzycRXGb7JQfLZ7eMFaDW4DiU3PMwz3WTrKuu8t9gT2BWppqWZJfJfB1gqL9VNXIhB\n8pCvcA2osprupDcIA9THsG5W/qNoXRAzAAekz3DSgn8A9du/X+wFvQUAAAAASUVORK5CYII=\n",
+       "text": [
+        "<qrcode.image.pil.PilImage at 0x7f3359bcdd10>"
+       ],
+       "metadata": {}
+      }
+     ],
+     "input": [
+      "img2"
+     ],
+     "language": "python",
+     "prompt_number": 72
+    },
+    {
+     "cell_type": "code",
+     "execution_count": null,
+     "metadata": {},
+     "outputs": [],
+     "input": [
+      "import qrcode.image.svg\n",
+      "img3 = qrcode.make('http://stackoverflow.com/questions/14452824/saving-image-in-python-pil', image_factory=qrcode.image.svg.SvgPathImage)\n",
+      "img5 = qrcode.make('http://stackoverflow.com/questions/14452824/saving-image-in-python-pil')"
+     ],
+     "language": "python",
+     "prompt_number": 73
+    },
+    {
+     "cell_type": "code",
+     "execution_count": null,
+     "metadata": {},
+     "outputs": [],
+     "input": [
+      "img3.save('adeus.svg')\n",
+      "img5.save('adeus_.png')"
+     ],
+     "language": "python",
+     "prompt_number": 74
+    },
+    {
+     "cell_type": "code",
+     "execution_count": null,
+     "metadata": {},
+     "outputs": [],
+     "input": [
+      "import base64\n",
+      "import cStringIO\n",
+      "\n",
+      "jpeg_image_buffer = cStringIO.StringIO()\n",
+      "img2.save(jpeg_image_buffer)\n",
+      "\n",
+      "imgStr = base64.b64encode(jpeg_image_buffer.getvalue())"
+     ],
+     "language": "python",
+     "prompt_number": 75
+    },
+    {
+     "cell_type": "code",
+     "execution_count": null,
+     "metadata": {},
+     "outputs": [
+      {
+       "output_type": "pyout",
+       "prompt_number": 77,
+       "text": [
+        "'iVBORw0KGgoAAAANSUhEUgAAAGkAAABpAQAAAAAR+TCXAAABxElEQVR4nI1UsWrbUBQ9VxIoUKrnNfQ5MmTo7E2GgLT5O9oviN0lkyVvnurmA0KX/kBHbTYYnM30D56iBx4bGQJPEPl2beKU27sdzuFy77nnPWL8VXMPL+o1rIhsQ0FDmFNwwr6CPrvuIuyKxCo2khjzLJ4mJtpdMb3BnkJVptN28y/2JaymMN+3+n/E+cp/3FW/M0ssijs6w93E7w3R0EAQg5nrAs/KMTMXks+9dbd0l0XYp0zyOfDz8RNCyyNL5TtxQWr8h1Zjp98rccHzfNz/CpDbf3HPcufSNmpdZQb3Yjb2xc5ECWhxhVb2+WGo0aZqBKRikOKLMDgAUbIBtGSd/dxCbe2Hn4juJbHX9cfcWw9uF4NDK5078OdDe0h0c6NnMHeiz3l3hIla25yJM4PKj7/GPw6huXVWPMqn8SZqR8vFABAjaiYOM+gojZlrIaLgY6qRxEvWUSjlGUatEKXcMJDGYmfmmrc6d/UxlMbwKqLzycRXGb7JQfLZ7eMFaDW4DiU3PMwz3WTrKuu8t9gT2BWppqWZJfJfB1gqL9VNXIhB8pCvcA2osprupDcIA9THsG5W/qNoXRAzAAekz3DSgn8A9du/X+wFvQUAAAAASUVORK5CYII='"
+       ],
+       "metadata": {}
+      }
+     ],
+     "input": [
+      "imgStr"
+     ],
+     "language": "python",
+     "prompt_number": 77
+    },
+    {
+     "cell_type": "code",
+     "execution_count": null,
+     "metadata": {},
+     "outputs": [],
+     "input": [
+      ""
+     ],
+     "language": "python"
+    },
+    {
+     "cell_type": "code",
+     "execution_count": null,
+     "metadata": {},
+     "outputs": [],
+     "input": [
+      ""
+     ],
+     "language": "python"
+    }
+   ]
+  }
+ ],
+ "cells": [],
+ "metadata": {},
+ "nbformat": 3,
+ "nbformat_minor": 0
+}

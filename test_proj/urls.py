@@ -27,5 +27,8 @@ urlpatterns = [
     url(r'', include(django_documentos_urls,
                      namespace='documentos')
         ),
+    url(r'^editor_redactor/', include('redactor.urls')),
+    url(r'^ckeditor/', include('ckeditor.urls')),
+
     url(r'', include('django.contrib.auth.urls')),
 ]

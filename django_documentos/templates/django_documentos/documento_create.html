@@ -1,9 +1,10 @@
-{% extends "django_documentos/base.html" %}
-{% load bootstrap3 %}
+{% extends "django_documentos/teste.html" %}
+{#{% extends "django_documentos/base.html" %}#}
+{% load bootstrap3 staticfiles %}
 
-{% block titulo %}
-    Criar Documento
-{% endblock titulo %}
+{#{% block titulo %}#}
+{#    Criar Documento#}
+{#{% endblock titulo %}#}
 
 
 
@@ -11,15 +12,24 @@
 {% block conteudo_app %}
     {{ block.super }}
 
+{% block js_ready_app %}
+    {% if form.media %}
+                <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+                {{ form.media }}
+            {% endif %}
+{% endblock %}
+
 
     {% if form %}
         <form action="." method="post">
             {% csrf_token %}
-            {% bootstrap_form form %}
+
+
+            {{ form }}
             {% if inlines %}
                 {% for formset in inlines %}
                     <div id="formset-{{ forloop.counter|stringformat:"05d" }}">
-                        {% bootstrap_formset formset %}
+                        {{ formset }}
                     </div>
                 {% endfor %}
             {% endif %}

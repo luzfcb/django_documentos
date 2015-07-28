@@ -7,6 +7,7 @@ from django.db.models import Max
 from django.utils import timezone
 from django.utils.six import python_2_unicode_compatible
 from model_utils import tracker
+from redactor.fields import RedactorField
 
 from simple_history.models import HistoricalRecords
 from simple_history.views import MissingHistoryRecordsField
@@ -91,18 +92,19 @@ class BaseModeloVersionado(models.Model):
 @python_2_unicode_compatible
 class Documento(BaseModeloVersionado):
     titulo = models.CharField(blank=True, max_length=500)
+    conteudo = models.TextField(
+        verbose_name='Conteudo',
+        blank=True
+    )
     versoes = HistoricalRecords()
 
     def __str__(self):
         return self.titulo
 
-
-# basically is this:
-
-
-class DocumentoConteudo(BaseModeloVersionado):
-    documento = models.OneToOneField('Documento', related_name="conteudo", null=True, on_delete=models.SET_NULL,
-                                     editable=False)
-    titulo = models.CharField(blank=True, max_length=500)
-    conteudo = models.TextField(blank=True)
-    versoes = HistoricalRecords()
+#
+# class DocumentoConteudo(BaseModeloVersionado):
+#     documento = models.OneToOneField('Documento', related_name="conteudo", null=True, on_delete=models.SET_NULL,
+#                                      editable=False)
+#     titulo = models.CharField(blank=True, max_length=500)
+#     conteudo = models.TextField(blank=True)
+#     versoes = HistoricalRecords()

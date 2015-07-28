@@ -5,6 +5,7 @@ from django import forms
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
+from redactor.widgets import RedactorEditor
 
 from .models import Documento
 
@@ -42,6 +43,9 @@ class DocumentoFormCreate(SaveHelperFormMixin, forms.ModelForm):
         model = Documento
         fields = '__all__'
         exclude = ['criado_por', 'modificado_por']
+        # widgets = {
+        #     'conteudo': RedactorEditor()
+        # }
 
 
 class DocumentoFormUpdate(SaveHelperFormMixin, forms.ModelForm):
@@ -49,7 +53,9 @@ class DocumentoFormUpdate(SaveHelperFormMixin, forms.ModelForm):
         model = Documento
         fields = '__all__'
         exclude = ['criado_por', 'modificado_por']
-
+        # widgets = {
+        #     'conteudo': RedactorEditor()
+        # }
 
 class DocumentoRevertForm(RevertHelperFormMixin, forms.ModelForm):
     class Meta:

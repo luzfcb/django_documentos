@@ -8,8 +8,8 @@ from extra_views import CreateWithInlinesView, InlineFormSet, UpdateWithInlinesV
 from simple_history.views import HistoryRecordListViewMixin, RevertFromHistoryRecordViewMixin
 
 from .forms import DocumentoFormCreate, DocumentoRevertForm
-from .models import Documento, DocumentoConteudo
-
+from .models import Documento
+# from .models import DocumentoConteudo
 
 class DocumentoGeneralDashboardView(generic.TemplateView):
     template_name = 'django_documentos/dashboard_general.html'
@@ -35,6 +35,7 @@ class DocumentoListView(generic.ListView):
     model = Documento
 
 
+
 class AuditavelViewMixin(object):
     def form_valid(self, form):
         if not form.instance.criado_por:
@@ -43,17 +44,17 @@ class AuditavelViewMixin(object):
         return super(AuditavelViewMixin, self).form_valid(form)
 
 
-class DocumentoConteudoInline(InlineFormSet):
-    model = DocumentoConteudo
-    can_delete = False
+# class DocumentoConteudoInline(InlineFormSet):
+#     model = DocumentoConteudo
+#     can_delete = False
 
 
-class DocumentoCreateView(AuditavelViewMixin, CreateWithInlinesView):
+class DocumentoCreateView(AuditavelViewMixin, generic.CreateView):
     template_name = 'django_documentos/documento_create.html'
     model = Documento
     form_class = DocumentoFormCreate
     success_url = reverse_lazy('documentos:list')
-    inlines = [DocumentoConteudoInline, ]
+    # inlines = [DocumentoConteudoInline, ]
 
 
 class DocumentoDetailView(generic.DetailView):
@@ -61,12 +62,12 @@ class DocumentoDetailView(generic.DetailView):
     model = Documento
 
 
-class DocumentoUpdateView(AuditavelViewMixin, UpdateWithInlinesView):
+class DocumentoUpdateView(AuditavelViewMixin, generic.UpdateView):
     template_name = 'django_documentos/documento_update.html'
     model = Documento
     form_class = DocumentoFormCreate
     success_url = reverse_lazy('documentos:list')
-    inlines = [DocumentoConteudoInline, ]
+    # inlines = [DocumentoConteudoInline, ]
 
 
 class DocumentoHistoryView(HistoryRecordListViewMixin, generic.DetailView):
@@ -75,11 +76,11 @@ class DocumentoHistoryView(HistoryRecordListViewMixin, generic.DetailView):
     history_records_paginate_by = 2
 
 
-class DocumentoRevertView(RevertFromHistoryRecordViewMixin, AuditavelViewMixin, UpdateWithInlinesView):
+class DocumentoRevertView(RevertFromHistoryRecordViewMixin, AuditavelViewMixin, generic.UpdateView):
     template_name = 'django_documentos/documento_revert.html'
     model = Documento
     form_class = DocumentoRevertForm
-    inlines = [DocumentoConteudoInline, ]
+    # inlines = [DocumentoConteudoInline, ]
 
     def get_success_url(self):
         sucess_url = reverse_lazy('documentos:detail', {'pk': self.get_object().pk}, )

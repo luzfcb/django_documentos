@@ -11,6 +11,8 @@ django-bootstrap-pagination
 django-extensions
 django-extra-views
 django-braces
+django-wysiwyg-redactor
+django-ckeditor
 
 django-model-utils
 django-debug-toolbar
