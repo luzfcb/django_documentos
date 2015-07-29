@@ -105,7 +105,7 @@ function EventoCtrl($scope, $http, $filter)
             for(var i = 0; i < $scope.dias_semana.length; i++)
             {
                 agenda.dias.push(true);
-                agenda.horarios.push({dia: $scope.dias_semana[i], horarios:[], ativo: true});
+                agenda.horarios.push({dia: $scope.dias_semana[i], horarios:[], conciliacao:[], ativo: true});
             }
 
         }
@@ -420,18 +420,18 @@ function EventoCtrl($scope, $http, $filter)
 
     $scope.adicionar_horario = function(array, value)
     {
-
-        for(var i in array)
-        {
-            if(array[i]==value)
+        if (value){
+            for(var i in array)
             {
-                return false;
-            };
+                if(array[i]==value)
+                {
+                    return false;
+                };
+            }
+
+            array.push(value);
+            array.sort();
         }
-
-        array.push(value);
-        array.sort();
-
     }
 
     $scope.remover_horario = function(array, index)

@@ -36,3 +36,9 @@
     {% endif %}
 
 {% endblock conteudo_app %}
+
+{% block js_app %}
+    {% if form.media %}
+        {{ form.media }}
+    {% endif %}
+{% endblock %}

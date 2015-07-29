@@ -61,6 +61,14 @@ function AgendamentoCtrl($scope, $http, $filter)
     $scope.carregarMes = function(ano, mes)
     {
 
+        $scope.hoje = new Date();
+
+        if(ano < $scope.hoje.getFullYear() || (ano == $scope.hoje.getFullYear() && mes < $scope.hoje.getMonth()))
+        {
+            ano = $scope.hoje.getFullYear();
+            mes = $scope.hoje.getMonth();
+        }
+
         $scope.ano = ano;
         $scope.mes = mes;
 
@@ -207,6 +215,7 @@ function AgendamentoCtrl($scope, $http, $filter)
                             break;
                         }
                     }
+
                 }
             }
 
@@ -297,6 +306,12 @@ function AgendamentoCtrl($scope, $http, $filter)
         dia.agendamentos = agendamentos;
         dia.vagas = vagas;
         dia.simultaneos = ($scope.agendas[agenda].simultaneos > 1);
+
+        if(dia.agendamentos && dia.agendamentos.length > dia.total_pauta)
+        {
+            dia.total_pauta = 0;
+            dia.horarios = [];
+        }
 
     }
 

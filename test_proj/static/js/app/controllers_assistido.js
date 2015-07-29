@@ -387,9 +387,10 @@ function CadastrarPessoaModel($scope, $http, $filter)
 		return arr;
 	}
 
-	$scope.init = function(tab)
+	$scope.init = function(tab, initial)
 	{
 
+		$scope.initial = initial;
 		$scope.carregando = true;
 		$scope.pessoa = {'bens' : {}, 'estrutura' : {}};
 		$scope.init_filiacao();
@@ -399,7 +400,9 @@ function CadastrarPessoaModel($scope, $http, $filter)
 
 		$http.get('/assistido/json/get/').success(function(data){
 
+			$scope.set_initial_values(data, initial);
 			$scope.pessoa = data;
+
 			$scope.init_filiacao();
 			$scope.init_telefone();
 
@@ -420,7 +423,19 @@ function CadastrarPessoaModel($scope, $http, $filter)
 
 	}
 
+	$scope.set_initial_values = function(obj, values)
+	{
+		for(var key in values)
+		{
+			if(!(key in obj))
+			{
+				obj[key] = values[key];
+			}
+		}
+	}
+
 }
+
 
 function clone(obj)
 {

@@ -14,6 +14,7 @@
 
     {% if object %}
         {{ object|as_form }}
+        {{ object|as_form_media}}
     {% else %}
         Nada para mostrar
     {% endif %}
@@ -69,3 +70,11 @@
     {% endif %}
 
 {% endblock conteudo_app %}
+
+
+
+{% block js_app %}
+    {% if form.media %}
+        {{ form.media }}
+    {% endif %}
+{% endblock %}

@@ -132,6 +132,15 @@ function AtendimentoCtrl($scope, $http)
         Chronus.generate($scope, $scope.relatorio.user, 'declaracao', 'atendimento/atendimento/declaracao', $scope.relatorio.params)
     }
 
+	$scope.listar_outros = function()
+	{
+		$scope.outros = null;
+		$http.post('atender/outros/get/').success(function(data){
+			$scope.outros = data;
+			$scope.carregando_documentos = false;
+		});
+	}
+
 	function init()
 	{
 

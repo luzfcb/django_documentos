@@ -1,5 +1,5 @@
-{% extends "django_documentos/teste.html" %}
-{#{% extends "django_documentos/base.html" %}#}
+{#{% extends "django_documentos/teste.html" %}#}
+{% extends "django_documentos/base.html" %}
 {% load bootstrap3 staticfiles %}
 
 {#{% block titulo %}#}
@@ -12,12 +12,7 @@
 {% block conteudo_app %}
     {{ block.super }}
 
-{% block js_ready_app %}
-    {% if form.media %}
-                <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-                {{ form.media }}
-            {% endif %}
-{% endblock %}
+
 
 
     {% if form %}
@@ -43,3 +38,8 @@
     {% endif %}
 
 {% endblock conteudo_app %}
+{% block js_app %}
+    {% if form.media %}
+        {{ form.media }}
+    {% endif %}
+{% endblock %}

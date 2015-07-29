@@ -45,4 +45,5 @@ docs/_build
 .idea
 
 *.sqlite3
+test_proj/media
 

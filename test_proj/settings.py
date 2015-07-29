@@ -61,7 +61,7 @@ CKEDITOR_CONFIGS = {
 
 REDACTOR_UPLOAD_HANDLER = 'redactor.handlers.UUIDUploader'
 # REDACTOR_AUTH_DECORATOR = 'django.contrib.auth.decorators.login_required'
-REDACTOR_OPTIONS = {'lang': 'pt_br'}
+REDACTOR_OPTIONS = {'lang': 'pt_br', 'plugins': ['video', 'table', 'fullscreen']}
 REDACTOR_UPLOAD = 'uploads/'
 
 
@@ -135,3 +135,6 @@ STATICFILES_DIRS = (
 )
 
 DJANGO_DOCUMENTOS_ENABLE_GENERAL_DASHBOARD = True
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
