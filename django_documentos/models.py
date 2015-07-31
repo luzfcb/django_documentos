@@ -92,7 +92,11 @@ class BaseModeloVersionado(models.Model):
 @python_2_unicode_compatible
 class Documento(BaseModeloVersionado):
     titulo = models.CharField(blank=True, max_length=500)
-    conteudo = RedactorField(verbose_name=u'conteudo')
+    conteudo = RedactorField(
+        verbose_name=u'conteudo',
+        allow_file_upload=True,
+        allow_image_upload=True
+    )
     versoes = HistoricalRecords()
 
     def __str__(self):
