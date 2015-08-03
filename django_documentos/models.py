@@ -96,6 +96,7 @@ class Documento(BaseModeloVersionado):
         verbose_name=u'conteudo',
         allow_file_upload=True,
         allow_image_upload=True
+
     )
     versoes = HistoricalRecords()
 

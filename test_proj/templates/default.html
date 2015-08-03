@@ -43,7 +43,8 @@
             <div class="span3">
                 <div class="panel-sitename">
                     <h1>
-                        <a href="{% url 'documentos:dashboard' %}" title="Solução Avançada em Atendimento de Referência">
+                        <a href="{% url 'documentos:dashboard' %}"
+                           title="Solução Avançada em Atendimento de Referência">
                             SOLAR
                         </a>
                     </h1>
@@ -66,7 +67,7 @@
                 <div class="panel-ext">
                     <div class="btn-group user-group">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            <img class="corner-all" align="middle" src="{{ user}}"
+                            <img class="corner-all" align="middle" src="{{ user }}"
                                  title="{{ request.user.get_full_name }}" alt="{{ request.user.get_full_name }}"
                                  height="48" width="48"/> <!--this for display on PC device-->
                         </a>
@@ -319,103 +320,110 @@
                 <div class="content-body">
                     <!-- bloco para o conteudo -->
 
-<div class="row-fluid">
-    <div class="span12">
+                    <div class="row-fluid">
+                        <div class="span12">
 
-        <!-- =========================================
-                            ELEMENT
-        =========================================== -->
-        <!--element-->
-        <div id="element" class="row-fluid">
-            <!--span-->
-            <div class="span12">
-                <!--box-->
-                <div class="box corner-all">
-                    <!--box header-->
-                    <div class="box-header grd-white color-silver-dark corner-top">
-                        <div class="header-control">
-                            <a data-box="collapse"><i class="icofont-caret-up"></i></a>
-                            <a data-box="close">×</a>
-                        </div>
-                        <span>Elements</span>
-                    </div>
-                    <!--/box header-->
-                    <!--box body-->
-                    <div class="box-body">
-                        <!--element-->
+                            <!-- =========================================
+                                                ELEMENT
+                            =========================================== -->
+                            <!--element-->
+                            <div id="element" class="row-fluid">
+                                <!--span-->
+                                <div class="span12">
+                                    <!--box-->
+                                    <div class="box corner-all">
+                                        <!--box header-->
+                                        <div class="box-header grd-white color-silver-dark corner-top">
+                                            <div class="header-control">
+                                                <a data-box="collapse"><i class="icofont-caret-up"></i></a>
+                                                <a data-box="close">×</a>
+                                            </div>
+                                            <span>Elements</span>
+                                        </div>
+                                        <!--/box header-->
+                                        <!--box body-->
+                                        <div class="box-body">
+                                            <!--element-->
 
-                        {% block conteudo_app %}
+                                            {% block conteudo_app %}
 
-                            <div class="shortcut-group">
-                                <ul class="a-btn-group">
-                                    <li>
-                                        <a href="{% url "documentos:create" %}" class="a-btn grd-white" rel="tooltip"
-                                           data-original-title="Criar novo Documento">
-                                            <span></span>
-                                            <span><i class="icofont-edit color-silver-dark"></i></span>
+                                                <div class="shortcut-group">
+                                                    <ul class="a-btn-group">
+                                                        <li>
+                                                            <a href="{% url "documentos:create" %}"
+                                                               class="a-btn grd-white" rel="tooltip"
+                                                               data-original-title="Criar novo Documento">
+                                                                <span></span>
+                                                                <span><i
+                                                                        class="icofont-edit color-silver-dark"></i></span>
                                             <span class="color-silver-dark"><i
                                                     class="icofont-file color-silver-dark"></i></span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="a-btn grd-white" rel="tooltip"
-                                           data-original-title="upload something">
-                                            <span></span>
-                                            <span><i class="icofont-upload color-silver-dark"></i></span>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#" class="a-btn grd-white" rel="tooltip"
+                                                               data-original-title="upload something">
+                                                                <span></span>
+                                                                <span><i
+                                                                        class="icofont-upload color-silver-dark"></i></span>
                                             <span class="color-silver-dark"><i
                                                     class="icofont-upload-alt color-silver-dark"></i></span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="a-btn grd-white" rel="tooltip" data-original-title="message">
-                                            <span></span>
-                                            <span><i class="icofont-envelope color-silver-dark"></i></span>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#" class="a-btn grd-white" rel="tooltip"
+                                                               data-original-title="message">
+                                                                <span></span>
+                                                                <span><i class="icofont-envelope color-silver-dark"></i></span>
                                             <span class="color-silver-dark"><i
                                                     class="icofont-envelope-alt color-teal"></i></span>
 
-                                            <div class="badge badge-info">9</div>
-                                            <!--don't use span here!-->
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="a-btn grd-white" rel="tooltip" data-original-title="invoice">
-                                            <span></span>
-                                            <span><i class="icofont-barcode color-silver-dark"></i></span>
+                                                                <div class="badge badge-info">9</div>
+                                                                <!--don't use span here!-->
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#" class="a-btn grd-white" rel="tooltip"
+                                                               data-original-title="invoice">
+                                                                <span></span>
+                                                                <span><i class="icofont-barcode color-silver-dark"></i></span>
                                             <span class="color-silver-dark"><i
                                                     class="icofont-shopping-cart color-red"></i></span>
 
-                                            <div class="label label-important">2</div>
-                                            <!--don't use span here!-->
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="a-btn grd-white" rel="tooltip"
-                                           data-original-title="check statistics">
-                                            <span></span>
-                                            <span><i class="icofont-bar-chart color-silver-dark"></i></span>
-                                            <span class="color-silver-dark"><i class="typicn-lineChart"></i></span>
-                                        </a>
-                                    </li>
-                                    <li class="clearfix"></li>
-                                </ul>
+                                                                <div class="label label-important">2</div>
+                                                                <!--don't use span here!-->
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#" class="a-btn grd-white" rel="tooltip"
+                                                               data-original-title="check statistics">
+                                                                <span></span>
+                                                                <span><i
+                                                                        class="icofont-bar-chart color-silver-dark"></i></span>
+                                                                <span class="color-silver-dark"><i
+                                                                        class="typicn-lineChart"></i></span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="clearfix"></li>
+                                                    </ul>
+                                                </div>
+                                                <div class="divider-content"><span></span></div>
+
+
+                                            {% endblock %}
+                                            <!--/element-->
+                                        </div>
+                                        <!--/box body-->
+                                    </div>
+                                    <!--/box-->
+                                </div>
+                                <!--/span-->
                             </div>
-                            <div class="divider-content"><span></span></div>
+                            <!--/element-->
 
-
-                        {% endblock %}
-                        <!--/element-->
+                        </div>
+                        <!--/span-->
                     </div>
-                    <!--/box body-->
-                </div>
-                <!--/box-->
-            </div>
-            <!--/span-->
-        </div>
-        <!--/element-->
-
-    </div>
-    <!--/span-->
-</div>
 
                     <!-- /bloco para o conteudo -->
                 </div>

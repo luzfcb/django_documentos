@@ -1,5 +1,6 @@
-{#{% extends "django_documentos/teste.html" %}#}
-{% extends "django_documentos/base.html" %}
+{#{% extends standalone|yesno:"django_documentos/teste.html,django_documentos/base.html" %}#}
+{% extends standalone %}
+{#{% extends "django_documentos/base.html" %}#}
 {% load bootstrap3 staticfiles %}
 
 {#{% block titulo %}#}
@@ -12,7 +13,14 @@
 {% block conteudo_app %}
     {{ block.super }}
 
-
+    <script>
+        window.onunload = function () {
+            if (window.opener && !window.opener.closed) {
+                //window.opener.popUpClosed("Mááááá oiiiiiii");
+                window.opener.mais_que("Mááááá oiiiiiii");
+            }
+        };
+    </script>
 
 
     {% if form %}
@@ -43,6 +51,6 @@
     {% if form.media %}
         {{ form.media }}
     {% endif %}
-    <script src="{% static "redactor/toolbars/mini.js" %}"></script>
+
 
 {% endblock %}

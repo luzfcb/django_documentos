@@ -55,6 +55,12 @@ class DocumentoCreateView(AuditavelViewMixin, generic.CreateView):
     form_class = DocumentoFormCreate
     success_url = reverse_lazy('documentos:list')
     # inlines = [DocumentoConteudoInline, ]
+    def get_context_data(self, **kwargs):
+        context = super(DocumentoCreateView, self).get_context_data(**kwargs)
+
+        context['standalone'] = "django_documentos/teste.html" if self.request.GET.get('standalone', False) else "django_documentos/base.html"
+        return context
+
 
 
 class DocumentoDetailView(generic.DetailView):

@@ -48,6 +48,7 @@ INSTALLED_APPS = (
     'braces',
     'redactor',
     'ckeditor',
+    'debug_toolbar',
     'django_documentos',
 )
 
