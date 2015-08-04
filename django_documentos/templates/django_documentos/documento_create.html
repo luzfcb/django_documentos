@@ -1,5 +1,6 @@
-{#{% extends standalone|yesno:"django_documentos/teste.html,django_documentos/base.html" %}#}
-{% extends standalone %}
+{% extends popup|yesno:"django_documentos/documento_create_popup.html,django_documentos/base.html" %}
+{#{% extends popup %}#}
+
 {#{% extends "django_documentos/base.html" %}#}
 {% load bootstrap3 staticfiles %}
 
@@ -12,23 +13,12 @@
 
 {% block conteudo_app %}
     {{ block.super }}
-
-    <script>
-        window.onunload = function () {
-            if (window.opener && !window.opener.closed) {
-                //window.opener.popUpClosed("Mááááá oiiiiiii");
-                window.opener.mais_que("Mááááá oiiiiiii");
-            }
-        };
-    </script>
-
-
     {% if form %}
         <form action="." method="post">
             {% csrf_token %}
 
 
-            {{ form }}
+            {{ form.as_p }}
             {% if inlines %}
                 {% for formset in inlines %}
                     <div id="formset-{{ forloop.counter|stringformat:"05d" }}">
@@ -51,6 +41,23 @@
     {% if form.media %}
         {{ form.media }}
     {% endif %}
+    {% if popup %}
+        <script>
+            {#        window.onunload = function () {#}
+            {#            if (window.opener && !window.opener.closed) {#}
+            {#                //window.opener.popUpClosed("Mááááá oiiiiiii");#}
+            {#                window.opener.mais_que("http://www.google.com.br");#}
+            {#            }#}
+            {#        };#}
+            function OnClose() {
+                "use strict";
+                if (window.opener != null && !window.opener.closed) {
+                    window.opener.HideModalDiv('vaiFuncionar');
+                    window.opener.redirecionar('vaiFuncionar');
+                }
+            }
+            window.onunload = OnClose;
 
-
+        </script>
+    {% endif %}
 {% endblock %}

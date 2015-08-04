@@ -9,6 +9,8 @@ from simple_history.views import HistoryRecordListViewMixin, RevertFromHistoryRe
 
 from .forms import DocumentoFormCreate, DocumentoRevertForm
 from .models import Documento
+
+
 # from .models import DocumentoConteudo
 
 class DocumentoGeneralDashboardView(generic.TemplateView):
@@ -35,7 +37,6 @@ class DocumentoListView(generic.ListView):
     model = Documento
 
 
-
 class AuditavelViewMixin(object):
     def form_valid(self, form):
         if not form.instance.criado_por:
@@ -54,13 +55,32 @@ class DocumentoCreateView(AuditavelViewMixin, generic.CreateView):
     model = Documento
     form_class = DocumentoFormCreate
     success_url = reverse_lazy('documentos:list')
+    is_popup = False
     # inlines = [DocumentoConteudoInline, ]
+
+    def get_success_url(self):
+
+        if self.is_popup:
+            return reverse_lazy('documentos:close')
+
+        return super(DocumentoCreateView, self).get_success_url()
+
+    def get_is_popup(self):
+        if self.request.GET.get('popup', False):
+            self.is_popup = True
+        else:
+            self.is_popup = False
+        return self.is_popup
+
     def get_context_data(self, **kwargs):
         context = super(DocumentoCreateView, self).get_context_data(**kwargs)
 
-        context['standalone'] = "django_documentos/teste.html" if self.request.GET.get('standalone', False) else "django_documentos/base.html"
+        context['popup'] = self.get_is_popup()
         return context
 
+
+class CloseView(generic.TemplateView):
+    template_name = 'django_documentos/fechar.html'
 
 
 class DocumentoDetailView(generic.DetailView):

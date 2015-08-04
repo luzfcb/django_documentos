@@ -6,6 +6,7 @@ from django.conf.urls import url, include
 from django_documentos.views import (
     DocumentoCreateView, DocumentoDashboardView, DocumentoDetailView, DocumentoGeneralDashboardView,
     DocumentoHistoryView, DocumentoListView, DocumentoRevertView, DocumentoUpdateView,
+    CloseView
 )
 
 from .settings import DJANGO_DOCUMENTOS_ENABLE_GENERAL_DASHBOARD
@@ -39,7 +40,10 @@ urlpatterns = [
         DocumentoRevertView.as_view(),
         name='revert'
         ),
-
+    url(r'^close/$',
+        CloseView.as_view(),
+        name='close'
+        ),
 ]
 
 if DJANGO_DOCUMENTOS_ENABLE_GENERAL_DASHBOARD:
