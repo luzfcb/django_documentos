@@ -1,4 +1,4 @@
-{% extends popup|yesno:"django_documentos/documento_create_popup.html,django_documentos/base.html" %}
+{% extends popup|yesno:"django_documentos/documento_create_popup_base.html,django_documentos/base.html" %}
 {#{% extends popup %}#}
 
 {#{% extends "django_documentos/base.html" %}#}
@@ -9,26 +9,27 @@
 {#{% endblock titulo %}#}
 
 
-
-
 {% block conteudo_app %}
     {{ block.super }}
     {% if form %}
-        <form action="." method="post">
+        <a id="teste" href="{% url 'documentos:create' %}{% if popup %}?popup=1{% endif %}">Verifique a Validade</a>
+        <div id="codigo_qr"></div>
+        <form action="{% url 'documentos:create' %}{% if popup %}?popup=1{% endif %}" method="post">
             {% csrf_token %}
 
-
-            {{ form.as_p }}
+            {% bootstrap_form_errors form %}
+            {% bootstrap_form form %}
             {% if inlines %}
                 {% for formset in inlines %}
                     <div id="formset-{{ forloop.counter|stringformat:"05d" }}">
-                        {{ formset }}
+                        {% bootstrap_formset_errors formset %}
+                        {% bootstrap_formset formset %}
                     </div>
                 {% endfor %}
             {% endif %}
             {% buttons %}
                 <button type="submit" class="btn btn-primary">
-                    {% bootstrap_icon "star" %} Submit
+                    Submit
                 </button>
             {% endbuttons %}
         </form>
@@ -37,6 +38,7 @@
 
 {% endblock conteudo_app %}
 {% block js_app %}
+    {{ block.super }}
 
     {% if form.media %}
         {{ form.media }}
@@ -60,4 +62,64 @@
 
         </script>
     {% endif %}
+
+    <script type="text/javascript" src="{% static "django_documentos/js/autosize.js" %}"></script>
+    <script src="{% static 'django_documentos/js/jquery.qrcode.min.js' %}"></script>
+    <script>
+        autosize(document.querySelectorAll('textarea'));
+        var teste = $("#teste");
+        var opcoes = {
+            // render method: 'canvas', 'image' or 'div'
+            render: 'canvas',
+
+            // version range somewhere in 1 .. 40
+            minVersion: 1,
+            maxVersion: 40,
+
+            // error correction level: 'L', 'M', 'Q' or 'H'
+            ecLevel: 'H',
+
+            // offset in pixel if drawn onto existing canvas
+            left: 0,
+            top: 0,
+
+            // size in pixel
+            size: 100,
+
+            // code color or image element
+            fill: '#000',
+
+            // background color or image element, null for transparent background
+            background: null,
+
+            // content
+            text: teste.attr("href"),
+
+            // corner radius relative to module width: 0.0 .. 0.5
+            radius: 0.5,
+
+            // quiet zone in modules
+            quiet: 0,
+
+            // modes
+            // 0: normal
+            // 1: label strip
+            // 2: label box
+            // 3: image strip
+            // 4: image box
+            mode: 2,
+
+            mSize: 0.1,
+            mPosX: 0.5,
+            mPosY: 0.5,
+
+            label: 'Solar',
+            fontname: 'sans',
+            fontcolor: '#ff8300',
+
+            image: null
+        };
+
+        $("#codigo_qr").qrcode(opcoes);
+    </script>
 {% endblock %}

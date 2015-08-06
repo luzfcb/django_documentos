@@ -1,0 +1,41 @@
+{% load staticfiles bootstrap3 %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+
+
+    {% block css_app %}
+        {% bootstrap_css %}
+        <style>
+            textarea {
+                -webkit-box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                box-sizing: border-box;
+
+                width: 100%;
+            }
+        </style>
+    {% endblock %}
+</head>
+<body>
+{% block conteudo_app %}
+{% endblock conteudo_app %}
+
+<script>if (!window.jQuery) {
+    document.write('<script src="{% static 'django_documentos/js/jquery/1.11.3/jquery.min.js' %}"><\/script>');
+    document.write('<script src="{% static 'django_documentos/js/jquery/1.11.3/jquery-migrate.min.js' %}"><\/script>');
+}
+</script>
+
+<script src="{% static 'django_documentos/js/jquery.qrcode.min.js' %}"></script>
+<div id="boot">
+    {% bootstrap_javascript %}
+</div>
+{% block js_app %}
+{% endblock %}
+
+
+</body>
+</html>

@@ -67,6 +67,7 @@
 {% endblock conteudo_app %}
 
 {% block js_app %}
+    {{ block.super }}
     <script>
         jQuery(document).ready(function ($) {
 
@@ -115,8 +116,8 @@
 
                 var left = (screen.width / 2) - (w / 2);
                 var top = (screen.height / 2) - (h / 2);
-
-                var popUpObj = window.open($(this).prop('href'), id, 'scrollbars=' + s + ',resizable=yes,width=' + w + ',height=' + h + ',top=' + top + ',left=' + left + ',modal=yes');
+                var features = 'scrollbars=' + s + ',resizable=yes,width=' + w + ',height=' + h + ',top=' + top + ',left=' + left + ',modal=yes';
+                var popUpObj = window.open($(this).prop('href'), id, 'all=yes');
 
                 if (window.focus) {
                     popUpObj.focus();
@@ -148,7 +149,7 @@
                         clearInterval(timer);
                         HideModalDiv('');
                     }
-                }, 1000);
+                }, 500);
             }
 
             function LoadModalDiv(popUpObj) {
