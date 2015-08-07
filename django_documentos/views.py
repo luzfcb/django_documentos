@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function, unicode_literals
 
-from django.core.urlresolvers import reverse_lazy
+from django.core.urlresolvers import reverse_lazy, reverse
+from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.views import generic
 from extra_views import CreateWithInlinesView, InlineFormSet, UpdateWithInlinesView
@@ -13,6 +14,32 @@ from .models import Documento
 
 
 # from .models import DocumentoConteudo
+
+class AjaxableResponseMixin(object):
+    """
+    Mixin to add AJAX support to a form.
+    Must be used with an object-based FormView (e.g. CreateView)
+    """
+    def form_invalid(self, form):
+        response = super(AjaxableResponseMixin, self).form_invalid(form)
+        if self.request.is_ajax():
+            return JsonResponse(form.errors, status=400)
+        else:
+            return response
+
+    def form_valid(self, form):
+        # We make sure to call the parent's form_valid() method because
+        # it might do some processing (in the case of CreateView, it will
+        # call form.save() for example).
+        response = super(AjaxableResponseMixin, self).form_valid(form)
+        if self.request.is_ajax():
+            print('eh ajax')
+            data = {
+                'pk': self.object.pk,
+            }
+            return JsonResponse(data)
+        else:
+            return response
 
 class DocumentoGeneralDashboardView(generic.TemplateView):
     template_name = 'django_documentos/dashboard_general.html'
@@ -50,6 +77,11 @@ class NextURLMixin(object):
     def dispatch(self, request, *args, **kwargs):
         ret = super(NextURLMixin, self).dispatch(request, *args, **kwargs)
         self.next_url = self.get_next_url()
+        if self.request.method in ('POST', 'PUT'):
+            print('self.kwargs: {}'.format(self.kwargs))
+            print('self.request.GET: {}'.format(self.request.GET))
+        else:
+            print('eh get')
         return ret
 
     def get_context_data(self, **kwargs):
@@ -78,7 +110,7 @@ class AuditavelViewMixin(object):
 #     can_delete = False
 
 
-class DocumentoCreateView(NextURLMixin, AuditavelViewMixin, generic.CreateView):
+class DocumentoCreateView(AjaxableResponseMixin, NextURLMixin, AuditavelViewMixin, generic.CreateView):
     template_name = 'django_documentos/documento_create.html'
     model = Documento
     form_class = DocumentoFormCreate
@@ -91,13 +123,19 @@ class DocumentoCreateView(NextURLMixin, AuditavelViewMixin, generic.CreateView):
         print('id: {}'.format(id(self)))
 
     def get_success_url(self):
+        print("get_success_url of {}".format(id(self)))
+        document_param = "?documment={}".format(self.object.pk)
+        if not self.is_popup and self.next_url:
+            return "{}{}".format(self.next_url, document_param)
 
-        if self.is_popup:
-            return reverse_lazy('documentos:close')
-        if self.next_url:
-            print('if self.next_url')
-            return redirect(self.next_url)
-        return super(DocumentoCreateView, self).get_success_url()
+        if not self.next_url:
+            return reverse('documentos:detail', {'pk': self.object.pk})
+
+        return '{}?{}={}'.format(reverse_lazy('documentos:close'), self.next_kwarg, "{}{}".format(self.next_url, document_param))
+
+    def form_valid(self, form):
+        self.next_url = form.cleaned_data.get('proximo')
+        return super(NextURLMixin, self).form_valid(form)
 
     def get_is_popup(self):
         if self.request.GET.get('popup', False):
@@ -106,14 +144,23 @@ class DocumentoCreateView(NextURLMixin, AuditavelViewMixin, generic.CreateView):
             self.is_popup = False
         return self.is_popup
 
+    def get_initial(self):
+        initial = super(DocumentoCreateView, self).get_initial()
+        initial.update({'proximo': self.get_next_url(), 'is_popup': self.get_is_popup()})
+        return initial
+
     def get_context_data(self, **kwargs):
         context = super(DocumentoCreateView, self).get_context_data(**kwargs)
-
         context['popup'] = self.get_is_popup()
         return context
 
+    def get_form(self, form_class=None):
+        form = super(DocumentoCreateView, self).get_form(form_class=form_class)
+        print(form)
+        return form
 
-class CloseView(generic.TemplateView):
+
+class CloseView(NextURLMixin, generic.TemplateView):
     template_name = 'django_documentos/fechar.html'
 
 

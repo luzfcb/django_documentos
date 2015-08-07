@@ -14,31 +14,22 @@
     {% if form %}
         <a id="teste" href="{% url 'documentos:create' %}{% if popup %}?popup=1{% endif %}">Verifique a Validade</a>
         <div id="codigo_qr"></div>
-        <form action="{% url 'documentos:create' %}{% if popup or next_url%}?{% endif %}{% if popup %}popup=1{% endif %}{% if next_url %}&{{ next_kwarg }}={{ next_url }}{% endif %}" method="post" name="documento_create">
+        <div id="success_div"></div>
+        <div id="error_div"></div>
+        <form action="
+
+
+                {% url 'documentos:create' %}{% if popup or next_url %}?{% endif %}{% if popup %}popup=1{% endif %}{% if next_url %}&{{ next_kwarg }}={{ next_url }}{% endif %}"
+              method="post" id="documento_create">
             {% csrf_token %}
 
             {% if form.non_field_errors %}
                 {{ form.non_field_errors }}
             {% endif %}
 
-            {{ form.as_p }}
+            {{ form.as_table }}
+            <input type="submit" id="enviar" value="Submit">
 
-{#            {% bootstrap_form_errors form %}#}
-{#            {% bootstrap_form form %}#}
-{#            {% if inlines %}#}
-{#                {% for formset in inlines %}#}
-{#                    <div id="formset-{{ forloop.counter|stringformat:"05d" }}">#}
-{#                        {% bootstrap_formset_errors formset %}#}
-{#                        {% bootstrap_formset formset %}#}
-{#                    </div>#}
-{#                {% endfor %}#}
-{#            {% endif %}#}
-{#            {% buttons %}#}
-{#                <button type="submit" class="btn btn-primary">#}
-{#                    Submit#}
-{#                </button>#}
-{#            {% endbuttons %}#}
-        <input type="submit" value="Submit">
         </form>
 
     {% endif %}
@@ -52,20 +43,36 @@
     {% endif %}
     {% if popup %}
         <script>
-            {#        window.onunload = function () {#}
-            {#            if (window.opener && !window.opener.closed) {#}
-            {#                //window.opener.popUpClosed("Mááááá oiiiiiii");#}
-            {#                window.opener.mais_que("http://www.google.com.br");#}
-            {#            }#}
-            {#        };#}
-            function OnClose() {
-                "use strict";
-                if (window.opener != null && !window.opener.closed) {
-                    window.opener.HideModalDiv('vaiFuncionar');
-                    window.opener.redirecionar('vaiFuncionar');
+            {% if not popup %}
+                function OnClose() {
+                    "use strict";
+                    if (window.opener != null && !window.opener.closed) {
+                        window.opener.HideModalDiv();
+                        {% if next_url %}
+                            window.opener.redirecionar("{{ next_url }}");
+                        {% endif %}
+                    }
                 }
-            }
-            window.onunload = OnClose;
+                window.onunload = OnClose;
+            {% endif %}
+            $('#documento_create').on('submit', '#enviar', function () {
+                $.ajax({
+                    type: $(this).attr('method'),
+                    url: $(this).attr('action'),
+                    data: $(this).serialize(),
+                    success: function () { // on success..
+                        var sucess_div = $('#success_div');
+                        sucess_div.append('Changes saved'); // update the DIV
+                        sucess_div.toggleClass('alert alert-success'); // unhide
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) { // on error..
+                        var error_div = $('#error_div');
+                        error_div.append(xhr); // update the DIV
+                        error_div.toggleClass('alert alert-error'); // unhide
+                    }
+                });
+                return false;
+            });
 
         </script>
     {% endif %}
@@ -128,5 +135,8 @@
         };
 
         $("#codigo_qr").qrcode(opcoes);
+        {% if next_url %}
+
+        {% endif %}
     </script>
 {% endblock %}

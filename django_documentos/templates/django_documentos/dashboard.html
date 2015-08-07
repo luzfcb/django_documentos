@@ -24,10 +24,10 @@
 
     </h4>
 
-    <a href="{% url 'documentos:create' %}" target="_blank">
+    <a href="{% url 'documentos:create' %}?next=https://www.google.com" target="_blank">
         Criar novo v1
     </a>
-    <a href="{% url 'documentos:create' %}" class="popup">
+    <a href="{% url 'documentos:create' %}?next=https://www.google.com" class="popup">
         Criar novo v2
     </a>
     <a href="{% url 'documentos:create' %}?popup=1&next=https://www.google.com" id="create3" class="popup" data-fullscreen="no" data-scrollbars="no"
@@ -44,22 +44,6 @@
             console.log('algo: ' + algo);
             //window.location.reload();
         }
-        function mais_que(algo) {
-            //console.log('recarregando pagina...');
-            //console.log('algo: ' + algo);
-            window.location.href = algo
-        }
-        {#        function popupClosing() {#}
-        {#            alert('About to refresh');#}
-        {#            window.location.href = window.location.href;#}
-        {#        }#}
-        {#        function abrir_janela() {#}
-        {#            var w = window.open("{% url 'documentos:create' %}", "_blank", "toolbar=yes, location=yes, directories=no, status=no, menubar=yes, scrollbars = yes, resizable = no, copyhistory = yes, width = 400, height = 400");#}
-        {#            w.onunload = function () {#}
-        {#                window.parent.popupClosing()#}
-        {#            };#}
-        {#            w();#}
-        {#        }#}
 
     </script>
 
@@ -185,7 +169,7 @@
         }
         function redirecionar(param) {
             console.log("algo aqui:" + window.location.href);
-            window.location.href = window.location.href + '?' + param + '=1';
+            window.location.href = param;
             console.log('param=' + param);
         }
         function HideModalDiv(param) {

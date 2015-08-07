@@ -30,6 +30,10 @@
 </script>
 
 <script src="{% static 'django_documentos/js/jquery.qrcode.min.js' %}"></script>
+<script type="text/javascript" src="{% static "django_documentos/js/autosize.js" %}"></script>
+<script>
+    autosize(document.querySelectorAll('textarea'));
+</script>
 <div id="boot">
     {% bootstrap_javascript %}
 </div>

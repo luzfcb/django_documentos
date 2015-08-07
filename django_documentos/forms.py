@@ -38,7 +38,17 @@ class RevertHelperFormMixin(object):
         self.helper = RevertHelper(self)
 
 
-class DocumentoFormCreate(SaveHelperFormMixin, forms.ModelForm):
+class IsPopUpMixin(forms.Form):
+    is_popup = forms.NullBooleanField(required=False, widget=forms.HiddenInput())
+
+
+class NextFormMixin(forms.Form):
+    proximo = forms.CharField(widget=forms.HiddenInput())
+
+
+class DocumentoFormCreate(SaveHelperFormMixin, NextFormMixin, IsPopUpMixin, forms.ModelForm):
+    # next = forms.CharField(widget=forms.HiddenInput())
+    # proximo = forms.CharField()
     class Meta:
         model = Documento
         fields = '__all__'
@@ -56,6 +66,7 @@ class DocumentoFormUpdate(SaveHelperFormMixin, forms.ModelForm):
         # widgets = {
         #     'conteudo': RedactorEditor()
         # }
+
 
 class DocumentoRevertForm(RevertHelperFormMixin, forms.ModelForm):
     class Meta:
