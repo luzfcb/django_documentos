@@ -117,7 +117,7 @@
                 var left = (screen.width / 2) - (w / 2);
                 var top = (screen.height / 2) - (h / 2);
                 var features = 'scrollbars=' + s + ',resizable=yes,width=' + w + ',height=' + h + ',top=' + top + ',left=' + left + ',modal=yes';
-                var popUpObj = window.open($(this).prop('href'), id, 'all=yes');
+                popUpObj = window.open($(this).prop('href'), id, 'all=yes');
 
                 if (window.focus) {
                     popUpObj.focus();

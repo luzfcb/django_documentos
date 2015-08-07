@@ -86,6 +86,7 @@ class BaseModeloVersionado(models.Model):
         super(BaseModeloVersionado, self).save(*args, **kwargs)
 
     class Meta:
+        ordering = ['criado_em']
         abstract = True
 
 
@@ -103,8 +104,6 @@ class Documento(BaseModeloVersionado):
     def __str__(self):
         return self.titulo
 
-    class Meta:
-        db_table = ''
 
 #
 # class DocumentoConteudo(BaseModeloVersionado):

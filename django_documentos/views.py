@@ -58,6 +58,10 @@ class DocumentoCreateView(AuditavelViewMixin, generic.CreateView):
     is_popup = False
     # inlines = [DocumentoConteudoInline, ]
 
+    def __init__(self, *args, **kwargs):
+        super(DocumentoCreateView, self).__init__(*args, **kwargs)
+        print('id: {}'.format(id(self)))
+
     def get_success_url(self):
 
         if self.is_popup:
