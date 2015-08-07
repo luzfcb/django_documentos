@@ -32,6 +32,23 @@ class DocumentoDashboardView(generic.TemplateView):
         return context
 
 
+class NextURLMixin(object):
+    next_kwarg = 'next'
+    next_url = None
+
+    def get_next_kwarg(self):
+        return self.next_kwarg
+
+    def get_next_url(self):
+        next_kwarg = self.get_next_kwarg()
+        next_url = self.kwargs.get(next_kwarg) or self.request.GET.get(next_kwarg)
+        return next_url
+
+    def dispatch(self, request, *args, **kwargs):
+        super(NextURLMixin, self).dispatch(request, *args, **kwargs)
+        self.next_url = self.get_next_url()
+
+
 class DocumentoListView(generic.ListView):
     template_name = 'django_documentos/documento_list.html'
     model = Documento
@@ -50,7 +67,7 @@ class AuditavelViewMixin(object):
 #     can_delete = False
 
 
-class DocumentoCreateView(AuditavelViewMixin, generic.CreateView):
+class DocumentoCreateView(NextURLMixin, AuditavelViewMixin, generic.CreateView):
     template_name = 'django_documentos/documento_create.html'
     model = Documento
     form_class = DocumentoFormCreate
@@ -66,7 +83,8 @@ class DocumentoCreateView(AuditavelViewMixin, generic.CreateView):
 
         if self.is_popup:
             return reverse_lazy('documentos:close')
-
+        if self.next_url:
+            return self.next_url
         return super(DocumentoCreateView, self).get_success_url()
 
     def get_is_popup(self):
