@@ -2,6 +2,7 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 from django.core.urlresolvers import reverse_lazy
+from django.shortcuts import redirect
 from django.views import generic
 from extra_views import CreateWithInlinesView, InlineFormSet, UpdateWithInlinesView
 
@@ -37,16 +38,26 @@ class NextURLMixin(object):
     next_url = None
 
     def get_next_kwarg(self):
+        print('get_next_kwarg')
         return self.next_kwarg
 
     def get_next_url(self):
         next_kwarg = self.get_next_kwarg()
         next_url = self.kwargs.get(next_kwarg) or self.request.GET.get(next_kwarg)
+        print('next_url: {}'.format(next_url))
         return next_url
 
     def dispatch(self, request, *args, **kwargs):
-        super(NextURLMixin, self).dispatch(request, *args, **kwargs)
+        ret = super(NextURLMixin, self).dispatch(request, *args, **kwargs)
         self.next_url = self.get_next_url()
+        return ret
+
+    def get_context_data(self, **kwargs):
+        context = super(NextURLMixin, self).get_context_data(**kwargs)
+        context['next_kwarg'] = self.get_next_kwarg()
+        context['next_url'] = self.get_next_url()
+
+        return context
 
 
 class DocumentoListView(generic.ListView):
@@ -84,7 +95,8 @@ class DocumentoCreateView(NextURLMixin, AuditavelViewMixin, generic.CreateView):
         if self.is_popup:
             return reverse_lazy('documentos:close')
         if self.next_url:
-            return self.next_url
+            print('if self.next_url')
+            return redirect(self.next_url)
         return super(DocumentoCreateView, self).get_success_url()
 
     def get_is_popup(self):

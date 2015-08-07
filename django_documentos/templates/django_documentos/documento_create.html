@@ -14,7 +14,7 @@
     {% if form %}
         <a id="teste" href="{% url 'documentos:create' %}{% if popup %}?popup=1{% endif %}">Verifique a Validade</a>
         <div id="codigo_qr"></div>
-        <form action="{% url 'documentos:create' %}{% if popup %}?popup=1{% endif %}" method="post" name="documento_create">
+        <form action="{% url 'documentos:create' %}{% if popup or next_url%}?{% endif %}{% if popup %}popup=1{% endif %}{% if next_url %}&{{ next_kwarg }}={{ next_url }}{% endif %}" method="post" name="documento_create">
             {% csrf_token %}
 
             {% if form.non_field_errors %}
