@@ -20,7 +20,11 @@ urlpatterns = [
         DocumentoListView.as_view(),
         name='list'
         ),
-    url(r'^create/$',
+    # url(r'^create/$',
+    #     DocumentoCreateView.as_view(),
+    #     name='create'
+    #     ),
+    url(r'^d/create/$',
         DocumentoCreateView.as_view(),
         name='create'
         ),

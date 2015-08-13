@@ -30,10 +30,23 @@
     <a href="{% url 'documentos:create' %}?next=https://www.google.com" class="popup">
         Criar novo v2
     </a>
-    <a href="{% url 'documentos:create' %}?popup=1&next=https://www.google.com" id="create3" class="popup" data-fullscreen="no" data-scrollbars="no"
+    <a href="{% url 'documentos:create' %}?popup=1&next=http://127.0.0.1:8004/list/" id="create3" class="popup" data-fullscreen="no" data-scrollbars="no"
        alt="my link text">
         Criar novo v3
     </a>
+    <a href="{% url 'documentos:create' %}?popup=1&next=//127.0.0.1:8004/list/" id="create3" class="popup" data-fullscreen="no" data-scrollbars="no"
+       alt="my link text">
+        Criar novo v4
+    </a>
+    <a href="{% url 'documentos:create' %}?popup=1&next=127.0.0.1:8004/list/" id="create3" class="popup" data-fullscreen="no" data-scrollbars="no"
+       alt="my link text">
+        Criar novo v5
+    </a>
+    <a href="{% url 'documentos:create' %}?popup=1&next=http://127.0.0.1:8004/list/?teste=1" id="create3" class="popup" data-fullscreen="no" data-scrollbars="no"
+       alt="my link text">
+        Criar novo v6
+    </a>
+
 
 
     <script>
@@ -168,7 +181,14 @@
             return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [, ""])[1].replace(/\+/g, '%20')) || null
         }
         function redirecionar(param) {
-            console.log("algo aqui:" + window.location.href);
+{#            console.log("algo aqui:" + window.location.href);#}
+{#            if(param.charAt(0) !== "/"){#}
+{#                param = "/" + param;#}
+{#            }#}
+{#            if(window.location.port !== "80" || window.location.port !== "443"){#}
+{#                param = ":" + window.location.port + param;#}
+{#            }#}
+{#            window.location.href = window.location.protocol + "//" + window.location.hostname + param;#}
             window.location.href = param;
             console.log('param=' + param);
         }

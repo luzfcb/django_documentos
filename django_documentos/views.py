@@ -4,6 +4,7 @@ from __future__ import absolute_import, print_function, unicode_literals
 from django.core.urlresolvers import reverse_lazy, reverse
 from django.http import JsonResponse
 from django.shortcuts import redirect
+from django.utils.encoding import iri_to_uri
 from django.views import generic
 from extra_views import CreateWithInlinesView, InlineFormSet, UpdateWithInlinesView
 
@@ -20,6 +21,7 @@ class AjaxableResponseMixin(object):
     Mixin to add AJAX support to a form.
     Must be used with an object-based FormView (e.g. CreateView)
     """
+
     def form_invalid(self, form):
         response = super(AjaxableResponseMixin, self).form_invalid(form)
         if self.request.is_ajax():
@@ -40,6 +42,7 @@ class AjaxableResponseMixin(object):
             return JsonResponse(data)
         else:
             return response
+
 
 class DocumentoGeneralDashboardView(generic.TemplateView):
     template_name = 'django_documentos/dashboard_general.html'
@@ -88,7 +91,7 @@ class NextURLMixin(object):
         context = super(NextURLMixin, self).get_context_data(**kwargs)
         context['next_kwarg'] = self.get_next_kwarg()
         context['next_url'] = self.get_next_url()
-
+        context['next_url2'] = self.request.build_absolute_uri(self.get_next_url())
         return context
 
 
@@ -123,15 +126,21 @@ class DocumentoCreateView(AjaxableResponseMixin, NextURLMixin, AuditavelViewMixi
         print('id: {}'.format(id(self)))
 
     def get_success_url(self):
-        print("get_success_url of {}".format(id(self)))
+        # print("get_success_url of {}".format(id(self)))
         document_param = "?documment={}".format(self.object.pk)
         if not self.is_popup and self.next_url:
             return "{}{}".format(self.next_url, document_param)
 
         if not self.next_url:
             return reverse('documentos:detail', {'pk': self.object.pk})
-
-        return '{}?{}={}'.format(reverse_lazy('documentos:close'), self.next_kwarg, "{}{}".format(self.next_url, document_param))
+        import urlparse
+        parsed = urlparse.urlparse(self.next_kwarg)
+        next2_ = urlparse.parse_qs(parsed.query)
+        print("parsed:", parsed)
+        print("close:", next2_)
+        close_view_url = '{}?{}={}'.format(reverse_lazy('documentos:close'), self.next_kwarg,
+                                 "{}{}".format(self.next_url, document_param))
+        return close_view_url
 
     def form_valid(self, form):
         self.next_url = form.cleaned_data.get('proximo')
@@ -156,13 +165,17 @@ class DocumentoCreateView(AjaxableResponseMixin, NextURLMixin, AuditavelViewMixi
 
     def get_form(self, form_class=None):
         form = super(DocumentoCreateView, self).get_form(form_class=form_class)
-        print(form)
+        # print(form)
         return form
 
 
 class CloseView(NextURLMixin, generic.TemplateView):
     template_name = 'django_documentos/fechar.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(CloseView, self).get_context_data(**kwargs)
+
+        return context
 
 class DocumentoDetailView(generic.DetailView):
     template_name = 'django_documentos/documento_detail.html'
