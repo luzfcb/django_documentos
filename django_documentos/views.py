@@ -133,6 +133,10 @@ class DocumentoCreateView(AjaxableResponseMixin, NextURLMixin, AuditavelViewMixi
 
         if not self.next_url:
             return reverse('documentos:detail', {'pk': self.object.pk})
+
+        # http://stackoverflow.com/questions/4293460/how-to-add-custom-parameters-to-an-url-query-string-with-python
+        # http://stackoverflow.com/questions/2506379/add-params-to-given-url-in-python
+        # http://stackoverflow.com/questions/5074803/retrieving-parameter-from-url-in-python
         import urlparse
         parsed = urlparse.urlparse(self.next_kwarg)
         next2_ = urlparse.parse_qs(parsed.query)
