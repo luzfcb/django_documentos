@@ -1,4 +1,5 @@
 {% extends "django_documentos/base.html" %}
+{% load staticfiles %}
 {% block titulo %}
     Dashboard
 {% endblock titulo %}
@@ -25,24 +26,24 @@
     </h4>
 
     <a href="{% url 'documentos:create' %}?next=https://www.google.com" target="_blank">
-        Criar novo v1
+        Criar novo v1 - Nova aba
     </a>
-    <a href="{% url 'documentos:create' %}?next=https://www.google.com" class="popup">
+    <a href="{% url 'documentos:create' %}?next=https://www.google.com" class="djpopup">
         Criar novo v2
     </a>
-    <a href="{% url 'documentos:create' %}?popup=1&next=http://127.0.0.1:8004/list/" id="create3" class="popup" data-fullscreen="no" data-scrollbars="no"
+    <a href="{% url 'documentos:create' %}?popup=1&next=http://127.0.0.1:8004/list/" id="create3" class="djpopup" data-fullscreen="no" data-scrollbars="no"
        alt="my link text">
         Criar novo v3
     </a>
-    <a href="{% url 'documentos:create' %}?popup=1&next=//127.0.0.1:8004/list/" id="create3" class="popup" data-fullscreen="no" data-scrollbars="no"
+    <a href="{% url 'documentos:create' %}?popup=1&next=//127.0.0.1:8004/list/" id="create3" class="djpopup" data-fullscreen="no" data-scrollbars="no"
        alt="my link text">
         Criar novo v4
     </a>
-    <a href="{% url 'documentos:create' %}?popup=1&next=127.0.0.1:8004/list/" id="create3" class="popup" data-fullscreen="no" data-scrollbars="no"
+    <a href="{% url 'documentos:create' %}?popup=1&next=127.0.0.1:8004/list/" id="create3" class="djpopup" data-fullscreen="no" data-scrollbars="no"
        alt="my link text">
         Criar novo v5
     </a>
-    <a href="{% url 'documentos:create' %}?popup=1&next=http://127.0.0.1:8004/list/?teste=1" id="create3" class="popup" data-fullscreen="no" data-scrollbars="no"
+    <a href="{% url 'documentos:create' %}?popup=1&next=http://127.0.0.1:8004/list/?teste=1" id="create3" class="djpopup" data-fullscreen="no" data-scrollbars="no"
        alt="my link text">
         Criar novo v6
     </a>
@@ -65,142 +66,5 @@
 
 {% block js_app %}
     {{ block.super }}
-    <script>
-        jQuery(document).ready(function ($) {
-
-            $('.asdasdsa').click(function () {
-
-                var id = $(this).attr('id');
-                var w = $(this).data('width');
-                var h = $(this).data('height');
-                var s = $(this).data('scrollbars');
-                var fullscreen = $(this).data('fullscreen');
-                if (fullscreen === "no") {
-                    console.log(fullscreen);
-                } else {
-                    console.log('nada');
-                }
-
-
-                var left = (screen.width / 2) - (w / 2);
-                var top = (screen.height / 2) - (h / 2);
-
-                var NWin = window.open($(this).prop('href'), id, 'scrollbars=' + s + ',resizable=yes,width=' + w + ',height=' + h + ',top=' + top + ',left=' + left + ',modal=yes');
-
-                if (window.focus) {
-                    NWin.focus();
-                }
-
-                return false;
-            });
-
-
-            $('.popup').click(function () {
-
-                var popUpObj;
-
-                var id = $(this).attr('id');
-                var w = $(this).data('width');
-                var h = $(this).data('height');
-                var s = $(this).data('scrollbars');
-                var fullscreen = $(this).data('fullscreen');
-                if (fullscreen === "no") {
-                    console.log(fullscreen);
-                } else {
-                    console.log('nada');
-                }
-
-
-                var left = (screen.width / 2) - (w / 2);
-                var top = (screen.height / 2) - (h / 2);
-                var features = 'scrollbars=' + s + ',resizable=yes,width=' + w + ',height=' + h + ',top=' + top + ',left=' + left + ',modal=yes';
-                popUpObj = window.open($(this).prop('href'), id, 'all=yes');
-
-                if (window.focus) {
-                    popUpObj.focus();
-                }
-
-
-                {#                popUpObj = window.open($(this).prop('href'),#}
-                {#                        "ModalPopUp",#}
-                {#                        "toolbar=no," +#}
-                {#                        "scrollbars=no," +#}
-                {#                        "location=no," +#}
-                {#                        "statusbar=no," +#}
-                {#                        "menubar=no," +#}
-                {#                        "resizable=0," +#}
-                {#                        "width=100," +#}
-                {#                        "height=100," +#}
-                {#                        "left = 490," +#}
-                {#                        "top=300");#}
-
-                LoadModalDiv(popUpObj);
-                autoHideModalDivIfPopUPClosed(popUpObj);
-                return false;
-
-            });
-
-            function autoHideModalDivIfPopUPClosed(popUpObj) {
-                var timer = setInterval(function () {
-                    if (popUpObj.closed) {
-                        clearInterval(timer);
-                        HideModalDiv('');
-                    }
-                }, 500);
-            }
-
-            function LoadModalDiv(popUpObj) {
-                var bcgDiv = document.getElementById("divBackground");
-
-                if (popUpObj) {
-                    function oba() {
-                        popUpObj.focus();
-                    }
-
-                    bcgDiv.onclick = oba;
-                }
-
-
-                bcgDiv.style.display = "block";
-
-
-                if (bcgDiv != null) {
-                    if (document.body.clientHeight > document.body.scrollHeight) {
-                        bcgDiv.style.height = document.body.clientHeight + "px";
-                    }
-                    else {
-                        bcgDiv.style.height = document.body.scrollHeight + "px";
-                    }
-                    bcgDiv.style.width = "100%";
-                }
-            }
-
-        });
-
-        function getURLParameter(name) {
-            return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [, ""])[1].replace(/\+/g, '%20')) || null
-        }
-        function redirecionar(param) {
-{#            console.log("algo aqui:" + window.location.href);#}
-{#            if(param.charAt(0) !== "/"){#}
-{#                param = "/" + param;#}
-{#            }#}
-{#            if(window.location.port !== "80" || window.location.port !== "443"){#}
-{#                param = ":" + window.location.port + param;#}
-{#            }#}
-{#            window.location.href = window.location.protocol + "//" + window.location.hostname + param;#}
-            window.location.href = param;
-            console.log('param=' + param);
-        }
-        function HideModalDiv(param) {
-            var bcgDiv = document.getElementById("divBackground");
-            bcgDiv.style.display = "none";
-            //var bcgbody = document.getElementsByName('body');
-            //document.focus();
-            //redirecionar(param);
-        }
-    </script>
-    <div id="divBackground"
-         style=" position:absolute; top:0px; left:0px;background-color:black; z-index:100;opacity: 0.8;filter:alpha(opacity=60); -moz-opacity: 0.8; overflow:hidden; display:none">
-    </div>
+    <script type="text/javascript" src="{% static "django_documentos/js/django_documentos.js" %}"></script>
 {% endblock js_app %}

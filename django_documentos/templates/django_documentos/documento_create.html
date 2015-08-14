@@ -1,4 +1,5 @@
 {% extends popup|yesno:"django_documentos/documento_create_popup_base.html,django_documentos/base.html" %}
+{% load i18n %}
 {#{% extends popup %}#}
 
 {#{% extends "django_documentos/base.html" %}#}
@@ -79,6 +80,7 @@
 
     <script type="text/javascript" src="{% static "django_documentos/js/autosize.js" %}"></script>
     <script src="{% static 'django_documentos/js/jquery.qrcode.min.js' %}"></script>
+    <script src="{% static 'django_documentos/js/jquery.are-you-sure.js' %}"></script>
     <script>
         autosize(document.querySelectorAll('textarea'));
         var teste = $("#teste");
@@ -138,5 +140,9 @@
         {% if next_url %}
 
         {% endif %}
+        $('form').areYouSure(
+                {'message': "{% trans "Suas modificações ainda não foram salvas" %}" }
+        );
+
     </script>
 {% endblock %}

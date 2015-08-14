@@ -68,13 +68,11 @@ class NextURLMixin(object):
     next_url = None
 
     def get_next_kwarg(self):
-        print('get_next_kwarg')
         return self.next_kwarg
 
     def get_next_url(self):
         next_kwarg = self.get_next_kwarg()
         next_url = self.kwargs.get(next_kwarg) or self.request.GET.get(next_kwarg)
-        print('next_url: {}'.format(next_url))
         return next_url
 
     def dispatch(self, request, *args, **kwargs):
@@ -99,6 +97,10 @@ class DocumentoListView(generic.ListView):
     template_name = 'django_documentos/documento_list.html'
     model = Documento
 
+    def render_to_response(self, context, **response_kwargs):
+        rend = super(DocumentoListView, self).render_to_response(context, **response_kwargs)
+        return rend
+
 
 class AuditavelViewMixin(object):
     def form_valid(self, form):
@@ -108,9 +110,28 @@ class AuditavelViewMixin(object):
         return super(AuditavelViewMixin, self).form_valid(form)
 
 
-# class DocumentoConteudoInline(InlineFormSet):
-#     model = DocumentoConteudo
-#     can_delete = False
+from urllib import urlencode
+from urlparse import parse_qs, urlsplit, urlunsplit
+
+
+def set_query_parameter(url, pairs):
+    """Given a URL, set or replace a query parameter and return the
+    modified URL.
+
+    >>> set_query_parameter('http://example.com?foo=bar&biz=baz', 'foo', 'stuff')
+    'http://example.com?foo=stuff&biz=baz'
+
+    """
+    scheme, netloc, path, query_string, fragment = urlsplit(url)
+    query_params = parse_qs(query_string)
+
+    #query_params[param_name] = [param_value]
+    query_params.update(
+        pairs
+    )
+    new_query_string = urlencode(query_params, doseq=True)
+
+    return urlunsplit((scheme, netloc, path, new_query_string, fragment))
 
 
 class DocumentoCreateView(AjaxableResponseMixin, NextURLMixin, AuditavelViewMixin, generic.CreateView):
@@ -127,23 +148,23 @@ class DocumentoCreateView(AjaxableResponseMixin, NextURLMixin, AuditavelViewMixi
 
     def get_success_url(self):
         # print("get_success_url of {}".format(id(self)))
-        document_param = "?documment={}".format(self.object.pk)
-        if not self.is_popup and self.next_url:
-            return "{}{}".format(self.next_url, document_param)
+        # document_param = "?document={}".format(self.object.pk)
 
-        if not self.next_url:
+        document_param_name = 'document'
+        document_param_value = self.object.pk
+
+        doc = {
+            document_param_name: document_param_value
+        }
+        next_url = set_query_parameter(self.get_next_url(), doc)
+        if not self.is_popup and self.get_next_url():
+            return next_url
+
+        if not self.get_next_url():
             return reverse('documentos:detail', {'pk': self.object.pk})
 
-        # http://stackoverflow.com/questions/4293460/how-to-add-custom-parameters-to-an-url-query-string-with-python
-        # http://stackoverflow.com/questions/2506379/add-params-to-given-url-in-python
-        # http://stackoverflow.com/questions/5074803/retrieving-parameter-from-url-in-python
-        import urlparse
-        parsed = urlparse.urlparse(self.next_kwarg)
-        next2_ = urlparse.parse_qs(parsed.query)
-        print("parsed:", parsed)
-        print("close:", next2_)
-        close_view_url = '{}?{}={}'.format(reverse_lazy('documentos:close'), self.next_kwarg,
-                                 "{}{}".format(self.next_url, document_param))
+        close_view_url = set_query_parameter(reverse_lazy('documentos:close'), {self.next_kwarg: next_url})
+        close_view_url = self.request.build_absolute_uri(close_view_url)
         return close_view_url
 
     def form_valid(self, form):
@@ -180,6 +201,7 @@ class CloseView(NextURLMixin, generic.TemplateView):
         context = super(CloseView, self).get_context_data(**kwargs)
 
         return context
+
 
 class DocumentoDetailView(generic.DetailView):
     template_name = 'django_documentos/documento_detail.html'
