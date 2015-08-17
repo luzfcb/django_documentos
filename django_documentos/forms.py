@@ -5,8 +5,8 @@ from django import forms
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
-from redactor.widgets import RedactorEditor
 
+# from redactor.widgets import RedactorEditor
 from .models import Documento
 
 

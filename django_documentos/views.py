@@ -1,14 +1,17 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function, unicode_literals
-from django.core.exceptions import ImproperlyConfigured
 
-from django.core.urlresolvers import reverse_lazy, reverse
+from pprint import pprint
+from urllib import urlencode
+from urlparse import parse_qs, urlsplit, urlunsplit
+
+from django.core.exceptions import ImproperlyConfigured
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.http import JsonResponse
-from django.shortcuts import redirect, resolve_url
-from django.utils.encoding import iri_to_uri, uri_to_iri
+from django.shortcuts import resolve_url
+from django.utils.encoding import uri_to_iri
 from django.utils.http import is_safe_url
 from django.views import generic
-from extra_views import CreateWithInlinesView, InlineFormSet, UpdateWithInlinesView
 
 from simple_history.views import HistoryRecordListViewMixin, RevertFromHistoryRecordViewMixin
 
@@ -100,8 +103,7 @@ class NextURLMixin(generic.View):
         if self.next_page_url is not None:
             next_page = resolve_url(self.next_page_url)
 
-        if (next_kwarg_name in self.request.POST or
-                    next_kwarg_name in self.request.GET):
+        if next_kwarg_name in self.request.POST or next_kwarg_name in self.request.GET:
             next_page = self.request.POST.get(next_kwarg_name,
                                               self.request.GET.get(next_kwarg_name))
             # Security check -- don't allow redirection to a different host.
@@ -163,12 +165,6 @@ class AuditavelViewMixin(object):
             form.instance.criado_por = self.request.user
         form.instance.modificado_por = self.request.user
         return super(AuditavelViewMixin, self).form_valid(form)
-
-
-from urllib import urlencode
-from urlparse import parse_qs, urlsplit, urlunsplit
-
-from pprint import pprint
 
 
 def set_query_parameter(url, pairs):

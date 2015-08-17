@@ -1,4 +1,4 @@
-from redactor.handlers import UUIDUploader, DateDirectoryUploader
+from redactor.handlers import DateDirectoryUploader, UUIDUploader
 
 
 class DateDirectoryWithUUIDUploader(UUIDUploader, DateDirectoryUploader):

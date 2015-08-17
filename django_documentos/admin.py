@@ -23,7 +23,7 @@ class DocumentContentAdmin(SimpleHistoryAdmin):
     def visualizar_versao(self, obj):
         url_triplet = self.admin_site.name, self.model._meta.app_label, self.model._meta.model_name
         history_url = reverse('%s:%s_%s_history' % url_triplet,
-                                   args=(obj.pk,))
+                              args=(obj.pk,))
         html = format_html('<a href="{}">{}</a>'.format(history_url, 'Visualizar'))
         return html
     visualizar_versao.allow_tags = True
