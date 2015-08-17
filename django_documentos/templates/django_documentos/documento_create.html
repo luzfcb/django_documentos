@@ -18,9 +18,7 @@
         <div id="success_div"></div>
         <div id="error_div"></div>
         <form action="
-
-
-                {% url 'documentos:create' %}{% if popup or next_url %}?{% endif %}{% if popup %}popup=1{% endif %}{% if next_url %}&{{ next_kwarg }}={{ next_url }}{% endif %}"
+                {% url 'documentos:create' %}{% if popup or next_page_url %}?{% endif %}{% if popup %}popup=1{% endif %}{% if next_page_url %}&{{ next_kwarg_name }}={{ next_page_url }}{% endif %}"
               method="post" id="documento_create">
             {% csrf_token %}
 
@@ -49,31 +47,31 @@
                     "use strict";
                     if (window.opener != null && !window.opener.closed) {
                         window.opener.HideModalDiv();
-                        {% if next_url %}
-                            window.opener.redirecionar("{{ next_url }}");
+                        {% if next_page_url %}
+                            window.opener.redirecionar("{{ next_page_url }}");
                         {% endif %}
                     }
                 }
                 window.onunload = OnClose;
             {% endif %}
-            $('#documento_create').on('submit', '#enviar', function () {
-                $.ajax({
-                    type: $(this).attr('method'),
-                    url: $(this).attr('action'),
-                    data: $(this).serialize(),
-                    success: function () { // on success..
-                        var sucess_div = $('#success_div');
-                        sucess_div.append('Changes saved'); // update the DIV
-                        sucess_div.toggleClass('alert alert-success'); // unhide
-                    },
-                    error: function (xhr, ajaxOptions, thrownError) { // on error..
-                        var error_div = $('#error_div');
-                        error_div.append(xhr); // update the DIV
-                        error_div.toggleClass('alert alert-error'); // unhide
-                    }
-                });
-                return false;
-            });
+{#            $('#documento_create').on('submit', '#enviar', function () {#}
+{#                $.ajax({#}
+{#                    type: $(this).attr('method'),#}
+{#                    url: $(this).attr('action'),#}
+{#                    data: $(this).serialize(),#}
+{#                    success: function () { // on success..#}
+{#                        var sucess_div = $('#success_div');#}
+{#                        sucess_div.append('Changes saved'); // update the DIV#}
+{#                        sucess_div.toggleClass('alert alert-success'); // unhide#}
+{#                    },#}
+{#                    error: function (xhr, ajaxOptions, thrownError) { // on error..#}
+{#                        var error_div = $('#error_div');#}
+{#                        error_div.append(xhr); // update the DIV#}
+{#                        error_div.toggleClass('alert alert-error'); // unhide#}
+{#                    }#}
+{#                });#}
+{#                return false;#}
+{#            });#}
 
         </script>
     {% endif %}
@@ -137,7 +135,7 @@
         };
 
         $("#codigo_qr").qrcode(opcoes);
-        {% if next_url %}
+        {% if next_page_url %}
 
         {% endif %}
         $('form').areYouSure(

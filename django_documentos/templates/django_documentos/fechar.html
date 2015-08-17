@@ -10,13 +10,13 @@
         "use strict";
         if (window.opener != null && !window.opener.closed) {
             window.opener.HideModalDiv();
-            {% if next_url %}
-                window.opener.redirecionar("{{ next_url2 }}");
+            {% if next_page_url %}
+                window.opener.redirecionar("{{ next_page_url }}");
             {% endif %}
         }
     }
     window.onunload = OnClose;
-    //window.location.href = "{{ next_url2 }}";
+    //window.location.href = "{{ next_page_url2 }}";
     window.close();
 </script>
 

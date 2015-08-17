@@ -25,25 +25,20 @@
 
     </h4>
 
-    <a href="{% url 'documentos:create' %}?next=https://www.google.com" target="_blank">
-        Criar novo v1 - Nova aba
-    </a>
-    <a href="{% url 'documentos:create' %}?next=https://www.google.com" class="djpopup">
-        Criar novo v2
-    </a>
-    <a href="{% url 'documentos:create' %}?popup=1&next=http://127.0.0.1:8004/list/" id="create3" class="djpopup" data-fullscreen="no" data-scrollbars="no"
-       alt="my link text">
-        Criar novo v3
-    </a>
-    <a href="{% url 'documentos:create' %}?popup=1&next=//127.0.0.1:8004/list/" id="create3" class="djpopup" data-fullscreen="no" data-scrollbars="no"
-       alt="my link text">
-        Criar novo v4
-    </a>
-    <a href="{% url 'documentos:create' %}?popup=1&next=127.0.0.1:8004/list/" id="create3" class="djpopup" data-fullscreen="no" data-scrollbars="no"
+{#    <a href="{% url 'documentos:create' %}?next=https://www.google.com" target="_blank">#}
+{#        Criar novo v1 - Nova aba#}
+{#    </a>#}
+{#    <a href="{% url 'documentos:create' %}?next=https://www.google.com" class="djpopup">#}
+{#        Criar novo v2#}
+{#    </a>#}
+
+    <a href="{% url 'documentos:create' %}?popup=1&next=127.0.0.1:8004/list/?teste=1" id="create3" class="djpopup" data-fullscreen="no" data-scrollbars="no"
        alt="my link text">
         Criar novo v5
     </a>
-    <a href="{% url 'documentos:create' %}?popup=1&next=http://127.0.0.1:8004/list/?teste=1" id="create3" class="djpopup" data-fullscreen="no" data-scrollbars="no"
+    <p>
+    <p>
+    <a href="{% url 'documentos:create' %}?popup=1&next=/list/?teste=1" id="create3" class="djpopup" data-fullscreen="no" data-scrollbars="no"
        alt="my link text">
         Criar novo v6
     </a>

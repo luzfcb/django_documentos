@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function, unicode_literals
+from django.core.exceptions import ImproperlyConfigured
 
 from django.core.urlresolvers import reverse_lazy, reverse
 from django.http import JsonResponse
-from django.shortcuts import redirect
-from django.utils.encoding import iri_to_uri
+from django.shortcuts import redirect, resolve_url
+from django.utils.encoding import iri_to_uri, uri_to_iri
+from django.utils.http import is_safe_url
 from django.views import generic
 from extra_views import CreateWithInlinesView, InlineFormSet, UpdateWithInlinesView
 
@@ -63,33 +65,86 @@ class DocumentoDashboardView(generic.TemplateView):
         return context
 
 
-class NextURLMixin(object):
-    next_kwarg = 'next'
-    next_url = None
+class NextURLMixin(generic.View):
+    next_kwarg_name = 'next'
+    next_page_url = None
 
-    def get_next_kwarg(self):
-        return self.next_kwarg
+    def __init__(self):
+        super(NextURLMixin, self).__init__()
+        self.contador = 0
 
-    def get_next_url(self):
-        next_kwarg = self.get_next_kwarg()
-        next_url = self.kwargs.get(next_kwarg) or self.request.GET.get(next_kwarg)
-        return next_url
+    def get_next_kwarg_name(self):
+        if not hasattr(self, 'next_kwarg_name'):
+            raise ImproperlyConfigured(
+                '{0} is missing an next_kwarg_name.'
+                ' Define '
+                '{0}.next_kwarg_name or override '
+                '{0}.get_next_kwarg_name().'.format(
+                    self.__class__.__name__))
+        return self.next_kwarg_name
 
-    def dispatch(self, request, *args, **kwargs):
-        ret = super(NextURLMixin, self).dispatch(request, *args, **kwargs)
-        self.next_url = self.get_next_url()
-        if self.request.method in ('POST', 'PUT'):
-            print('self.kwargs: {}'.format(self.kwargs))
-            print('self.request.GET: {}'.format(self.request.GET))
-        else:
-            print('eh get')
+    def get_next_page_url(self):
+        next_kwarg_name = self.get_next_kwarg_name()
+        next_page = None
+
+        if not hasattr(self, 'next_page_url'):
+            raise ImproperlyConfigured(
+                '{0} is missing an next_page_url '
+                'url to redirect to. Define '
+                '{0}.next_page_url or override '
+                '{0}.get_next_page_url().'.format(
+                    self.__class__.__name__))
+
+        self.contador = self.contador + 1
+
+        if self.next_page_url is not None:
+            next_page = resolve_url(self.next_page_url)
+
+        if (next_kwarg_name in self.request.POST or
+                    next_kwarg_name in self.request.GET):
+            next_page = self.request.POST.get(next_kwarg_name,
+                                              self.request.GET.get(next_kwarg_name))
+            # Security check -- don't allow redirection to a different host.
+            if not is_safe_url(url=next_page, host=self.request.get_host()):
+                next_page = self.request.path
+
+        # next_url = self.kwargs.get(next_kwarg_name) or self.request.GET.get(next_kwarg_name) or self.request.POST.get(next_kwarg_name)
+        # next_url = resolve_url(next_url)
+        print(next_page)
+        return next_page
+
+    # def dispatch(self, request, *args, **kwargs):
+    #     ret = super(NextURLMixin, self).dispatch(request, *args, **kwargs)
+    #
+    #
+    #     return ret
+    def form_valid(self, form):
+        self.next_page_url = form.cleaned_data.get('proximo')
+        return super(NextURLMixin, self).form_valid(form)
+
+    def get_initial(self):
+        initial = super(NextURLMixin, self).get_initial()
+        initial.update({'proximo': self.get_next_page_url()})
+        return initial
+
+    def post(self, request, *args, **kwargs):
+        ret = super(NextURLMixin, self).post(request, *args, **kwargs)
+        self.next_page_url = self.get_next_page_url()
+        print("POST: self.contador:", self.contador)
+        return ret
+
+    #
+    def get(self, *args, **kwargs):
+        ret = super(NextURLMixin, self).get(*args, **kwargs)
+        self.next_page_url = self.get_next_page_url()
+        print("GET: self.contador:", self.contador)
         return ret
 
     def get_context_data(self, **kwargs):
         context = super(NextURLMixin, self).get_context_data(**kwargs)
-        context['next_kwarg'] = self.get_next_kwarg()
-        context['next_url'] = self.get_next_url()
-        context['next_url2'] = self.request.build_absolute_uri(self.get_next_url())
+        context['next_kwarg_name'] = self.next_kwarg_name  # self.get_next_kwarg_name()
+        context['next_page_url'] = self.next_page_url
+        # context['next_url2'] = self.request.build_absolute_uri(self.get_next_page_url())
         return context
 
 
@@ -113,6 +168,8 @@ class AuditavelViewMixin(object):
 from urllib import urlencode
 from urlparse import parse_qs, urlsplit, urlunsplit
 
+from pprint import pprint
+
 
 def set_query_parameter(url, pairs):
     """Given a URL, set or replace a query parameter and return the
@@ -122,16 +179,23 @@ def set_query_parameter(url, pairs):
     'http://example.com?foo=stuff&biz=baz'
 
     """
-    scheme, netloc, path, query_string, fragment = urlsplit(url)
+
+    url2 = uri_to_iri(url)
+    scheme, netloc, path, query_string, fragment = urlsplit(url2)
     query_params = parse_qs(query_string)
 
-    #query_params[param_name] = [param_value]
+    # query_params[param_name] = [param_value]
     query_params.update(
         pairs
     )
     new_query_string = urlencode(query_params, doseq=True)
+    teste = uri_to_iri(new_query_string)
 
-    return urlunsplit((scheme, netloc, path, new_query_string, fragment))
+    new_url = urlunsplit((scheme, netloc, path, new_query_string, fragment))
+    print('--------------')
+    pprint(locals())
+    print('--------------')
+    return new_url
 
 
 class DocumentoCreateView(AjaxableResponseMixin, NextURLMixin, AuditavelViewMixin, generic.CreateView):
@@ -149,6 +213,9 @@ class DocumentoCreateView(AjaxableResponseMixin, NextURLMixin, AuditavelViewMixi
     def get_success_url(self):
         # print("get_success_url of {}".format(id(self)))
         # document_param = "?document={}".format(self.object.pk)
+        next_kwarg_name = self.get_next_kwarg_name()
+        next_page_url = self.get_next_page_url()
+        is_popup = self.get_is_popup()
 
         document_param_name = 'document'
         document_param_value = self.object.pk
@@ -156,20 +223,26 @@ class DocumentoCreateView(AjaxableResponseMixin, NextURLMixin, AuditavelViewMixi
         doc = {
             document_param_name: document_param_value
         }
-        next_url = set_query_parameter(self.get_next_url(), doc)
-        if not self.is_popup and self.get_next_url():
+        next_url = set_query_parameter(self.next_page_url, doc)
+        print('next_page_url:', next_url)
+        if not is_popup and next_page_url:
             return next_url
 
-        if not self.get_next_url():
+        if not next_page_url:
             return reverse('documentos:detail', {'pk': self.object.pk})
 
-        close_view_url = set_query_parameter(reverse_lazy('documentos:close'), {self.next_kwarg: next_url})
-        close_view_url = self.request.build_absolute_uri(close_view_url)
+        close_view_url = set_query_parameter(reverse_lazy('documentos:close'), {next_kwarg_name: uri_to_iri(next_url)})
+
+        print('close_view_url:', close_view_url)
+        print('get_full_path:', self.request.get_full_path())
+        # close_view_url = self.request.build_absolute_uri(close_view_url)
+        print('close_view_url2:', close_view_url)
         return close_view_url
 
-    def form_valid(self, form):
-        self.next_url = form.cleaned_data.get('proximo')
-        return super(NextURLMixin, self).form_valid(form)
+    def get_initial(self):
+        initial = super(DocumentoCreateView, self).get_initial()
+        initial.update({'is_popup': self.get_is_popup()})
+        return initial
 
     def get_is_popup(self):
         if self.request.GET.get('popup', False):
@@ -177,11 +250,6 @@ class DocumentoCreateView(AjaxableResponseMixin, NextURLMixin, AuditavelViewMixi
         else:
             self.is_popup = False
         return self.is_popup
-
-    def get_initial(self):
-        initial = super(DocumentoCreateView, self).get_initial()
-        initial.update({'proximo': self.get_next_url(), 'is_popup': self.get_is_popup()})
-        return initial
 
     def get_context_data(self, **kwargs):
         context = super(DocumentoCreateView, self).get_context_data(**kwargs)
