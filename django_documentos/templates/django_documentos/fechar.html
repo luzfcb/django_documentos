@@ -15,9 +15,10 @@
             {% endif %}
         }
     }
+    OnClose();
     window.onunload = OnClose;
     //window.location.href = "{{ next_page_url2 }}";
-    window.close();
+    //window.close();
 </script>
 
 </body>

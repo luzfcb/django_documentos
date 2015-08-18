@@ -2,15 +2,15 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 from pprint import pprint
-from urllib import urlencode
-from urlparse import parse_qs, urlsplit, urlunsplit
+# from urllib import urlencode
+# from urlparse import parse_qs, urlsplit, urlunsplit, urlparse, urlunparse
 
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse, reverse_lazy
-from django.http import JsonResponse
+from django.http import JsonResponse, QueryDict
 from django.shortcuts import resolve_url
 from django.utils.encoding import uri_to_iri
-from django.utils.http import is_safe_url
+from django.utils.http import is_safe_url, urlunquote, urlquote_plus, urlunquote_plus, urlencode
 from django.views import generic
 
 from simple_history.views import HistoryRecordListViewMixin, RevertFromHistoryRecordViewMixin
@@ -110,9 +110,6 @@ class NextURLMixin(generic.View):
             if not is_safe_url(url=next_page, host=self.request.get_host()):
                 next_page = self.request.path
 
-        # next_url = self.kwargs.get(next_kwarg_name) or self.request.GET.get(next_kwarg_name) or self.request.POST.get(next_kwarg_name)
-        # next_url = resolve_url(next_url)
-        print(next_page)
         return next_page
 
     # def dispatch(self, request, *args, **kwargs):
@@ -145,7 +142,7 @@ class NextURLMixin(generic.View):
     def get_context_data(self, **kwargs):
         context = super(NextURLMixin, self).get_context_data(**kwargs)
         context['next_kwarg_name'] = self.next_kwarg_name  # self.get_next_kwarg_name()
-        context['next_page_url'] = self.next_page_url
+        context['next_page_url'] = self.next_page_url or self.get_next_page_url()
         # context['next_url2'] = self.request.build_absolute_uri(self.get_next_page_url())
         return context
 
@@ -167,31 +164,57 @@ class AuditavelViewMixin(object):
         return super(AuditavelViewMixin, self).form_valid(form)
 
 
-def set_query_parameter(url, pairs):
-    """Given a URL, set or replace a query parameter and return the
-    modified URL.
+# def set_query_parameter(url, pairs):
+#     """Given a URL, set or replace a query parameter and return the
+#     modified URL.
+#
+#     >>> set_query_parameter('http://example.com?foo=bar&biz=baz', 'foo', 'stuff')
+#     'http://example.com?foo=stuff&biz=baz'
+#
+#     """
+#
+#     # url2 = uri_to_iri(url)
+#     scheme, netloc, path, query_string, fragment = urlsplit(url)
+#     query_params = parse_qs(query_string)
+#
+#     # query_params[param_name] = [param_value]
+#     query_params.update(
+#         pairs
+#     )
+#     new_query_string = urlencode(query_params, doseq=True)
+#     # teste = uri_to_iri(new_query_string)
+#
+#     new_url = urlunsplit((scheme, netloc, path, new_query_string, fragment))
+#     print('--------------')
+#     pprint(locals())
+#     print('--------------')
+#     return new_url
 
-    >>> set_query_parameter('http://example.com?foo=bar&biz=baz', 'foo', 'stuff')
-    'http://example.com?foo=stuff&biz=baz'
 
-    """
+# def url_path_join(*parts):
+#     """Normalize url parts and join them with a slash."""
+#     schemes, netlocs, paths, queries, fragments = zip(*(urlsplit(part) for part in parts))
+#     scheme, netloc, query, fragment = first_of_each(schemes, netlocs, queries, fragments)
+#     path = '/'.join(x.strip('/') for x in paths if x)
+#     return urlunsplit((scheme, netloc, path, query, fragment))
+#
+#
+# def first_of_each(*sequences):
+#     return (next((x for x in sequence if x), '') for sequence in sequences)
 
-    url2 = uri_to_iri(url)
-    scheme, netloc, path, query_string, fragment = urlsplit(url2)
-    query_params = parse_qs(query_string)
-
-    # query_params[param_name] = [param_value]
-    query_params.update(
-        pairs
-    )
-    new_query_string = urlencode(query_params, doseq=True)
-    teste = uri_to_iri(new_query_string)
-
-    new_url = urlunsplit((scheme, netloc, path, new_query_string, fragment))
-    print('--------------')
-    pprint(locals())
-    print('--------------')
-    return new_url
+# def add_get_args_to_url(url, arg_dict):
+#     # import urllib
+#     # urllib.quote_plus()
+#     url_parts = urlparse(url)
+#
+#     qs_args = parse_qs(url_parts[4])
+#     qs_args.update(arg_dict)
+#
+#     new_qs = urlencode(qs_args, True)
+#
+#     ret = urlunparse(list(url_parts[0:4]) + [new_qs] + list(url_parts[5:]))
+#     #pprint(locals(), indent=4)
+#     return ret
 
 
 class DocumentoCreateView(AjaxableResponseMixin, NextURLMixin, AuditavelViewMixin, generic.CreateView):
@@ -216,10 +239,16 @@ class DocumentoCreateView(AjaxableResponseMixin, NextURLMixin, AuditavelViewMixi
         document_param_name = 'document'
         document_param_value = self.object.pk
 
+        qd = QueryDict('', mutable=True)
+
         doc = {
             document_param_name: document_param_value
         }
-        next_url = set_query_parameter(self.next_page_url, doc)
+        qd.update(doc)
+        # next_url = set_query_parameter(self.next_page_url, doc)
+        doc2 = urlencode(qd.urlencode())
+
+        next_url = (next_page_url, doc)
         print('next_page_url:', next_url)
         if not is_popup and next_page_url:
             return next_url
@@ -227,12 +256,12 @@ class DocumentoCreateView(AjaxableResponseMixin, NextURLMixin, AuditavelViewMixi
         if not next_page_url:
             return reverse('documentos:detail', {'pk': self.object.pk})
 
-        close_view_url = set_query_parameter(reverse_lazy('documentos:close'), {next_kwarg_name: uri_to_iri(next_url)})
-
-        print('close_view_url:', close_view_url)
-        print('get_full_path:', self.request.get_full_path())
+        close_view_url = reverse_lazy('documentos:close'), {next_kwarg_name: urlquote_plus(next_url)}
+        #close_view_url = urlunquote_plus(close_view_url)
+        # print('close_view_url:', close_view_url)
+        # print('get_full_path:', self.request.get_full_path())
         # close_view_url = self.request.build_absolute_uri(close_view_url)
-        print('close_view_url2:', close_view_url)
+        # print('close_view_url2:', close_view_url)
         return close_view_url
 
     def get_initial(self):
