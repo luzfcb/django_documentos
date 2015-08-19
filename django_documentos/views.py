@@ -246,9 +246,9 @@ class DocumentoCreateView(AjaxableResponseMixin, NextURLMixin, AuditavelViewMixi
         }
         qd.update(doc)
         # next_url = set_query_parameter(self.next_page_url, doc)
-        doc2 = urlencode(qd.urlencode())
+        # doc2 = urlencode(qd.urlencode())
 
-        next_url = (next_page_url, doc)
+        next_url = "{}&{}={}".format(next_page_url, document_param_name, document_param_value)
         print('next_page_url:', next_url)
         if not is_popup and next_page_url:
             return next_url
@@ -256,13 +256,15 @@ class DocumentoCreateView(AjaxableResponseMixin, NextURLMixin, AuditavelViewMixi
         if not next_page_url:
             return reverse('documentos:detail', {'pk': self.object.pk})
 
-        close_view_url = reverse_lazy('documentos:close'), {next_kwarg_name: urlquote_plus(next_url)}
+        original_close_url = reverse('documentos:close')
+        aaa = "{}?{}={}".format(original_close_url, 'next', next_url)
+        # close_view_url = next_kwarg_name: urlquote_plus(next_url)
         #close_view_url = urlunquote_plus(close_view_url)
         # print('close_view_url:', close_view_url)
         # print('get_full_path:', self.request.get_full_path())
         # close_view_url = self.request.build_absolute_uri(close_view_url)
         # print('close_view_url2:', close_view_url)
-        return close_view_url
+        return aaa
 
     def get_initial(self):
         initial = super(DocumentoCreateView, self).get_initial()
