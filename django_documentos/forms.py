@@ -43,7 +43,7 @@ class IsPopUpMixin(forms.Form):
 
 
 class NextFormMixin(forms.Form):
-    proximo = forms.CharField(widget=forms.HiddenInput())
+    proximo = forms.CharField(required=False, widget=forms.HiddenInput())
 
 
 class DocumentoFormCreate(SaveHelperFormMixin, NextFormMixin, IsPopUpMixin, forms.ModelForm):

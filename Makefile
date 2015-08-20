@@ -33,6 +33,12 @@ test:
 test-all:
 	tox
 
+isort:
+	-isort --recursive --check-only django_documentos
+
+isortfix:
+	isort --recursive django_documentos
+
 coverage:
 	coverage run --source django_documentos runtests.py tests
 	coverage report -m

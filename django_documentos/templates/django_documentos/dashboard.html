@@ -25,9 +25,16 @@
 
     </h4>
 
-{#    <a href="{% url 'documentos:create' %}?next=https://www.google.com" target="_blank">#}
-{#        Criar novo v1 - Nova aba#}
-{#    </a>#}
+    <a href="{% url 'documentos:create' %}?next=/list/?teste=1">
+        Criar novo v1 - mesma janela
+    </a>
+    <p>
+    <p>
+    <a href="{% url 'documentos:create' %}?next=/list/?teste=1" target="_blank">
+        Criar novo v1 - Nova aba
+    </a>
+    <p>
+    <p>
 {#    <a href="{% url 'documentos:create' %}?next=https://www.google.com" class="djpopup">#}
 {#        Criar novo v2#}
 {#    </a>#}

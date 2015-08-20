@@ -1,22 +1,18 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function, unicode_literals
 
-from pprint import pprint
-# from urllib import urlencode
-# from urlparse import parse_qs, urlsplit, urlunsplit, urlparse, urlunparse
-
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse, reverse_lazy
-from django.http import JsonResponse, QueryDict
+from django.http import JsonResponse
 from django.shortcuts import resolve_url
-from django.utils.encoding import uri_to_iri
-from django.utils.http import is_safe_url, urlunquote, urlquote_plus, urlunquote_plus, urlencode
+# from django.utils.http import is_safe_url
 from django.views import generic
 
 from simple_history.views import HistoryRecordListViewMixin, RevertFromHistoryRecordViewMixin
 
 from .forms import DocumentoFormCreate, DocumentoRevertForm
 from .models import Documento
+from .utils import add_querystrings_to_url
 
 
 # from .models import DocumentoConteudo
@@ -72,10 +68,6 @@ class NextURLMixin(generic.View):
     next_kwarg_name = 'next'
     next_page_url = None
 
-    def __init__(self):
-        super(NextURLMixin, self).__init__()
-        self.contador = 0
-
     def get_next_kwarg_name(self):
         if not hasattr(self, 'next_kwarg_name'):
             raise ImproperlyConfigured(
@@ -98,8 +90,6 @@ class NextURLMixin(generic.View):
                 '{0}.get_next_page_url().'.format(
                     self.__class__.__name__))
 
-        self.contador = self.contador + 1
-
         if self.next_page_url is not None:
             next_page = resolve_url(self.next_page_url)
 
@@ -107,8 +97,8 @@ class NextURLMixin(generic.View):
             next_page = self.request.POST.get(next_kwarg_name,
                                               self.request.GET.get(next_kwarg_name))
             # Security check -- don't allow redirection to a different host.
-            if not is_safe_url(url=next_page, host=self.request.get_host()):
-                next_page = self.request.path
+            # if not is_safe_url(url=next_page, host=self.request.get_host()):
+            #     next_page = self.request.path
 
         return next_page
 
@@ -129,14 +119,12 @@ class NextURLMixin(generic.View):
     def post(self, request, *args, **kwargs):
         ret = super(NextURLMixin, self).post(request, *args, **kwargs)
         self.next_page_url = self.get_next_page_url()
-        print("POST: self.contador:", self.contador)
         return ret
 
     #
     def get(self, *args, **kwargs):
         ret = super(NextURLMixin, self).get(*args, **kwargs)
         self.next_page_url = self.get_next_page_url()
-        print("GET: self.contador:", self.contador)
         return ret
 
     def get_context_data(self, **kwargs):
@@ -157,6 +145,7 @@ class DocumentoListView(generic.ListView):
 
 
 class AuditavelViewMixin(object):
+
     def form_valid(self, form):
         if not form.instance.criado_por:
             form.instance.criado_por = self.request.user
@@ -230,8 +219,6 @@ class DocumentoCreateView(AjaxableResponseMixin, NextURLMixin, AuditavelViewMixi
         print('id: {}'.format(id(self)))
 
     def get_success_url(self):
-        # print("get_success_url of {}".format(id(self)))
-        # document_param = "?document={}".format(self.object.pk)
         next_kwarg_name = self.get_next_kwarg_name()
         next_page_url = self.get_next_page_url()
         is_popup = self.get_is_popup()
@@ -239,32 +226,21 @@ class DocumentoCreateView(AjaxableResponseMixin, NextURLMixin, AuditavelViewMixi
         document_param_name = 'document'
         document_param_value = self.object.pk
 
-        qd = QueryDict('', mutable=True)
-
         doc = {
             document_param_name: document_param_value
         }
-        qd.update(doc)
-        # next_url = set_query_parameter(self.next_page_url, doc)
-        # doc2 = urlencode(qd.urlencode())
 
-        next_url = "{}&{}={}".format(next_page_url, document_param_name, document_param_value)
-        print('next_page_url:', next_url)
+        next_url = add_querystrings_to_url(next_page_url, doc)
         if not is_popup and next_page_url:
+            print('aqui')
             return next_url
 
         if not next_page_url:
             return reverse('documentos:detail', {'pk': self.object.pk})
 
-        original_close_url = reverse('documentos:close')
-        aaa = "{}?{}={}".format(original_close_url, 'next', next_url)
-        # close_view_url = next_kwarg_name: urlquote_plus(next_url)
-        #close_view_url = urlunquote_plus(close_view_url)
-        # print('close_view_url:', close_view_url)
-        # print('get_full_path:', self.request.get_full_path())
-        # close_view_url = self.request.build_absolute_uri(close_view_url)
-        # print('close_view_url2:', close_view_url)
-        return aaa
+        close_url = add_querystrings_to_url(reverse('documentos:close'), {next_kwarg_name: next_url})
+
+        return close_url
 
     def get_initial(self):
         initial = super(DocumentoCreateView, self).get_initial()
