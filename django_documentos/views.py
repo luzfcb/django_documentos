@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function, unicode_literals
+from django.contrib.auth.models import AnonymousUser
 
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse, reverse_lazy
@@ -91,9 +92,11 @@ class NextURLMixin(generic.View):
                     self.__class__.__name__))
 
         if self.next_page_url is not None:
+            print('if self.next_page_url is not None:')
             next_page = resolve_url(self.next_page_url)
 
         if next_kwarg_name in self.request.POST or next_kwarg_name in self.request.GET:
+            print('if next_kwarg_name in self.request.POST or next_kwarg_name in self.request.GET: id:', id(self))
             next_page = self.request.POST.get(next_kwarg_name,
                                               self.request.GET.get(next_kwarg_name))
             # Security check -- don't allow redirection to a different host.
@@ -147,9 +150,10 @@ class DocumentoListView(generic.ListView):
 class AuditavelViewMixin(object):
 
     def form_valid(self, form):
-        if not form.instance.criado_por:
-            form.instance.criado_por = self.request.user
-        form.instance.modificado_por = self.request.user
+        if hasattr(self.request, 'user') and not isinstance(self.request.user, AnonymousUser):
+            if not form.instance.criado_por:
+                form.instance.criado_por = self.request.user
+            form.instance.modificado_por = self.request.user
         return super(AuditavelViewMixin, self).form_valid(form)
 
 

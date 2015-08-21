@@ -5,6 +5,7 @@ pytest-cov
 pytest-sugar
 coverage
 django_coverage_plugin
+django-test-plus
 codecov
 django-bootstrap3
 django-bootstrap-pagination

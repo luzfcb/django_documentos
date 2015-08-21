@@ -11,7 +11,15 @@ __all__ = (
 
 
 def add_querystrings_to_url(url, querystrings_dict):
-    parsed_url = urlparse(urlunquote(url))
+    uri = url
+
+    while True:
+        dec = urlunquote(uri)
+        if dec == uri:
+            break
+        uri = dec
+
+    parsed_url = urlparse(urlunquote(uri))
 
     current_params = dict(parse_qsl(parsed_url.query))
     current_params.update(
@@ -23,8 +31,14 @@ def add_querystrings_to_url(url, querystrings_dict):
         for key, value in six.iteritems(current_params)
     }
 
+    from pprint import pprint
     encoded_params = urlencode(parsed_params)
+    pprint(parsed_params)
+
+    print('uri:', uri)
 
     new_url = urlunsplit((parsed_url.scheme, parsed_url.netloc, parsed_url.path.rstrip('\n\r').lstrip('\n\r'),
                           encoded_params, parsed_url.fragment))
+    print('new_url:', new_url)
+
     return new_url
