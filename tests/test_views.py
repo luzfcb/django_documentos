@@ -42,5 +42,16 @@ class TestDjangoDocumentos(CBVTestCase):
         print(b)
         # self.assertInContext('next_page_url')
 
+    def test_special_method(self):
+        url = add_querystrings_to_url(reverse('documentos:create'), {'popup': 1})
+        request = RequestFactory().get(url)
+        instance = self.get_instance(DocumentoCreateView, request=request)
+
+        # invoke a MyClass method
+        result = instance.special_method()
+
+        # make assertions
+        self.assertTrue(result)
+
     def tearDown(self):
         pass

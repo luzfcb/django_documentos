@@ -48,17 +48,58 @@ INSTALLED_APPS = (
     'braces',
     'redactor',
     'ckeditor',
+    'django_wysiwyg',
     # 'debug_toolbar',
     'django_documentos',
 )
 
+# django_wysiwyg
+DJANGO_WYSIWYG_FLAVOR = 'ckeditor'
+
 CKEDITOR_UPLOAD_PATH = 'uploads/'
+# CKEDITOR_CONFIGS = {
+#     'default': {
+#         'toolbar': 'Custom',
+#         'toolbar_Custom': [
+#             ['Bold', 'Italic', 'Underline'],
+#             ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+#             ['Link', 'Unlink'],
+#             ['RemoveFormat', 'Source'],
+#             ["Maximize"]
+#         ]
+#     }
+# }
+
 CKEDITOR_CONFIGS = {
-    'awesome_ckeditor': {
-        'toolbar': 'Basic',
-    },
+    'default': {
+        'skin': 'moono',
+        # 'skin': 'office2013',
+        'toolbar_Basic': [
+            ['Source', '-', 'Bold', 'Italic']
+        ],
+        'toolbar_Full': [
+            ['Styles', 'Format', 'Bold', 'Italic', 'Underline', 'Strike', 'SpellChecker', 'Undo', 'Redo'],
+            ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter',
+             'JustifyRight', 'JustifyBlock'],
+            ['Link', 'Unlink', 'Anchor'],
+            ['Image', 'Flash', 'Table', 'HorizontalRule'],
+            ['TextColor', 'BGColor'],
+            ['Smiley', 'SpecialChar'], ['Source'],
+            ['widget', 'clipboard'],
+        ],
+        'toolbar': 'Full',
+        'height': 291,
+        'width': 835,
+        'filebrowserWindowWidth': 940,
+        'filebrowserWindowHeight': 725,
+        # 'extraPlugins': ['pbckcode', 'codesnippet']
+    }
 }
 
+# CKEDITOR_CONFIGS['default']['extraPlugins'] = ['clipboard', 'dialog', 'dialogui', 'lineutils', 'widget']
+
+
+CKEDITOR_IMAGE_BACKEND = 'Pillow'
 
 REDACTOR_UPLOAD_HANDLER = 'redactor.handlers.UUIDUploader'
 # REDACTOR_AUTH_DECORATOR = 'django.contrib.auth.decorators.login_required'
@@ -115,7 +156,7 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'pt-br'
 
 TIME_ZONE = 'UTC'
 

@@ -7,7 +7,8 @@ from django.db.models import Max
 from django.utils import timezone
 from django.utils.six import python_2_unicode_compatible
 from model_utils import tracker
-from redactor.fields import RedactorField
+# from redactor.fields import RedactorField
+from ckeditor import fields as ckeditor_fields
 
 from simple_history.models import HistoricalRecords
 from simple_history.views import MissingHistoryRecordsField
@@ -93,12 +94,13 @@ class BaseModeloVersionado(models.Model):
 @python_2_unicode_compatible
 class Documento(BaseModeloVersionado):
     titulo = models.CharField(blank=True, max_length=500, editable=False)
-    conteudo = RedactorField(
-        verbose_name=u'conteudo',
-        allow_file_upload=True,
-        allow_image_upload=True
-
-    )
+    # conteudo = RedactorField(
+    #     verbose_name=u'conteudo',
+    #     allow_file_upload=True,
+    #     allow_image_upload=True
+    #
+    # )
+    conteudo = ckeditor_fields.RichTextField()
     versoes = HistoricalRecords()
 
     def __str__(self):
