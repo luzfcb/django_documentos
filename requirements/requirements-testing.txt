@@ -14,7 +14,8 @@ django-extensions
 django-extra-views
 django-braces
 django-wysiwyg-redactor
-django-ckeditor
+# django-ckeditor
+-e git://github.com/luzfcb/django-ckeditor.git@master#egg=django-ckeditor
 
 django-model-utils
 django-debug-toolbar
