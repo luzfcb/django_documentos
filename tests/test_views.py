@@ -5,12 +5,14 @@ from __future__ import absolute_import, print_function, unicode_literals
 import os
 import shutil
 import unittest
-from django.core.urlresolvers import reverse
 
+from django.core.urlresolvers import reverse
 from django.test import RequestFactory
-from test_plus.test import TestCase, CBVTestCase
+from test_plus.test import CBVTestCase, TestCase
+
 from django_documentos.utils import add_querystrings_to_url
 from django_documentos.views import DocumentoCreateView, DocumentoListView
+
 """
 test_django_documentos
 ------------
