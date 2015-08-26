@@ -116,7 +116,14 @@ CKEDITOR_CONFIGS = {
         'toolbar_Teste': [
             {'name': 'document', 'items': ['Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates']},
             '/',
-            {'name': 'extraplugins', 'items': ['Readonlysections', 'Simplebox', 'Simplebox2', 'Image2', 'Readonlysections2']},
+            {'name': 'extraplugins', 'items': [
+                #'Readonlysections',
+                #'Simplebox',
+                #'Simplebox2',
+                #'Image2',
+                #'Readonlysections2',
+                'Cwjdsjcsconfineselection'
+            ]},
         ],
         'toolbar': 'Teste',
         # 'toolbarGroups': [{ 'name': 'document', 'groups': [ 'mode', 'document', 'doctools' ] }],
@@ -128,7 +135,8 @@ CKEDITOR_CONFIGS = {
         # 'mathJaxLib': '//cdn.mathjax.org/mathjax/2.2-latest/MathJax.js?config=TeX-AMS_HTML',
 
         'extraPlugins': ','.join(
-            ['readonlysections', 'simplebox', 'simplebox2', 'widget', 'lineutils', 'clipboard', 'dialog', 'dialogui', 'elementspath']),
+            ['readonlysections', 'simplebox', 'simplebox2', 'widget', 'lineutils', 'clipboard', 'dialog', 'dialogui',
+             'elementspath']),
         # , 'image2', 'mathjax', 'dialog', 'dialogui', 'lineutils', 'clipboard', 'notification', 'notificationaggregator']),
     }
 }
