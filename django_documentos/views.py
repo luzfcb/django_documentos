@@ -147,7 +147,12 @@ class DocumentoListView(generic.ListView):
         return rend
 
 
-class AuditavelViewMixin(object):
+class Goku(object):
+    def goku(self):
+        pass
+
+
+class AuditavelViewMixin(Goku, object):
 
     def form_valid(self, form):
         if hasattr(self.request, 'user') and not isinstance(self.request.user, AnonymousUser):
@@ -217,6 +222,7 @@ class DocumentoCreateView(AjaxableResponseMixin, NextURLMixin, AuditavelViewMixi
     success_url = reverse_lazy('documentos:list')
     is_popup = False
     # inlines = [DocumentoConteudoInline, ]
+
 
     def __init__(self, *args, **kwargs):
         super(DocumentoCreateView, self).__init__(*args, **kwargs)

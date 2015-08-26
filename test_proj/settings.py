@@ -77,22 +77,59 @@ CKEDITOR_CONFIGS = {
         'toolbar_Basic': [
             ['Source', '-', 'Bold', 'Italic']
         ],
-        'toolbar_Full': [
-            ['Styles', 'Format', 'Bold', 'Italic', 'Underline', 'Strike', 'SpellChecker', 'Undo', 'Redo'],
-            ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter',
-             'JustifyRight', 'JustifyBlock'],
-            ['Link', 'Unlink', 'Anchor'],
-            ['Image', 'Flash', 'Table', 'HorizontalRule'],
-            ['TextColor', 'BGColor'],
-            ['Smiley', 'SpecialChar'], ['Source'],
-            ['widget', 'clipboard'],
+        # 'toolbar_Full': [
+        #     ['Styles', 'Format', 'Bold', 'Italic', 'Underline', 'Strike', 'SpellChecker', 'Undo', 'Redo'],
+        #     ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter',
+        #      'JustifyRight', 'JustifyBlock'],
+        #     ['Link', 'Unlink', 'Anchor'],
+        #     ['Flash', 'Table', 'HorizontalRule'],
+        #     ['TextColor', 'BGColor'],
+        #     ['Smiley', 'SpecialChar'], ['Source'],
+        #     ['widget', 'clipboard'],
+        #     [''],
+        # ],
+        # 'toolbar_Full': [
+        #     {'name': 'document', 'items': ['Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates']},
+        #     {'name': 'clipboard', 'items': ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo']},
+        #     {'name': 'editing', 'items': ['Find', 'Replace', '-', 'SelectAll']},
+        #     {'name': 'forms',
+        #      'items': ['Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton',
+        #                'HiddenField']},
+        #     '/',
+        #     {'name': 'basicstyles',
+        #      'items': ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat']},
+        #     {'name': 'paragraph',
+        #      'items': ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-',
+        #                'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl',
+        #                'Language']},
+        #     {'name': 'links', 'items': ['Link', 'Unlink', 'Anchor']},
+        #     {'name': 'insert',
+        #      'items': ['Image3', 'Flash', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe']},
+        #     '/',
+        #     {'name': 'styles', 'items': ['Styles', 'Format', 'Font', 'FontSize']},
+        #     {'name': 'colors', 'items': ['TextColor', 'BGColor']},
+        #     {'name': 'tools', 'items': ['Maximize', 'ShowBlocks']},
+        #     {'name': 'about', 'items': ['About']},
+        #     '/',
+        #     {'name': 'extraplugins', 'items': ['Image2', 'Mathjax', 'notification', ]},
+        # ],
+        'toolbar_Teste': [
+            {'name': 'document', 'items': ['Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates']},
+            '/',
+            {'name': 'extraplugins', 'items': ['Readonlysections', 'Simplebox', 'Simplebox2', 'Image2', 'Readonlysections2']},
         ],
-        'toolbar': 'Full',
-        'height': 291,
-        'width': 835,
-        'filebrowserWindowWidth': 940,
-        'filebrowserWindowHeight': 725,
-        # 'extraPlugins': ['pbckcode', 'codesnippet']
+        'toolbar': 'Teste',
+        # 'toolbarGroups': [{ 'name': 'document', 'groups': [ 'mode', 'document', 'doctools' ] }],
+        # 'height': 291,
+        # 'width': '100%',
+        # 'filebrowserWindowHeight': 725,
+        # 'filebrowserWindowWidth': 940,
+        # 'toolbarCanCollapse': True,
+        # 'mathJaxLib': '//cdn.mathjax.org/mathjax/2.2-latest/MathJax.js?config=TeX-AMS_HTML',
+
+        'extraPlugins': ','.join(
+            ['readonlysections', 'simplebox', 'simplebox2', 'widget', 'lineutils', 'clipboard', 'dialog', 'dialogui', 'elementspath']),
+        # , 'image2', 'mathjax', 'dialog', 'dialogui', 'lineutils', 'clipboard', 'notification', 'notificationaggregator']),
     }
 }
 
@@ -105,8 +142,6 @@ REDACTOR_UPLOAD_HANDLER = 'redactor.handlers.UUIDUploader'
 # REDACTOR_AUTH_DECORATOR = 'django.contrib.auth.decorators.login_required'
 REDACTOR_OPTIONS = {'lang': 'pt_br', 'plugins': ['video', 'table', 'fullscreen']}
 REDACTOR_UPLOAD = 'uploads/'
-
-
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
