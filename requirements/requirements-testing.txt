@@ -1,9 +1,9 @@
 # PyTest for running the tests.
-pytest==2.7.2
-pytest-django==2.8.0
+pytest>=2.7.2
+pytest-django>=2.8.0
 pytest-cov
 pytest-sugar
-coverage
+coverage>=4.0b2
 django_coverage_plugin
 django-test-plus
 codecov
@@ -15,8 +15,9 @@ django-extra-views
 django-braces
 django-wysiwyg-redactor
 # django-ckeditor
--e git://github.com/luzfcb/django-ckeditor.git@master#egg=django-ckeditor
+-e git://github.com/django-ckeditor/django-ckeditor.git@master#egg=django-ckeditor
 
+django-wysiwyg
 django-model-utils
 django-debug-toolbar
 -e git://github.com/luzfcb/django-simple-history.git@wip-generic-views#egg=django-simple-history

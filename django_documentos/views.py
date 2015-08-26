@@ -222,6 +222,8 @@ class DocumentoCreateView(AjaxableResponseMixin, NextURLMixin, AuditavelViewMixi
         super(DocumentoCreateView, self).__init__(*args, **kwargs)
         print('id: {}'.format(id(self)))
 
+
+
     def get_success_url(self):
         next_kwarg_name = self.get_next_kwarg_name()
         next_page_url = self.get_next_page_url()
@@ -267,6 +269,7 @@ class DocumentoCreateView(AjaxableResponseMixin, NextURLMixin, AuditavelViewMixi
         form = super(DocumentoCreateView, self).get_form(form_class=form_class)
         # print(form)
         return form
+
 
 
 class CloseView(NextURLMixin, generic.TemplateView):
