@@ -3,7 +3,7 @@
  */
 
 'use strict';
-
+// https://github.com/ckeditor/ckeditor-dev/blob/master/plugins/div/dialogs/div.js#L98-185
 function dumpObject(o, pfx, sep) {
     var p;
     var s = "";
