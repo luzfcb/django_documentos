@@ -18,6 +18,8 @@
         <div id="success_div"></div>
         <div id="error_div"></div>
         <form action="
+
+
                 {% url 'documentos:create' %}{% if popup or next_page_url %}?{% endif %}{% if popup %}popup=1{% endif %}{% if next_page_url %}&{{ next_kwarg_name }}={{ next_page_url }}{% endif %}"
               method="post" id="documento_create">
             {% csrf_token %}
@@ -30,12 +32,13 @@
             <input type="submit" id="enviar" value="Submit">
 
         </form>
-
+    <div id="appdebug"></div>
     {% endif %}
 
 {% endblock conteudo_app %}
 {% block js_app %}
     {{ block.super }}
+    <script src="{% static 'django_documentos/js/prettyprint.js' %}"></script>
 
     {% if form.media %}
         {{ form.media }}
@@ -54,24 +57,24 @@
                 }
                 window.onunload = OnClose;
             {% endif %}
-{#            $('#documento_create').on('submit', '#enviar', function () {#}
-{#                $.ajax({#}
-{#                    type: $(this).attr('method'),#}
-{#                    url: $(this).attr('action'),#}
-{#                    data: $(this).serialize(),#}
-{#                    success: function () { // on success..#}
-{#                        var sucess_div = $('#success_div');#}
-{#                        sucess_div.append('Changes saved'); // update the DIV#}
-{#                        sucess_div.toggleClass('alert alert-success'); // unhide#}
-{#                    },#}
-{#                    error: function (xhr, ajaxOptions, thrownError) { // on error..#}
-{#                        var error_div = $('#error_div');#}
-{#                        error_div.append(xhr); // update the DIV#}
-{#                        error_div.toggleClass('alert alert-error'); // unhide#}
-{#                    }#}
-{#                });#}
-{#                return false;#}
-{#            });#}
+            {#            $('#documento_create').on('submit', '#enviar', function () {#}
+            {#                $.ajax({#}
+            {#                    type: $(this).attr('method'),#}
+            {#                    url: $(this).attr('action'),#}
+            {#                    data: $(this).serialize(),#}
+            {#                    success: function () { // on success..#}
+            {#                        var sucess_div = $('#success_div');#}
+            {#                        sucess_div.append('Changes saved'); // update the DIV#}
+            {#                        sucess_div.toggleClass('alert alert-success'); // unhide#}
+            {#                    },#}
+            {#                    error: function (xhr, ajaxOptions, thrownError) { // on error..#}
+            {#                        var error_div = $('#error_div');#}
+            {#                        error_div.append(xhr); // update the DIV#}
+            {#                        error_div.toggleClass('alert alert-error'); // unhide#}
+            {#                    }#}
+            {#                });#}
+            {#                return false;#}
+            {#            });#}
 
         </script>
     {% endif %}
@@ -80,11 +83,11 @@
     <script src="{% static 'django_documentos/js/jquery.qrcode.min.js' %}"></script>
     <script src="{% static 'django_documentos/js/jquery.are-you-sure.js' %}"></script>
     <script>
-        autosize(document.querySelectorAll('textarea'));
+{#        autosize(document.querySelectorAll('textarea'));#}
         var teste = $("#teste");
         var opcoes = {
             // render method: 'canvas', 'image' or 'div'
-            render: 'canvas',
+            render: 'image',
 
             // version range somewhere in 1 .. 40
             minVersion: 1,
@@ -139,8 +142,14 @@
 
         {% endif %}
         $('form').areYouSure(
-                {'message': "{% trans "Suas modificações ainda não foram salvas" %}" }
+                {'message': "{% trans "Suas modificações ainda não foram salvas" %}"}
         );
-
+        {% if popup %}
+            CKEDITOR.on('instanceReady',
+                    function (evt) {
+                        var editor = evt.editor;
+                        editor.execCommand('maximize');
+                    });
+        {% endif %}
     </script>
 {% endblock %}
