@@ -115,6 +115,10 @@ CKEDITOR_CONFIGS = {
         # ],
         'toolbar_Teste': [
             {'name': 'document', 'items': ['Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates']},
+            {'name': 'paragraph',
+             'items': ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-',
+                       'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl',
+                       'Language']},
             '/',
             {'name': 'basicstyles',
              'items': ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat']},
@@ -130,7 +134,7 @@ CKEDITOR_CONFIGS = {
                 'Fabio',
                 'Pagebreak',
                 'Placeholder',
-                'Fabio2',
+                'LockUnlock',
                 'Maximize',
                 'CreatePlaceholder',
                 'embedSemantic',
@@ -157,7 +161,7 @@ CKEDITOR_CONFIGS = {
         'extraPlugins': ','.join(
             [
                 # 'cwjdsjcsconfineselection',
-                'fabio',
+                'lockunlock',
                 'div',
                 'autolink',
                 'autoembed',
