@@ -119,6 +119,8 @@ CKEDITOR_CONFIGS = {
              'items': ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-',
                        'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl',
                        'Language']},
+            {'name': 'insert',
+             'items': ['Image3', 'Flash', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe']},
             '/',
             {'name': 'basicstyles',
              'items': ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat']},
@@ -140,6 +142,8 @@ CKEDITOR_CONFIGS = {
                 'embedSemantic',
                 'Preview',
                 'Pagebreak',
+                'Abbr',
+
 
                 # 'Div',
 
@@ -162,6 +166,7 @@ CKEDITOR_CONFIGS = {
             [
                 # 'cwjdsjcsconfineselection',
                 'lockunlock',
+                'abbr',
                 'div',
                 'autolink',
                 'autoembed',

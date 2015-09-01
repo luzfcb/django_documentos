@@ -6,3 +6,8 @@ O que é e como funciona o tal de "Operational Transformation" que o google docs
 
 http://operational-transformation.github.io/index.html
 
+
+page CSS
+http://codepen.io/rafaelcastrocouto/pen/LFAes/
+
+http://codepen.io/anon/pen/EjWmON

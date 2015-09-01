@@ -36,14 +36,14 @@ CKEDITOR.plugins.add('lockunlock', {
 				div.setStyle('color', 'red');
 				div.data('lockunlock-editionblocked', true);
 
-				if(editor.getSelectedHtml(true).length > 0){
+				if (editor.getSelectedHtml(true).length > 0) {
 					var selected_html = editor.getSelectedHtml(true);
-					console.log( editor.getSelectedHtml(true) );
-					//div.appendHtml(selected_html);
+					console.log("getSelectedHtml: "+ editor.getSelectedHtml(true));
+					div.appendHtml(selected_html);
 				}
 				//range.deleteContents();
 				//ranges.insertElementIntoSelection(div);
-				console.log("clone: " +range.clone());
+				console.log("clone: " + range.clone());
 
 
 				//if (selection.isLocked) {
@@ -53,10 +53,11 @@ CKEDITOR.plugins.add('lockunlock', {
 				//	console.log('travando');
 				//	selection.lock();
 				//}
-
+				console.dir(div);
 				console.log(div);
-				console.log(div.getHtml());
-
+				console.log(div.getOuterHtml());
+				editor.insertHtml(div.getOuterHtml(), 'html', range);
+				editor.updateElement();
 			}
 		});
 		editor.ui.addButton('LockUnlock', {
