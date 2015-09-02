@@ -143,6 +143,9 @@ CKEDITOR_CONFIGS = {
                 'Preview',
                 'Pagebreak',
                 'Abbr',
+                '-',
+                'CreateLockUnlock'
+
 
 
                 # 'Div',
@@ -166,8 +169,10 @@ CKEDITOR_CONFIGS = {
             [
                 # 'cwjdsjcsconfineselection',
                 'lockunlock',
+                'lockunlock2',
                 'abbr',
                 'div',
+                'divarea',
                 'autolink',
                 'autoembed',
                 # 'readonlysections',
