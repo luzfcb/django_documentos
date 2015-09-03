@@ -38,16 +38,20 @@ var contador = 0;
 				// We need to have wrapping element, otherwise there are issues in
 				// add dialog.
 				template: '<span class="cke_lockunlock2"></span>',
-				//template: '<div class="cke_lockunlock2">[[]]</div>',
-				downcast: function () {
-					console.log('widgets downcast');
-					return new CKEDITOR.htmlParser.text('[[' + this.data.name + ']]');
-				},
+				//downcast: function () {
+				//	console.log('widgets downcast');
+				//	return new CKEDITOR.htmlParser.text('[[' + this.data.name + ']]');
+				//},
 
 				init: function () {
 					console.log('widgets init');
 					// Note that placeholder markup characters are stripped for the name.
-					this.setData('name', this.element.getText().slice(2, -2));
+					var text = this.element.getText();
+					//var data_ = this.element.getText().slice(2, -2);
+					var data_ = text.slice(2, -2);
+					console.log('text:' + text);
+					console.log('data_:' + data_);
+					this.setData('name', data_);
 				},
 
 				data: function () {
@@ -73,6 +77,9 @@ var contador = 0;
 						//console.dir(this.element);
 						this.element.appendHtml(selected_html);
 					}
+					else{
+						console.log('nada feito');
+					}
 
 				}
 			});
@@ -83,38 +90,38 @@ var contador = 0;
 				toolbar: 'insert,5',
 				icon: 'lockunlock2'
 			});
-		},
-
-		afterInit: function (editor) {
-			var placeholderReplaceRegex = /\[\[([^\[\]])+\]\]/g;
-
-			editor.dataProcessor.dataFilter.addRules({
-				text: function (text, node) {
-					var dtd = node.parent && CKEDITOR.dtd[node.parent.name];
-
-					// Skip the case when placeholder is in elements like <title> or <textarea>
-					// but upcast placeholder in custom elements (no DTD).
-					if (dtd && !dtd.span)
-						return;
-
-					return text.replace(placeholderReplaceRegex, function (match) {
-						// Creating widget code.
-						var widgetWrapper = null,
-							innerElement = new CKEDITOR.htmlParser.element('span', {
-								'class': 'cke_lockunlock2'
-							});
-
-						// Adds placeholder identifier as innertext.
-						innerElement.add(new CKEDITOR.htmlParser.text(match));
-						widgetWrapper = editor.widgets.wrapElement(innerElement, 'lockunlock2');
-
-						// Return outerhtml of widget wrapper so it will be placed
-						// as replacement.
-						return widgetWrapper.getOuterHtml();
-					});
-				}
-			});
 		}
+
+		//,afterInit: function (editor) {
+		//	var placeholderReplaceRegex = /\[\[([^\[\]])+\]\]/g;
+        //
+		//	editor.dataProcessor.dataFilter.addRules({
+		//		text: function (text, node) {
+		//			var dtd = node.parent && CKEDITOR.dtd[node.parent.name];
+        //
+		//			// Skip the case when placeholder is in elements like <title> or <textarea>
+		//			// but upcast placeholder in custom elements (no DTD).
+		//			if (dtd && !dtd.span)
+		//				return;
+        //
+		//			return text.replace(placeholderReplaceRegex, function (match) {
+		//				// Creating widget code.
+		//				var widgetWrapper = null,
+		//					innerElement = new CKEDITOR.htmlParser.element('span', {
+		//						'class': 'cke_lockunlock2'
+		//					});
+        //
+		//				// Adds placeholder identifier as innertext.
+		//				innerElement.add(new CKEDITOR.htmlParser.text(match));
+		//				widgetWrapper = editor.widgets.wrapElement(innerElement, 'lockunlock2');
+        //
+		//				// Return outerhtml of widget wrapper so it will be placed
+		//				// as replacement.
+		//				return widgetWrapper.getOuterHtml();
+		//			});
+		//		}
+		//	});
+		//}
 	});
 
 })();
