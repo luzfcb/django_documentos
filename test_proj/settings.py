@@ -72,6 +72,7 @@ CKEDITOR_UPLOAD_PATH = 'uploads/'
 
 CKEDITOR_CONFIGS = {
     'default': {
+        # 'fullPage': True,  # http://docs.ckeditor.com/#!/guide/dev_fullpage
         'skin': 'moono',
         # 'skin': 'office2013',
         'toolbar_Basic': [
@@ -179,6 +180,7 @@ CKEDITOR_CONFIGS = {
                 'div',
                 'divarea',
                 # 'floating-tools',
+                # 'wysiwygarea', # http://docs.ckeditor.com/#!/guide/dev_fullpage
                 'autolink',
                 'autoembed',
                 # 'readonlysections',
