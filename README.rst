@@ -57,9 +57,42 @@ and ``urls`` file::
     urlpatterns = [
         ...
         url(r'', include(django_documentos_urls, namespace='documentos')),
+        url(r'^ckeditor/', include('ckeditor.urls')),
     ]
+
+
+
 
 Features
 --------
 
 * TODO
+
+ROADMAP
+--------
+
+Prover uma app plugavel generica para:
+
+criacao de documentos, versionamento dos mesmos, validacao de autenticidade de documentos, templates de docummentos, e auditoria.
+
+
+TESTES
+------
+
+Instale o tox::
+
+    pip install tox -U
+
+para verificar quais os testes estao disponiveis faça::
+
+    tox -l
+
+para rodar todos os testes, simplesmente::
+
+    tox
+
+para rodar somente os testes de qualidade de codigo execute::
+
+    tox -e py27-lint
+
+

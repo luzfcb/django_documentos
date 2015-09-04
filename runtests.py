@@ -81,6 +81,20 @@ if __name__ == "__main__":
         run_flake8 = False
         run_isort = False
 
+    try:
+        sys.argv.remove('-v')
+    except ValueError:
+        verbose = False
+    else:
+        verbose = True
+
+    try:
+        sys.argv.remove('-df')
+    except ValueError:
+        diff = False
+    else:
+        diff = True
+
     if len(sys.argv) > 1:
         pytest_args = sys.argv[1:]
         first_arg = pytest_args[0]
@@ -100,6 +114,13 @@ if __name__ == "__main__":
 
     if run_tests:
         exit_on_failure(pytest.main(pytest_args, plugins=['cov', 'sugar']))
+
+    if verbose:
+        FLAKE8_ARGS.append('--verbose')
+        ISORT_ARGS.append('--verbose')
+
+    if diff:
+        ISORT_ARGS.append('--diff')
 
     if run_flake8:
         exit_on_failure(flake8_main(FLAKE8_ARGS))

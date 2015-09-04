@@ -8,10 +8,11 @@ from django.utils import timezone
 from django.utils.six import python_2_unicode_compatible
 from model_utils import tracker
 
-# from redactor.fields import RedactorField
 from ckeditor import fields as ckeditor_fields
 from simple_history.models import HistoricalRecords
 from simple_history.views import MissingHistoryRecordsField
+
+# from redactor.fields import RedactorField
 
 USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
 

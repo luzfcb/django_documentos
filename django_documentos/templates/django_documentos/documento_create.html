@@ -45,6 +45,7 @@
     {% endif %}
     {% if popup %}
         <script>
+            {#        #}
             {% if not popup %}
                 function OnClose() {
                     "use strict";
@@ -137,19 +138,20 @@
             image: null
         };
 
-{#        $("#codigo_qr").qrcode(opcoes);#}
+        $("#codigo_qr").qrcode(opcoes);
         {% if next_page_url %}
 
         {% endif %}
         $('form').areYouSure(
                 {'message': "{% trans "Suas modificações ainda não foram salvas" %}"}
         );
-{#        {% if popup %}#}
+        {% if popup %}
+            {# coloca o editor em fullscreen se for uma janela popup#}
             CKEDITOR.on('instanceReady',
                     function (evt) {
                         var editor = evt.editor;
                         editor.execCommand('maximize');
                     });
-{#        {% endif %}#}
+        {% endif %}
     </script>
 {% endblock %}
