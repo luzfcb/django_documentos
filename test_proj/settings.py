@@ -155,6 +155,11 @@ CKEDITOR_CONFIGS = {
             ]},
         ],
         'toolbar': 'Teste',
+        #'floatingtools': 'Basic',
+        #'floatingtools_Basic':
+        #    [
+        #        {'name': 'floatingtools', 'itens': ['Bold', 'Italic', '-', 'NumberedList', 'BulletedList', '-', 'Link']}
+        #    ],
         # 'toolbarGroups': [{ 'name': 'document', 'groups': [ 'mode', 'document', 'doctools' ] }],
         # 'height': 291,
         # 'width': '100%',
@@ -173,6 +178,7 @@ CKEDITOR_CONFIGS = {
                 'abbr',
                 'div',
                 'divarea',
+                # 'floating-tools',
                 'autolink',
                 'autoembed',
                 # 'readonlysections',

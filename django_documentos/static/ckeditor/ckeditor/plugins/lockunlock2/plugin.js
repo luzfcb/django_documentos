@@ -20,7 +20,9 @@ var contador = 0;
 
 		onLoad: function () {
 			// Register styles for placeholder widget frame.
-			CKEDITOR.addCss('.cke_lockunlock2{background-color:#ff0}');
+			CKEDITOR.addCss('.cke_lockunlock2 {background-color: #ff0;} ' +
+				'span.cke_lockunlock2 {white-space: pre;}' // corrige erro da nao visualizacao de caractere de espaco no inicio do block span
+			);
 		},
 
 		init: function (editor) {
@@ -51,7 +53,7 @@ var contador = 0;
 					var data_ = text.slice(2, -2);
 					console.log('text:' + text);
 					console.log('data_:' + data_);
-					this.setData('name', data_);
+					//this.setData('name', data_);
 				},
 
 				data: function () {
@@ -64,6 +66,7 @@ var contador = 0;
 					if (!selection) {
 						return;
 					}
+					console.table(selection);
 					editor.lockSelection(selection);
 					//var div = new CKEDITOR.dom.element('div');
 					//div.setStyle('color', 'red');
