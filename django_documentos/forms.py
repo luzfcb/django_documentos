@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function, unicode_literals
+from captcha.fields import CaptchaField
 
 from django import forms
 
@@ -72,3 +73,9 @@ class DocumentoRevertForm(RevertHelperFormMixin, forms.ModelForm):
     class Meta:
         model = Documento
         fields = '__all__'
+
+
+class DocumetoValidarForm(forms.Form):
+    codigo_verificador = forms.CharField()
+    codigo_crc = forms.CharField()
+    captcha = CaptchaField()

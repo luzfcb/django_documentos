@@ -1,6 +1,26 @@
 {% extends "default.html" %}
 {% load staticfiles %}
 
+{% block css_app %}
+        {{ block.super }}
+
+    <style>
+        .overlay {
+            background-color: #e74c3c;
+            position: fixed;
+            z-index: 120;
+            top: 150px;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            opacity: 0;
+            display: none;
+            overflow: hidden;
+            text-align: left;
+        }
+    </style>
+{% endblock css_app %}
+
 {% block left_menu %}
 
     <li>

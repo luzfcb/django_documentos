@@ -39,6 +39,8 @@ class BaseModeloVersionado(models.Model):
 
     content_tracker = tracker.FieldTracker()
 
+
+
     versao_numero = models.IntegerField(default=1, auto_created=True, editable=False)
 
     def __init__(self, *args, **kwargs):

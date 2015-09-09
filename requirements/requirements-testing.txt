@@ -4,6 +4,7 @@ pytest-django>=2.8.0
 pytest-cov
 pytest-sugar
 coverage>=4.0b2
+django-simple-captcha
 django_coverage_plugin
 django-test-plus
 codecov

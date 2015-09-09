@@ -1,6 +1,7 @@
 {% extends "django_documentos/base.html" %}
 {% load bootstrap3 %}
 
+
 {% block titulo %}
     Reverter Documento
 {% endblock titulo %}
@@ -13,16 +14,18 @@
 
 
     {% if form %}
+        {{ object.conteudo|safe }}
+
         <form action="." method="post">
             {% csrf_token %}
-            {% bootstrap_form form %}
-            {% if inlines %}
-                {% for formset in inlines %}
-                    <div id="formset-{{ forloop.counter|stringformat:"05d" }}">
-                        {% bootstrap_formset formset %}
-                    </div>
-                {% endfor %}
-            {% endif %}
+{#            {% bootstrap_form form %}#}
+{#            {% if inlines %}#}
+{#                {% for formset in inlines %}#}
+{#                    <div id="formset-{{ forloop.counter|stringformat:"05d" }}">#}
+{#                        {% bootstrap_formset formset %}#}
+{#                    </div>#}
+{#                {% endfor %}#}
+{#            {% endif %}#}
             {% buttons %}
                 <button type="submit" class="btn btn-primary">
                     {% bootstrap_icon "star" %} Reverter para esta versão

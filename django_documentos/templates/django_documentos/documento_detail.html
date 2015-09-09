@@ -13,7 +13,7 @@
 
 
     {% if object %}
-        {{ object|as_form }}
+        {{ object.conteudo|safe }}
     {% else %}
         Nada para mostrar
     {% endif %}

@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function, unicode_literals
 
-from django.conf.urls import url
+from django.conf.urls import url, include
 
 from django_documentos.views import (
     CloseView, DocumentoCreateView, DocumentoDashboardView, DocumentoDetailView, DocumentoGeneralDashboardView,
     DocumentoHistoryView, DocumentoListView, DocumentoRevertView, DocumentoUpdateView,
-)
+    DocumentoValidacaoView)
 
 from .settings import DJANGO_DOCUMENTOS_ENABLE_GENERAL_DASHBOARD
 
@@ -47,6 +47,14 @@ urlpatterns = [
         CloseView.as_view(),
         name='close'
         ),
+    url(r'^captcha/',
+        include('captcha.urls'),
+        name='captcha'
+        ),
+    url(r'^v|validar',
+        DocumentoValidacaoView.as_view(),
+        name='validar'
+        )
 ]
 
 if DJANGO_DOCUMENTOS_ENABLE_GENERAL_DASHBOARD:
