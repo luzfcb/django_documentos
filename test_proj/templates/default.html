@@ -4,7 +4,9 @@
         <meta charset="UTF-8">
         <title></title>
         {% block css_app %}
-        {% endblock %}
+        {% endblock css_app %}
+        {% block extra_head_js %}
+        {% endblock extra_head_js %}
     </head>
     <body>
     {% block conteudo_app %}

@@ -4,6 +4,36 @@
 {% block titulo %}
     Detalhes Documento
 {% endblock titulo %}
+{% block css_app %}
+    <style>
+        body {
+            background: rgb(204, 204, 204);
+        }
+
+        page[size="A4"] {
+            background: white;
+            width: 21cm;
+            height: 29.7cm;
+            display: block;
+            margin: 0 auto 0.5cm;
+            box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
+
+            padding: 30px;
+{#            font-size: 11pt;#}
+{#            font-family: Arial;#}
+            text-justify: distribute;
+            line-height: 22pt;
+        }
+
+        @media print {
+            body, page[size="A4"] {
+                margin: 0;
+                box-shadow: 0;
+                background: transparent;
+            }
+        }
+    </style>
+{% endblock css_app %}
 
 
 
@@ -13,8 +43,10 @@
 
 
     {% if object %}
-        {{ object|as_form }}
-        {{ object|as_form_media}}
+        <page size="A4">
+            {{ object.conteudo|safe }}
+        </page>
+
     {% else %}
         Nada para mostrar
     {% endif %}
@@ -29,17 +61,19 @@
 
             {% endfor %}
         </div>
-        
+
         {% if  history_records_is_paginated %}
             <div class="pagination">
                 <div class="pull-left">
                     Página {{ history_records_page_obj.number }} de {{ history_records_page_obj.paginator.num_pages }}
                 </div>
-{#                <div class="pagination-right">#}
+                {#                <div class="pagination-right">#}
                 <div class="pagination-centered">
                     <ul>
                         {% if history_records_page_obj.has_previous %}
-                            <li><a href="?{{ history_records_page_kwarg }}={{ history_records_page_obj.previous_page_number }}">Anterior</a></li>
+                            <li>
+                                <a href="?{{ history_records_page_kwarg }}={{ history_records_page_obj.previous_page_number }}">Anterior</a>
+                            </li>
                         {% else %}
                             <li class="disabled"><a href="#">Anterior</a></li>
                         {% endif %}
@@ -55,7 +89,9 @@
                             {% endif %}
                         {% endfor %}
                         {% if history_records_page_obj.has_next %}
-                            <li><a href="?{{ history_records_page_kwarg }}={{ history_records_page_obj.next_page_number }}">Próxima</a></li>
+                            <li>
+                                <a href="?{{ history_records_page_kwarg }}={{ history_records_page_obj.next_page_number }}">Próxima</a>
+                            </li>
                         {% else %}
                             <li class="disabled"><a href="#">Próxima</a></li>
                         {% endif %}

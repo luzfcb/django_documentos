@@ -76,7 +76,18 @@ CKEDITOR_CONFIGS = {
         'skin': 'moono',
         # 'skin': 'office2013',
         'toolbar_Basic': [
-            ['Source', '-', 'Bold', 'Italic']
+            {'name': 'document', 'items': ['Source', '-', 'Save', 'Preview', 'Print', '-', 'Templates']},
+            {'name': 'basicstyles',
+             'items': ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat']},
+
+            {'name': 'paragraph',
+             'items': ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', '-',
+                       '-',
+                       ]},
+            {'name': 'insert',
+             'items': ['base64image', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak']},
+            # '/',
+            {'name': 'custom', 'items': ['CreateLockUnlock', ]}
         ],
         # 'toolbar_Full': [
         #     ['Styles', 'Format', 'Bold', 'Italic', 'Underline', 'Strike', 'SpellChecker', 'Undo', 'Redo'],
@@ -145,7 +156,8 @@ CKEDITOR_CONFIGS = {
                 'Pagebreak',
                 'Abbr',
                 '-',
-                'CreateLockUnlock'
+                'CreateLockUnlock',
+
 
 
 
@@ -155,9 +167,9 @@ CKEDITOR_CONFIGS = {
 
             ]},
         ],
-        'toolbar': 'Teste',
-        #'floatingtools': 'Basic',
-        #'floatingtools_Basic':
+        'toolbar': 'Basic',
+        # 'floatingtools': 'Basic',
+        # 'floatingtools_Basic':
         #    [
         #        {'name': 'floatingtools', 'itens': ['Bold', 'Italic', '-', 'NumberedList', 'BulletedList', '-', 'Link']}
         #    ],
@@ -171,6 +183,9 @@ CKEDITOR_CONFIGS = {
         'base64image_disableUrlImages': True,
         'resize_dir': 'both',
         'tabSpaces': 4,
+        # 'sharedSpaces': {
+        #     'top': "document.getElementById('toolbar-editor')",
+        # },
         'extraPlugins': ','.join(
             [
                 # 'cwjdsjcsconfineselection',
@@ -179,6 +194,8 @@ CKEDITOR_CONFIGS = {
                 'abbr',
                 'div',
                 'divarea',
+                'sharedspace',
+
                 # 'floating-tools',
                 # 'wysiwygarea', # http://docs.ckeditor.com/#!/guide/dev_fullpage
                 'autolink',
@@ -192,13 +209,15 @@ CKEDITOR_CONFIGS = {
                 'base64image',
                 'imageresize',
                 # 'devtools',
+                'codesnippet',
                 'widget',
+                'dialog',
                 'lineutils',
                 'clipboard',
-                'dialog',
                 'dialogui',
                 'elementspath'
             ]),
+        'removePlugins': 'maximize,resize',
         # , 'image2', 'mathjax', 'dialog', 'dialogui', 'lineutils', 'clipboard', 'notification', 'notificationaggregator']),
     }
 }

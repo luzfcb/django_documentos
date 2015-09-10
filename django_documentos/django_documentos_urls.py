@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function, unicode_literals
 
-from django.conf.urls import url, include
+from django.conf.urls import include, url
 
 from django_documentos.views import (
     CloseView, DocumentoCreateView, DocumentoDashboardView, DocumentoDetailView, DocumentoGeneralDashboardView,
-    DocumentoHistoryView, DocumentoListView, DocumentoRevertView, DocumentoUpdateView,
-    DocumentoValidacaoView)
+    DocumentoHistoryView, DocumentoListView, DocumentoRevertView, DocumentoUpdateView, DocumentoValidacaoView,
+)
 
 from .settings import DJANGO_DOCUMENTOS_ENABLE_GENERAL_DASHBOARD
 

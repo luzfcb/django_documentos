@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function, unicode_literals
-from captcha.fields import CaptchaField
 
+from captcha.fields import CaptchaField
 from django import forms
 
 from crispy_forms.helper import FormHelper
@@ -48,8 +48,9 @@ class NextFormMixin(forms.Form):
 
 
 class DocumentoFormCreate(SaveHelperFormMixin, NextFormMixin, IsPopUpMixin, forms.ModelForm):
-    # next = forms.CharField(widget=forms.HiddenInput())
-    # proximo = forms.CharField()
+    # cabecalho = ckeditor_fields.RichTextField(blank=True)
+    # conteudo = ckeditor_fields.RichTextField()
+    # rodape = ckeditor_fields.RichTextField(blank=True)
     class Meta:
         model = Documento
         fields = '__all__'

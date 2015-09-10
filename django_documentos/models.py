@@ -39,8 +39,6 @@ class BaseModeloVersionado(models.Model):
 
     content_tracker = tracker.FieldTracker()
 
-
-
     versao_numero = models.IntegerField(default=1, auto_created=True, editable=False)
 
     def __init__(self, *args, **kwargs):
@@ -103,7 +101,10 @@ class Documento(BaseModeloVersionado):
     #     allow_image_upload=True
     #
     # )
+    # cabecalho = ckeditor_fields.RichTextField(blank=True)
     conteudo = ckeditor_fields.RichTextField()
+    # rodape = ckeditor_fields.RichTextField(blank=True)
+
     versoes = HistoricalRecords()
 
     def __str__(self):

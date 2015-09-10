@@ -8,19 +8,18 @@
 {#{% block titulo %}#}
 {#    Criar Documento#}
 {#{% endblock titulo %}#}
-
+{% block  extra_head_js %}
+{% endblock extra_head_js %}
 
 {% block conteudo_app %}
     {{ block.super }}
+    <div id="toolbar-editor"></div>
     {% if form %}
         <a id="teste" href="{% url 'documentos:create' %}{% if popup %}?popup=1{% endif %}">Verifique a Validade</a>
         <div id="codigo_qr"></div>
         <div id="success_div"></div>
         <div id="error_div"></div>
-        <form action="
-
-
-                {% url 'documentos:create' %}{% if popup or next_page_url %}?{% endif %}{% if popup %}popup=1{% endif %}{% if next_page_url %}&{{ next_kwarg_name }}={{ next_page_url }}{% endif %}"
+        <form action="{% url 'documentos:create' %}{% if popup or next_page_url %}?{% endif %}{% if popup %}popup=1{% endif %}{% if next_page_url %}&{{ next_kwarg_name }}={{ next_page_url }}{% endif %}"
               method="post" id="documento_create">
             {% csrf_token %}
 
@@ -32,7 +31,7 @@
             <input type="submit" id="enviar" value="Submit">
 
         </form>
-    <div id="appdebug"></div>
+        <div id="appdebug"></div>
     {% endif %}
 
 {% endblock conteudo_app %}
@@ -41,6 +40,19 @@
     <script src="{% static 'django_documentos/js/prettyprint.js' %}"></script>
 
     {% if form.media %}
+        <script>
+            {#            var htmlElement = document.getElementById('toolbar-editor');#}
+            {#            CKEDITOR.editorConfig = function (config) {#}
+            {#                // Define changes to default configuration here. For example:#}
+            {#                // config.language = 'fr';#}
+            {#                // config.uiColor = '#AADC6E';#}
+            {#                config.sharedSpaces = {#}
+            {#                    top: htmlElement#}
+            {#                }#}
+            {#            };#}
+
+
+        </script>
         {{ form.media }}
     {% endif %}
     {% if popup %}
@@ -84,7 +96,7 @@
     <script src="{% static 'django_documentos/js/jquery.qrcode.min.js' %}"></script>
     <script src="{% static 'django_documentos/js/jquery.are-you-sure.js' %}"></script>
     <script>
-{#        autosize(document.querySelectorAll('textarea'));#}
+        {#        autosize(document.querySelectorAll('textarea'));#}
         var teste = $("#teste");
         var opcoes = {
             // render method: 'canvas', 'image' or 'div'
@@ -153,5 +165,15 @@
                         editor.execCommand('maximize');
                     });
         {% endif %}
+{#        CKEDITOR.disableAutoInline = true;#}
+{#        CKEDITOR.replace('editor2', {#}
+{#            extraPlugins: 'sharedspace',#}
+{#            removePlugins: 'maximize,resize',#}
+{#            height: 410,#}
+{#            sharedSpaces: {#}
+{#                top: 'toolbar-editor',#}
+                {#                bottom: 'bottom'#}
+{#            }#}
+{#        });#}
     </script>
 {% endblock %}

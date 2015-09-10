@@ -11,3 +11,8 @@ page CSS
 http://codepen.io/rafaelcastrocouto/pen/LFAes/
 
 http://codepen.io/anon/pen/EjWmON
+
+
+http://jsfiddle.net/oleq/yf5hgkuj/
+
+http://tableless.com.br/dicas-de-css-para-impressao/
