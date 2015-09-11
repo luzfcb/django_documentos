@@ -2,6 +2,7 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 from captcha.fields import CaptchaField
+from ckeditor.widgets import CKEditorWidget
 from django import forms
 
 from crispy_forms.helper import FormHelper
@@ -49,7 +50,7 @@ class NextFormMixin(forms.Form):
 
 class DocumentoFormCreate(SaveHelperFormMixin, NextFormMixin, IsPopUpMixin, forms.ModelForm):
     # cabecalho = ckeditor_fields.RichTextField(blank=True)
-    # conteudo = ckeditor_fields.RichTextField()
+    conteudo = forms.CharField(widget=CKEditorWidget())
     # rodape = ckeditor_fields.RichTextField(blank=True)
     class Meta:
         model = Documento

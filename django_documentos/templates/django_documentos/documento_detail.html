@@ -1,5 +1,7 @@
-{% extends "django_documentos/base.html" %}
+{% extends "django_documentos/documento_detail_base.html" %}
 {% load bootstrap3 django_documentos_tags %}
+
+
 
 {% block titulo %}
     Detalhes Documento
@@ -11,11 +13,11 @@
 {% block conteudo_app %}
     {{ block.super }}
 
-
-    {% if object %}
-        {{ object.conteudo|safe }}
-    {% else %}
-        Nada para mostrar
-    {% endif %}
-
+    <article>
+        {% if object %}
+            {{ object.conteudo|safe }}
+        {% else %}
+            Nada para mostrar
+        {% endif %}
+    </article>
 {% endblock conteudo_app %}

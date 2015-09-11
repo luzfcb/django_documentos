@@ -87,7 +87,7 @@ CKEDITOR_CONFIGS = {
             {'name': 'insert',
              'items': ['base64image', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak']},
             # '/',
-            {'name': 'custom', 'items': ['CreateLockUnlock', ]}
+            {'name': 'custom', 'items': ['CreateLockUnlock', 'Maximize', 'ShowBlocks']}
         ],
         # 'toolbar_Full': [
         #     ['Styles', 'Format', 'Bold', 'Italic', 'Underline', 'Strike', 'SpellChecker', 'Undo', 'Redo'],
@@ -183,17 +183,20 @@ CKEDITOR_CONFIGS = {
         'base64image_disableUrlImages': True,
         'resize_dir': 'both',
         'tabSpaces': 4,
-        # 'sharedSpaces': {
-        #     'top': "document.getElementById('toolbar-editor')",
-        # },
+        'disableAutoInline': True,
+        'sharedSpaces': {
+            # 'top': "document.getElementById('toolbar-editor')",
+            'top': "toolbarLocation",
+        },
         'extraPlugins': ','.join(
             [
                 # 'cwjdsjcsconfineselection',
+               # 'fixed',
                 'lockunlock',
                 'lockunlock2',
                 'abbr',
                 'div',
-                'divarea',
+                #'divarea',
                 'sharedspace',
 
                 # 'floating-tools',
@@ -217,7 +220,7 @@ CKEDITOR_CONFIGS = {
                 'dialogui',
                 'elementspath'
             ]),
-        'removePlugins': 'maximize,resize',
+        # 'removePlugins': 'maximize,resize',
         # , 'image2', 'mathjax', 'dialog', 'dialogui', 'lineutils', 'clipboard', 'notification', 'notificationaggregator']),
     }
 }
