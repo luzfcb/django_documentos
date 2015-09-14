@@ -5,6 +5,7 @@ pytest-cov
 pytest-sugar
 coverage>=4.0b2
 django-simple-captcha
+django-wkhtmltopdf
 django_coverage_plugin
 django-test-plus
 codecov

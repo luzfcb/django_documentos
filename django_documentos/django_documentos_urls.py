@@ -6,6 +6,7 @@ from django.conf.urls import include, url
 from django_documentos.views import (
     CloseView, DocumentoCreateView, DocumentoDashboardView, DocumentoDetailView, DocumentoGeneralDashboardView,
     DocumentoHistoryView, DocumentoListView, DocumentoRevertView, DocumentoUpdateView, DocumentoValidacaoView,
+    PDFViewer,
 )
 
 from .settings import DJANGO_DOCUMENTOS_ENABLE_GENERAL_DASHBOARD
@@ -54,7 +55,11 @@ urlpatterns = [
     url(r'^v|validar',
         DocumentoValidacaoView.as_view(),
         name='validar'
-        )
+        ),
+    url(r'^pdf',
+        PDFViewer.as_view(),
+        name='pdf_view'
+        ),
 ]
 
 if DJANGO_DOCUMENTOS_ENABLE_GENERAL_DASHBOARD:

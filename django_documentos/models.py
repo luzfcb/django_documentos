@@ -103,6 +103,7 @@ class Documento(BaseModeloVersionado):
     # )
     # cabecalho = ckeditor_fields.RichTextField(blank=True)
     conteudo = ckeditor_fields.RichTextField()
+    assinado = models.BooleanField(default=False, editable=True)
     # rodape = ckeditor_fields.RichTextField(blank=True)
 
     versoes = HistoricalRecords()

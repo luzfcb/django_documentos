@@ -51,11 +51,12 @@ class NextFormMixin(forms.Form):
 class DocumentoFormCreate(SaveHelperFormMixin, NextFormMixin, IsPopUpMixin, forms.ModelForm):
     # cabecalho = ckeditor_fields.RichTextField(blank=True)
     conteudo = forms.CharField(widget=CKEditorWidget())
+
     # rodape = ckeditor_fields.RichTextField(blank=True)
     class Meta:
         model = Documento
         fields = '__all__'
-        exclude = ['criado_por', 'modificado_por']
+        exclude = ['criado_por', 'modificado_por', 'assinado']
         # widgets = {
         #     'conteudo': RedactorEditor()
         # }
@@ -65,7 +66,7 @@ class DocumentoFormUpdate(SaveHelperFormMixin, forms.ModelForm):
     class Meta:
         model = Documento
         fields = '__all__'
-        exclude = ['criado_por', 'modificado_por']
+        exclude = ['criado_por', 'modificado_por', 'assinado']
         # widgets = {
         #     'conteudo': RedactorEditor()
         # }

@@ -49,6 +49,7 @@ INSTALLED_APPS = (
     'redactor',
     'ckeditor',
     'django_wysiwyg',
+    'wkhtmltopdf',
     # 'debug_toolbar',
     'django_documentos',
 )

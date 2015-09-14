@@ -12,6 +12,11 @@
 
 {% block conteudo_app %}
     {{ block.super }}
+
+    <a href="{% url 'documentos:list' %}">
+        Lista de documentos
+    </a>
+
     <h4>
         {% if quantidade_documentos_cadastrados %}
             Documentos Cadastrados: {{ quantidade_documentos_cadastrados }}
@@ -24,6 +29,8 @@
         {% endif %}
 
     </h4>
+
+
 
     <a href="{% url 'documentos:create' %}?next=/list/?teste=1">
         Criar novo v1 - mesma janela

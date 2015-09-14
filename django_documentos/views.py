@@ -6,11 +6,12 @@ from django.core import signing
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.http import JsonResponse
-from django.shortcuts import resolve_url
+from django.shortcuts import resolve_url, redirect
 # from django.utils.http import is_safe_url
 from django.views import generic
 
 from simple_history.views import HistoryRecordListViewMixin, RevertFromHistoryRecordViewMixin
+from wkhtmltopdf.views import PDFTemplateView
 
 from .forms import DocumentoFormCreate, DocumentoRevertForm, DocumetoValidarForm
 from .models import Documento
@@ -150,7 +151,6 @@ class DocumentoListView(generic.ListView):
 
 
 class AuditavelViewMixin(object):
-
     def form_valid(self, form):
         if hasattr(self.request, 'user') and not isinstance(self.request.user, AnonymousUser):
             if not form.instance.criado_por:
@@ -210,7 +210,6 @@ class AuditavelViewMixin(object):
 #     ret = urlunparse(list(url_parts[0:4]) + [new_qs] + list(url_parts[5:]))
 #     #pprint(locals(), indent=4)
 #     return ret
-
 
 class DocumentoCreateView(AjaxableResponseMixin, NextURLMixin, AuditavelViewMixin, generic.CreateView):
     template_name = 'django_documentos/documento_create.html'
@@ -289,16 +288,28 @@ class DocumentoDetailView(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super(DocumentoDetailView, self).get_context_data(**kwargs)
         conteudo = "{}{}{}".format(self.object.conteudo, self.object.versao_numero, self.request.user.username)
+        signer = signing.Signer(self.object.pk)
+        documento = signer.sign(conteudo)
+
         context.update(
             {
                 'conteudo': conteudo,
-                'conteudo_sign': signing.Signer(conteudo)
+                'conteudo_sign': documento
             }
         )
         return context
 
 
-class DocumentoUpdateView(AuditavelViewMixin, generic.UpdateView):
+class DocumentoAssinadoRedirectMixin(generic.UpdateView):
+    def dispatch(self, request, *args, **kwargs):
+        ret = super(DocumentoAssinadoRedirectMixin, self).dispatch(request, *args, **kwargs)
+        if self.object and self.object.esta_ativo and self.object.assinado:
+            detail_url = reverse('documentos:detail', kwargs={'pk': self.object.pk})
+            return redirect(detail_url, permanent=False)
+        return ret
+
+
+class DocumentoUpdateView(DocumentoAssinadoRedirectMixin, AuditavelViewMixin, generic.UpdateView):
     template_name = 'django_documentos/documento_update.html'
     model = Documento
     form_class = DocumentoFormCreate
@@ -342,3 +353,11 @@ class DocumentoRevertView(RevertFromHistoryRecordViewMixin, AuditavelViewMixin, 
 class DocumentoValidacaoView(generic.FormView):
     template_name = 'django_documentos/documento_validacao.html'
     form_class = DocumetoValidarForm
+
+
+#
+# class DocumentoPDFView(PDFTemplateView, DocumentoDetailView):
+#     pass
+
+class PDFViewer(generic.TemplateView):
+    template_name = 'django_documentos/pdf_viewer.html'

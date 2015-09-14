@@ -7,11 +7,10 @@
             background: rgb(204, 204, 204);
         }
 
-        article{
+        article {
             background: white;
             width: 21cm;
-{#            height: 29.7cm;#}
-            display: block;
+        {#            height: 29.7cm;#} display: block;
             margin: 0 auto 0.5cm;
             box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
 
@@ -26,10 +25,18 @@
                 box-shadow: 0;
                 background: transparent;
             }
+
         }
 
         .no-print {
             display: block;
+        }
+
+        @media print {
+            .cke_pagebreak {
+                display: block;
+                page-break-before: always;
+            }
         }
     </style>
 {% endblock css_app %}

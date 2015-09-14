@@ -96,3 +96,9 @@ para rodar somente os testes de qualidade de codigo execute::
     tox -e py27-lint
 
 
+
+
+DEPENDENCIES
+-------------
+
+http://download.gna.org/wkhtmltopdf/0.12/0.12.2.1/wkhtmltox-0.12.2.1_linux-trusty-amd64.deb
