@@ -10,7 +10,6 @@ from django.http import JsonResponse
 from django.shortcuts import redirect, resolve_url
 # from django.utils.http import is_safe_url
 from django.views import generic
-# from wkhtmltopdf.views import PDFTemplateView
 
 from simple_history.views import HistoryRecordListViewMixin, RevertFromHistoryRecordViewMixin
 
@@ -18,6 +17,11 @@ from .forms import DocumentoFormCreate, DocumentoRevertForm, DocumetoValidarForm
 from .models import Documento
 from .samples_html import BIG_SAMPLE_HTML, SMALL_SAMPLE_HTML  # noqa
 from .utils import add_querystrings_to_url
+
+
+# from wkhtmltopdf.views import PDFTemplateView
+
+
 
 
 # from .models import DocumentoConteudo
