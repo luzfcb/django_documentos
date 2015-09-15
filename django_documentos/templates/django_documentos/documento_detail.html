@@ -13,9 +13,17 @@
 {% block conteudo_app %}
     {{ block.super }}
 
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
     <article>
         {% if object %}
-{#            {{ object.conteudo|safe }}#}
+            {#            {{ object.conteudo|safe }}#}
             <br>
             <br>
             <br>

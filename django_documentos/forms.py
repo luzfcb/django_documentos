@@ -2,9 +2,9 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 from captcha.fields import CaptchaField
-from ckeditor.widgets import CKEditorWidget
 from django import forms
 
+from ckeditor.widgets import CKEditorWidget
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 

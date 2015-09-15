@@ -1,17 +1,18 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function, unicode_literals
 
+from django.contrib import messages
 from django.contrib.auth.models import AnonymousUser
 from django.core import signing
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.http import JsonResponse
-from django.shortcuts import resolve_url, redirect
+from django.shortcuts import redirect, resolve_url
 # from django.utils.http import is_safe_url
 from django.views import generic
+# from wkhtmltopdf.views import PDFTemplateView
 
 from simple_history.views import HistoryRecordListViewMixin, RevertFromHistoryRecordViewMixin
-from wkhtmltopdf.views import PDFTemplateView
 
 from .forms import DocumentoFormCreate, DocumentoRevertForm, DocumetoValidarForm
 from .models import Documento
@@ -288,7 +289,7 @@ class DocumentoDetailView(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super(DocumentoDetailView, self).get_context_data(**kwargs)
         conteudo = "{}{}{}".format(self.object.conteudo, self.object.versao_numero, self.request.user.username)
-        signer = signing.Signer(self.object.pk)
+        signer = signing.Signer("{}-{}-{}".format(self.object.pk, self.object.versao_numero, self.request.user.username))
         documento = signer.sign(conteudo)
 
         context.update(
@@ -305,6 +306,7 @@ class DocumentoAssinadoRedirectMixin(generic.UpdateView):
         ret = super(DocumentoAssinadoRedirectMixin, self).dispatch(request, *args, **kwargs)
         if self.object and self.object.esta_ativo and self.object.assinado:
             detail_url = reverse('documentos:detail', kwargs={'pk': self.object.pk})
+            messages.add_message(request, messages.INFO, 'Documentos assinados só podem ser visualizados')
             return redirect(detail_url, permanent=False)
         return ret
 
