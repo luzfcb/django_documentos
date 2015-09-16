@@ -39,6 +39,7 @@ requirements = [
 test_requirements = [
     'pytest',
     'pytest-django',
+    'django-wkhtmltopdf',
 ]
 
 long_description = readme + '\n\n' + history

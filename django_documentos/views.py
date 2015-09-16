@@ -22,8 +22,6 @@ from .utils import add_querystrings_to_url
 # from wkhtmltopdf.views import PDFTemplateView
 
 
-
-
 # from .models import DocumentoConteudo
 
 class AjaxableResponseMixin(object):
@@ -156,6 +154,7 @@ class DocumentoListView(generic.ListView):
 
 
 class AuditavelViewMixin(object):
+
     def form_valid(self, form):
         if hasattr(self.request, 'user') and not isinstance(self.request.user, AnonymousUser):
             if not form.instance.criado_por:
@@ -293,7 +292,8 @@ class DocumentoDetailView(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super(DocumentoDetailView, self).get_context_data(**kwargs)
         conteudo = "{}{}{}".format(self.object.conteudo, self.object.versao_numero, self.request.user.username)
-        signer = signing.Signer("{}-{}-{}".format(self.object.pk, self.object.versao_numero, self.request.user.username))
+        signer = signing.Signer("{}-{}-{}".format(self.object.pk,
+                                                  self.object.versao_numero, self.request.user.username))
         documento = signer.sign(conteudo)
 
         context.update(
@@ -306,6 +306,7 @@ class DocumentoDetailView(generic.DetailView):
 
 
 class DocumentoAssinadoRedirectMixin(generic.UpdateView):
+
     def dispatch(self, request, *args, **kwargs):
         ret = super(DocumentoAssinadoRedirectMixin, self).dispatch(request, *args, **kwargs)
         if self.object and self.object.esta_ativo and self.object.assinado:
