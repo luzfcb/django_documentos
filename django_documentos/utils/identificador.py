@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import, print_function, unicode_literals
+from __future__ import absolute_import, print_function
 
 import sys
 
-from django.utils import six
-from django.utils.http import urlencode, urlunquote
-from django.utils.six.moves.urllib.parse import parse_qsl, urlparse, urlunsplit
+__author__ = 'luzfcb'
 
 __all__ = (
-    'add_querystrings_to_url',
     'gerar_identificador',
-    'NonPositiveIntegerException'
+    'NonPositiveIntegerException',
+    'NonIntegerCasteableException',
+    'MaxIntegerException',
 )
 
 PY3 = sys.version_info[0] == 3
@@ -20,57 +19,15 @@ else:
     text_type = unicode
 
 
-def add_querystrings_to_url(url, querystrings_dict):
-    uri = url
-
-    while True:
-        dec = urlunquote(uri)
-        if dec == uri:
-            break
-        uri = dec
-
-    parsed_url = urlparse(urlunquote(uri))
-
-    current_params = dict(parse_qsl(parsed_url.query))
-    current_params.update(
-        querystrings_dict
-    )
-
-    parsed_params = {
-        key: (lambda x: x, urlunquote)[isinstance(value, six.string_types)](value)
-        for key, value in six.iteritems(current_params)
-    }
-
-    from pprint import pprint
-    encoded_params = urlencode(parsed_params)
-    pprint(parsed_params)
-
-    # print('uri:', uri)
-
-    new_url = urlunsplit((parsed_url.scheme, parsed_url.netloc, parsed_url.path.rstrip('\n\r').lstrip('\n\r'),
-                          encoded_params, parsed_url.fragment))
-    # print('new_url:', new_url)
-
-    return new_url
+class NonPositiveIntegerException(ValueError):
+    pass
 
 
-# def mount_dynamic_form(request):
-#
-#     dynamic_fields = {
-#     'nome': fields.CharField(max_length=100, required=True, label='Nome', initial='Gustavo'),
-#     'idade': fields.IntegerField(label='Idade', min_value=0),
-#     'email': fields.EmailField(max_length=200, required=False, label='E-mail')
-#     }
-#
-#     DynamicForm = type('', (forms.Form,), dynamic_fields)
-#     form = DynamicForm()
-#
-#     return render_to_response('your_path/page.html',
-#     {'form': form},
-#     context_instance=RequestContext(request))
-#     }
+class NonIntegerCasteableException(ValueError):
+    pass
 
-class NonPositiveIntegerException(Exception):
+
+class MaxIntegerException(ValueError):
     pass
 
 
@@ -85,27 +42,55 @@ def gerar_identificador(numero_documento, numero_versao, zeros_documento=8, zero
     :param zeros_versao: positive int or positive int as str default=3
     :return: str
 
-    >>> gerar_identificador(601, 22)
-    '00000601v022' # doctest: +IGNORE_UNICODE
+    >>> gerar_identificador(601, 22) # doctest: +IGNORE_UNICODE
+    '00000601v022'
     >>> gerar_identificador(601, 22, 4)
     '0601v022' # doctest: +IGNORE_UNICODE
     >>> gerar_identificador(601, 22, 4, 6)
     '0601v000022' # doctest: +IGNORE_UNICODE
     >>> gerar_identificador(601, 22, 4, 0)
-    '0601v22' # doctest: +IGNORE_UNICODE
+    '0601v23' # doctest: +IGNORE_UNICODE
     >>> gerar_identificador(601, 22, -4)
     Traceback (most recent call last):
     ...
     NonPositiveIntegerException: The parameters only accept positive integers or positive integers as str
+    >>> gerar_identificador(0601, 22)
     """
-    parameters = (numero_documento, numero_versao, zeros_documento, zeros_versao)
 
-    if any(map(lambda valor: int(valor) < 0, parameters)):
+    # if function parameters not is instance of unicode or int, raise exception
+    if not any(map(lambda valor: isinstance(valor, (text_type, int)),
+                   (numero_documento, numero_versao, zeros_documento, zeros_versao))):
+        raise ValueError('The parameters only accept positive integers or positive integers as str')
+
+    # if parameters not is castable to int, raise exception
+    n_documento, n_versao, z_documento, z_versao = text_type(numero_documento).strip(text_type('0')), text_type(numero_versao).strip(text_type('0')), text_type(
+        zeros_documento).strip(text_type('0')), text_type(zeros_versao).strip(text_type('0'))
+
+    try:
+        n_documento, n_versao, z_documento, z_versao = int(n_documento), int(n_versao), int(z_documento), int(z_versao)
+    except ValueError as e:
+        raise NonIntegerCasteableException('Impossible cast the value {} to int'.format(e))
+    parametros = (n_documento, n_versao, z_documento, z_versao)
+    if int(n_documento) == int('385'):
+        print('args')
+    # if function parameters is less than 0, raise exception
+
+    if any(map(lambda valor: int(valor) < 0, parametros)):
         raise NonPositiveIntegerException('The parameters only accept positive integers or positive integers as str')
 
+    # determine the max legth of numero_documento and numero_versao based on values of zeros_documento and zeros_versao
+    max_value_numero_documento = int('9' * int(z_documento))
+    max_value_numero_versao = int('9' * int(n_versao))
+
+    if int(n_documento) > max_value_numero_documento:
+        raise MaxIntegerException(
+            'The parameters {} max value is {}'.format('numero_documento', max_value_numero_documento))
+    if int(n_versao) > max_value_numero_versao:
+        raise MaxIntegerException('The parameters {} max value is {}'.format('numero_versao', max_value_numero_versao))
+
     return '{numero_doc:0>{num_zeros_doc}}v{numero_versao:0>{num_zeros_versao}}'.format(
-        num_zeros_doc=zeros_documento, num_zeros_versao=zeros_versao, numero_doc=numero_documento,
-        numero_versao=numero_versao)
+        num_zeros_doc=int(z_documento), num_zeros_versao=int(z_versao), numero_doc=int(n_documento),
+        numero_versao=int(n_versao))
 
 
 if __name__ == "__main__":
@@ -115,6 +100,7 @@ if __name__ == "__main__":
     # https://github.com/runfalk/spans/blob/master/spans/tests/__init__.py
     # Add unicode ignore functionality to doctest
     IGNORE_UNICODE = doctest.register_optionflag("IGNORE_UNICODE")
+
 
     class UnicodeIgnoreOutputChecker(doctest.OutputChecker):
         """
@@ -139,5 +125,6 @@ if __name__ == "__main__":
             else:
                 return doctest.OutputChecker.check_output(
                     self, want, got, optionflags)
+
 
     doctest.DocTestSuite(module=sys.modules[__name__], checker=UnicodeIgnoreOutputChecker())
