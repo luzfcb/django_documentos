@@ -82,7 +82,8 @@ CKEDITOR_CONFIGS = {
              'items': ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat']},
 
             {'name': 'paragraph',
-             'items': ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', '-',
+             'items': ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'NumberedList', 'BulletedList',
+                       '-', 'Outdent', 'Indent', '-', 'Blockquote', '-',
                        '-',
                        ]},
             {'name': 'insert',
@@ -159,9 +160,6 @@ CKEDITOR_CONFIGS = {
                 '-',
                 'CreateLockUnlock',
 
-
-
-
                 # 'Div',
 
                 # 'Cwjdsjcsconfineselection',
@@ -192,12 +190,12 @@ CKEDITOR_CONFIGS = {
         'extraPlugins': ','.join(
             [
                 # 'cwjdsjcsconfineselection',
-               # 'fixed',
+                # 'fixed',
                 'lockunlock',
                 'lockunlock2',
                 'abbr',
                 'div',
-                #'divarea',
+                # 'divarea',
                 'sharedspace',
 
                 # 'floating-tools',
@@ -297,6 +295,8 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 STATIC_URL = '/static/'
 

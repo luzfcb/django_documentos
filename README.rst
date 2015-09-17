@@ -19,6 +19,10 @@ django_documentos
      :target: https://landscape.io/github/luzfcb/django_documentos/master
      :alt: Code Health
 
+.. image:: https://www.quantifiedcode.com/api/v1/project/a7178204202b440180822033f188e543/badge.svg
+     :target: https://www.quantifiedcode.com/app/project/a7178204202b440180822033f188e543
+     :alt: Code issues
+
 .. image:: https://badge.waffle.io/luzfcb/django_documentos.png?label=ready&title=Ready
      :target: https://waffle.io/luzfcb/django_documentos
      :alt: 'Stories in Ready'

@@ -9,9 +9,12 @@ from django.core.urlresolvers import reverse, reverse_lazy
 from django.http import JsonResponse
 from django.shortcuts import redirect, resolve_url
 # from django.utils.http import is_safe_url
+from django.template.response import TemplateResponse
 from django.views import generic
+from django.views.generic import View
 
 from simple_history.views import HistoryRecordListViewMixin, RevertFromHistoryRecordViewMixin
+from wkhtmltopdf.views import PDFTemplateView, PDFTemplateResponse
 
 from .forms import DocumentoFormCreate, DocumentoRevertForm, DocumetoValidarForm
 from .models import Documento
@@ -154,7 +157,6 @@ class DocumentoListView(generic.ListView):
 
 
 class AuditavelViewMixin(object):
-
     def form_valid(self, form):
         if hasattr(self.request, 'user') and not isinstance(self.request.user, AnonymousUser):
             if not form.instance.criado_por:
@@ -306,7 +308,6 @@ class DocumentoDetailView(generic.DetailView):
 
 
 class DocumentoAssinadoRedirectMixin(generic.UpdateView):
-
     def dispatch(self, request, *args, **kwargs):
         ret = super(DocumentoAssinadoRedirectMixin, self).dispatch(request, *args, **kwargs)
         if self.object and self.object.esta_ativo and self.object.assinado:
@@ -368,3 +369,134 @@ class DocumentoValidacaoView(generic.FormView):
 
 class PDFViewer(generic.TemplateView):
     template_name = 'django_documentos/pdf_viewer.html'
+
+
+class PDFRenderMixin(object):
+    """Class-based view for HTML templates rendered to PDF."""
+
+    # Filename for downloaded PDF. If None, the response is inline.
+    pdf_filename = 'rendered_pdf.pdf'
+
+    # Send file as attachement. If True render content in the browser.
+    pdf_show_content_in_browser = False
+
+    # Filenames for the content, header, and footer templates.
+    pdf_template_name = None
+    pdf_header_template = None
+    pdf_footer_template = None
+
+    # TemplateResponse classes for PDF and HTML
+    pdf_response_class = PDFTemplateResponse
+    pdf_html_response_class = TemplateResponse
+
+    # Command-line options to pass to wkhtmltopdf
+    pdf_cmd_options = {
+        # 'orientation': 'portrait',
+        # 'collate': True,
+        # 'quiet': None,
+    }
+
+    def __init__(self, *args, **kwargs):
+        super(PDFRenderMixin, self).__init__(*args, **kwargs)
+
+        # Copy self.pdf_cmd_options to prevent clobbering the class-level object.
+        self.pdf_cmd_options = self.pdf_cmd_options.copy()
+        self.render_now = False
+
+    def get(self, request, *args, **kwargs):
+        response_class = self.pdf_response_class
+        try:
+            if self.kwargs.get('pdf') or self.request.GET.get('pdf'):
+                self.render_now = True
+            else:
+                self.render_now = False
+
+            if request.GET.get('as', '') == 'html':
+                # Use the html_response_class if HTML was requested.
+                self.pdf_response_class = self.pdf_html_response_class
+            return super(PDFRenderMixin, self).get(request,
+                                                     *args, **kwargs)
+        finally:
+            # Remove self.response_class
+            self.pdf_response_class = response_class
+
+    # Send file as attachement. If True render content in the browser.
+    def get_pdf_show_content_in_browser(self):
+        return self.pdf_show_content_in_browser
+
+    # Filenames for the content, header, and footer templates.
+    def get_pdf_template_name(self):
+        return self.pdf_template_name
+
+    def get_pdf_header_template(self):
+        return self.pdf_header_template
+
+    def get_pdf_footer_template(self):
+        return self.pdf_footer_template
+
+    # TemplateResponse classes for PDF and HTML
+    def get_pdf_response_class(self):
+        return self.pdf_response_class
+
+    def get_pdf_html_response_class(self):
+        return self.pdf_html_response_class
+
+    def get_pdf_filename(self):
+        return self.pdf_filename
+
+    def get_pdf_cmd_options(self):
+        return self.pdf_cmd_options
+
+    def render_to_response(self, context, **response_kwargs):
+        """
+        Returns a PDF response with a template rendered with the given context.
+        """
+        pdf_filename = response_kwargs.pop('pdf_filename', None)
+        pdf_cmd_options = response_kwargs.pop('pdf_cmd_options', None)
+
+        if self.render_now and issubclass(self.get_pdf_response_class(), PDFTemplateResponse):
+            if pdf_filename is None:
+                pdf_filename = self.get_pdf_filename()
+
+            if pdf_cmd_options is None:
+                pdf_cmd_options = self.get_pdf_cmd_options()
+
+            return super(PDFRenderMixin, self).render_to_response(
+                context=context, pdf_filename=pdf_filename,
+                pdf_show_content_in_browser=self.get_pdf_show_content_in_browser(),
+                pdf_header_template=self.get_pdf_header_template(),
+                template=self.get_pdf_template_name(),
+                pdf_footer_template=self.get_pdf_footer_template(),
+                pdf_cmd_options=pdf_cmd_options,
+                **response_kwargs
+            )
+        else:
+            return super(PDFRenderMixin, self).render_to_response(
+                context=context,
+                **response_kwargs
+            )
+
+
+class PDFRenderView(PDFRenderMixin, generic.DetailView):
+    template_name = 'django_documentos/documento_detail.html'
+    pdf_content_template_name = 'django_documentos/html_to_pdf_content.html'
+    pdf_header_template_name = 'django_documentos/html_to_pdf_header.html'
+    pdf_footer_template_name = 'django_documentos/html_to_pdf_footer.html'
+    pdf_filename = 'arquivo.pdf'
+    pdf_show_content_in_browser = True
+    model = Documento
+
+    def get_context_data(self, **kwargs):
+        context = super(PDFRenderView, self).get_context_data(**kwargs)
+        conteudo = "{}{}{}".format(self.object.conteudo, self.object.versao_numero, self.request.user.username)
+        signer = signing.Signer("{}-{}-{}".format(self.object.pk,
+                                                  self.object.versao_numero, self.request.user.username))
+        documento = signer.sign(conteudo)
+
+        context.update(
+            {
+                'conteudo': conteudo,
+                'conteudo_sign': documento
+            }
+        )
+        return context

@@ -7,7 +7,7 @@ from django_documentos.views import (
     CloseView, DocumentoCreateView, DocumentoDashboardView, DocumentoDetailView, DocumentoGeneralDashboardView,
     DocumentoHistoryView, DocumentoListView, DocumentoRevertView, DocumentoUpdateView, DocumentoValidacaoView,
     PDFViewer,
-)
+    PDFRenderView)
 
 from .settings import DJANGO_DOCUMENTOS_ENABLE_GENERAL_DASHBOARD
 
@@ -48,18 +48,22 @@ urlpatterns = [
         CloseView.as_view(),
         name='close'
         ),
-    url(r'^captcha/',
+    url(r'^captcha/$',
         include('captcha.urls'),
         name='captcha'
         ),
-    url(r'^v|validar',
+    url(r'^v|validar/$',
         DocumentoValidacaoView.as_view(),
         name='validar'
         ),
-    url(r'^pdf',
+    url(r'^pdf-file/$',
         PDFViewer.as_view(),
         name='pdf_view'
         ),
+    url(r'^pdf/(?P<pk>\d+)/$',
+        PDFRenderView.as_view(),
+        name='pdf_view'
+        )
 ]
 
 if DJANGO_DOCUMENTOS_ENABLE_GENERAL_DASHBOARD:

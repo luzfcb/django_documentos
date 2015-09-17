@@ -44,6 +44,8 @@ docs/_build
 # Pycharm
 .idea
 
+.cache
+
 *.sqlite3
 test_proj/media
 

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<article>
+    {% if object %}
+        {{ object.conteudo|safe }}
+        <br>
+        <br>
+        <br>
+        <br>
+        {#            {{ conteudo_sign }}#}
+    {% else %}
+        Nada para mostrar
+    {% endif %}
+</article>
+</body>
+</html>

@@ -3,31 +3,38 @@ import pytest
 from django_documentos.utils import identificador
 
 
-def test_gerar_identificador_all_parameter_is_positive_interger():
-    value = identificador.gerar_identificador(601, 22, 8, 3)
-    assert identificador.text_type(value) == identificador.text_type('00000601v022')
+def test_document_601_22():
+    assert identificador.document(601, 22) == '00000601v022'
 
 
-def test_gerar_identificador_any_parameter_is_non_positive_interger():
-    with pytest.raises(identificador.NonPositiveIntegerException):
-        identificador.gerar_identificador(601, 22, 8, -3)
+def test_document_100000000_22():
+    with pytest.raises(AssertionError) as excinfo:
+        identificador.document(99999999, 22)
+        identificador.document(100000000, 22)
+    assert 'Number dont fit size' in str(excinfo.value)
 
 
-def test_gerar_identificador_any_parameter_is_str_non_convertible_to_integer():
-    with pytest.raises(identificador.StrNonConvertibleToIntegerException):
-        identificador.gerar_identificador('a601', 22, 8, 3)
+def test_document_str_000000000000000000601_22():
+    # ainda estou me perguntando se eu deveria mesmo interpretar
+    # "000000000000000000601" como 601
+    try:
+        identificador.document('000000000000000000601', 22)
+    except AssertionError:
+        pytest.fail("Isto nao deveria levantar um erro")
 
 
-def test_gerar_identificador_any_parameter_is_str_convertible_to_integer():
-    value = identificador.gerar_identificador('0601', 22)
-    assert identificador.text_type(value) == identificador.text_type('00000601v022')
+def test_document_parametro_negativo():
+    with pytest.raises(AssertionError) as excinfo:
+        identificador.document(-601, 22)
+    assert 'Expected positive integer' in str(excinfo.value)
 
 
-def test_gerar_identificador_parameter_numero_documento():
-    value = identificador.gerar_identificador('0601', 22)
-    assert identificador.text_type(value) == identificador.text_type('00000601v022')
+def test_document_parametro_negativo_str():
+    with pytest.raises(AssertionError) as excinfo:
+        identificador.document('-601', 22)
+    assert 'Expected positive integer' in str(excinfo.value)
 
 
-def test_gerar_identificador_foo():
-    assert identificador.text_type(identificador.gerar_identificador('0601', 22)) == identificador.text_type(
-        '00000601v022')
+# def test_document_0x601_22():
+#     with pytest.raises(AssertionError):
+#         identificador.document(0x601, 22)
