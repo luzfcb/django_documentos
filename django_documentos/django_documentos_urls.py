@@ -6,8 +6,8 @@ from django.conf.urls import include, url
 from django_documentos.views import (
     CloseView, DocumentoCreateView, DocumentoDashboardView, DocumentoDetailView, DocumentoGeneralDashboardView,
     DocumentoHistoryView, DocumentoListView, DocumentoRevertView, DocumentoUpdateView, DocumentoValidacaoView,
-    PDFViewer,
-    PDFRenderView)
+    PDFRenderView, PDFViewer,
+    PDFRenderView2)
 
 from .settings import DJANGO_DOCUMENTOS_ENABLE_GENERAL_DASHBOARD
 
@@ -63,6 +63,10 @@ urlpatterns = [
     url(r'^pdf/(?P<pk>\d+)/$',
         PDFRenderView.as_view(),
         name='pdf_view'
+        ),
+    url(r'^pdf2/(?P<pk>\d+)/$',
+        PDFRenderView2.as_view(),
+        name='pdf_view2'
         )
 ]
 
