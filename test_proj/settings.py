@@ -50,10 +50,21 @@ INSTALLED_APPS = (
     'ckeditor',
     'django_wysiwyg',
     'wkhtmltopdf',
+    'captcha',
+    'crispy_forms',
     # 'debug_toolbar',
     'django_documentos',
 )
 
+# django-simple-captcha
+
+
+CAPTCHA_FOREGROUND_COLOR = '#991100'
+
+CAPTCHA_FONT_SIZE = 22
+# CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.math_challenge'
+CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.word_challenge'
+CAPTCHA_WORDS_DICTIONARY = '/usr/share/dict/brazilian'
 # django_wysiwyg
 DJANGO_WYSIWYG_FLAVOR = 'ckeditor'
 
@@ -300,9 +311,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-)
+# STATICFILES_DIRS = (
+#     os.path.join(BASE_DIR, 'static'),
+# )
 
 DJANGO_DOCUMENTOS_ENABLE_GENERAL_DASHBOARD = True
 

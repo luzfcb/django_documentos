@@ -1,7 +1,41 @@
 {% extends "django_documentos/base.html" %}
-
+{% load crispy_forms_tags %}
 
 {% block conteudo_app %}
 
-    nada ainda
+    {% if form %}
+        {% crispy form %}
+    {% else %}
+        Nada para mostrar
+    {% endif %}
+{% endblock %}
+
+{% block js_app %}
+    {{ block.super }}
+    {% if form.media %}
+        {{ form.media }}
+    {% endif %}
+    <script>
+        {#        $('.js-captcha-refresh').click(function () {#}
+        {#            $form = $(this).parents('form');#}
+        {##}
+        {#            $.getJSON($(this).data('url'), {}, function (json) {#}
+        {#                // This should update your captcha image src and captcha hidden input#}
+        {#                $('img[class="captcha"]').attr('src', json['new_cptch_image']);#}
+        {#                $('#id_captcha_0').val(json['new_cptch_key']);#}
+        {#                $('#id_captcha_1').val('');#}
+        {#            });#}
+        {#            console.log("OIIIII");#}
+        {##}
+        {#            return false;#}
+        {#        });#}
+        function refresh_captcha() {
+            $.getJSON($(this).data('url'), {'refresh_captcha': 1}, function (json) {
+                $('img[class="captcha"]').attr('src', json['new_cptch_image']);
+                $('#id_captcha_0').val(json['new_cptch_key']);
+                $('#id_captcha_1').val('');
+            });
+        }
+
+    </script>
 {% endblock %}

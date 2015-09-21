@@ -32,7 +32,9 @@ urlpatterns = [
         ),
     url(r'^editor_redactor/', include('redactor.urls')),
     url(r'^ckeditor/', include('ckeditor.urls')),
-
+    url(r'^captcha/',
+        include('captcha.urls'),
+        ),
     url(r'', include('django.contrib.auth.urls')),
 ]
 
