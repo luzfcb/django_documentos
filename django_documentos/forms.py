@@ -1,22 +1,22 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function, unicode_literals
+import autocomplete_light
 
 from captcha.fields import CaptchaField
 from django import forms
 # from redactor.widgets import RedactorEditor
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.hashers import check_password
-from django.utils.translation import ugettext_lazy as _
 
 from ckeditor.widgets import CKEditorWidget
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import HTML, Submit
+from django.contrib.auth.hashers import check_password
+from django.utils.translation import ugettext_lazy as _
 
 from .models import Documento
 
 
 class SaveHelper(FormHelper):
-
     def __init__(self, form=None):
         super(SaveHelper, self).__init__(form)
         self.layout.append(Submit(name='save', value='Salvar'))
@@ -25,14 +25,12 @@ class SaveHelper(FormHelper):
 
 
 class SaveHelperFormMixin(object):
-
     def __init__(self, *args, **kwargs):
         super(SaveHelperFormMixin, self).__init__(*args, **kwargs)
         self.helper = SaveHelper(self)
 
 
 class RevertHelper(FormHelper):
-
     def __init__(self, form=None):
         super(RevertHelper, self).__init__(form)
         self.layout.append(Submit(name='revert', value='Reverter'))
@@ -41,7 +39,6 @@ class RevertHelper(FormHelper):
 
 
 class RevertHelperFormMixin(object):
-
     def __init__(self, *args, **kwargs):
         super(RevertHelperFormMixin, self).__init__(*args, **kwargs)
         self.helper = RevertHelper(self)
@@ -63,32 +60,29 @@ class DocumentoFormCreate(SaveHelperFormMixin, NextFormMixin, IsPopUpMixin, form
     class Meta:
         model = Documento
         fields = '__all__'
-        exclude = ['criado_por', 'modificado_por', 'assinado']
+        exclude = ['criado_por', 'modificado_por', 'esta_assinado']
         # widgets = {
         #     'conteudo': RedactorEditor()
         # }
 
 
 class DocumentoFormUpdate(SaveHelperFormMixin, forms.ModelForm):
-
     class Meta:
         model = Documento
         fields = '__all__'
-        exclude = ['criado_por', 'modificado_por', 'assinado']
+        exclude = ['criado_por', 'modificado_por', 'esta_assinado']
         # widgets = {
         #     'conteudo': RedactorEditor()
         # }
 
 
 class DocumentoRevertForm(RevertHelperFormMixin, forms.ModelForm):
-
     class Meta:
         model = Documento
         fields = '__all__'
 
 
 class ValidarHelper(FormHelper):
-
     def __init__(self, form=None):
         super(ValidarHelper, self).__init__(form)
         self.layout.append(
@@ -105,7 +99,6 @@ class ValidarHelper(FormHelper):
 
 
 class ValidarHelperFormMixin(object):
-
     def __init__(self, *args, **kwargs):
         super(ValidarHelperFormMixin, self).__init__(*args, **kwargs)
         self.helper = ValidarHelper(self)
@@ -118,7 +111,6 @@ class DocumetoValidarForm(ValidarHelperFormMixin, forms.Form):
 
 
 class AssinarDocumentoHelper(FormHelper):
-
     def __init__(self, form=None):
         super(AssinarDocumentoHelper, self).__init__(form)
         # self.layout.append(
@@ -126,6 +118,7 @@ class AssinarDocumentoHelper(FormHelper):
         #
         # )
         self.layout.append(Submit(name='assinar', value='Assinar Documento'))
+        self.form_id = 'form_assinar'
         self.form_method = 'post'
         self.form_show_errors = True
         # self.form_action = 'documentos:validar'
@@ -134,13 +127,16 @@ class AssinarDocumentoHelper(FormHelper):
 
 
 class AssinarDocumentoHelperFormMixin(object):
-
     def __init__(self, *args, **kwargs):
         super(AssinarDocumentoHelperFormMixin, self).__init__(*args, **kwargs)
         self.helper = AssinarDocumentoHelper(self)
 
 
 class ValidatePasswordForm(forms.Form):
+
+    # user2 = autocomplete_light.ModelChoiceField('UserAutocomplete')
+
+
     password = forms.CharField(label="Sua senha",
                                widget=forms.PasswordInput)
 
@@ -236,5 +232,5 @@ class ValidatePasswordForm(forms.Form):
 #         return self.user_cache
 
 
-class AssinarDocumento(AssinarDocumentoHelperFormMixin, AuthenticationForm):
+class AssinarDocumento(AssinarDocumentoHelperFormMixin, ValidatePasswordForm):
     pass

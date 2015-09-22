@@ -4,9 +4,9 @@ from __future__ import absolute_import, print_function, unicode_literals
 from django.conf.urls import url
 
 from django_documentos.views import (
-    CloseView, DocumentoCreateView, DocumentoDashboardView, DocumentoDetailView, DocumentoGeneralDashboardView,
-    DocumentoHistoryView, DocumentoListView, DocumentoRevertView, DocumentoUpdateView, DocumentoValidacaoView,
-    PDFViewer,
+    AssinarDocumentoView, CloseView, DocumentoCreateView, DocumentoDashboardView, DocumentoDetailView,
+    DocumentoGeneralDashboardView, DocumentoHistoryView, DocumentoListView, DocumentoRevertView, DocumentoUpdateView,
+    DocumentoValidacaoView, PDFViewer,
 )
 
 from .settings import DJANGO_DOCUMENTOS_ENABLE_GENERAL_DASHBOARD
@@ -48,6 +48,10 @@ urlpatterns = [
     url(r'^close/$',
         CloseView.as_view(),
         name='close'
+        ),
+    url(r'^assinar/(?P<pk>\d+)/$',
+        AssinarDocumentoView.as_view(),
+        name='assinar'
         ),
     url(r'^validar/$',
         DocumentoValidacaoView.as_view(),

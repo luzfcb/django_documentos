@@ -1,5 +1,6 @@
 {% extends "django_documentos/base.html" %}
 {% load bootstrap3 %}
+{% load crispy_forms_tags %}
 
 {% block titulo %}
     Editar Documento
@@ -14,6 +15,13 @@
     {% if object %}
         <a href="{% url 'documentos:history' pk=object.pk %}" class="btn btn-primary"> Historico de Modificações</a>
     {% endif %}
+    {% if object %}
+        <a class="btn btn-primary"> Assinar Documento</a>
+        {% if form_assinar %}
+            {% crispy form_assinar %}
+        {% endif %}
+    {% endif %}
+
 
     {% if form %}
         <form action="." method="post">

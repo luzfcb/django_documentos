@@ -23,19 +23,24 @@ class BaseModeloVersionado(models.Model):
                                    related_name="%(app_label)s_%(class)s_criado_por", null=True,
                                    blank=True, on_delete=models.SET_NULL, editable=False)
 
-    modificado_em = models.DateField(auto_now=True, blank=True, null=True, editable=False)
+    modificado_em = models.DateTimeField(auto_now=True, blank=True, null=True, editable=False)
     modificado_por = models.ForeignKey(to=USER_MODEL,
                                        related_name="%(app_label)s_%(class)s_modificado_por", null=True,
                                        blank=True, on_delete=models.SET_NULL, editable=False)
 
-    revertido_em = models.DateField(blank=True, null=True, editable=False)
+    revertido_em = models.DateTimeField(blank=True, null=True, editable=False)
     revertido_por = models.ForeignKey(to=USER_MODEL,
                                       related_name="%(app_label)s_%(class)s_revertido_por", null=True,
                                       blank=True, on_delete=models.SET_NULL, editable=False)
     revertido_da_versao = models.IntegerField(null=True, default=None, auto_created=True, editable=False, blank=True)
 
     esta_ativo = models.NullBooleanField(default=True, editable=False)
+
     esta_bloqueado = models.NullBooleanField(default=False, editable=False)
+    bloqueado_em = models.DateTimeField(blank=True, null=True, editable=False)
+    bloqueado_por = models.ForeignKey(to=USER_MODEL,
+                                      related_name="%(app_label)s_%(class)s_bloqueado_por", null=True,
+                                      blank=True, on_delete=models.SET_NULL, editable=False)
 
     content_tracker = tracker.FieldTracker()
 
@@ -103,8 +108,20 @@ class Documento(BaseModeloVersionado):
     # )
     # cabecalho = ckeditor_fields.RichTextField(blank=True)
     conteudo = ckeditor_fields.RichTextField()
-    assinado = models.BooleanField(default=False, editable=True)
+
     assinatura = models.TextField(blank=True, editable=False)
+
+    esta_assinado = models.BooleanField(default=False, editable=True)
+    assinado_em = models.DateTimeField(blank=True, null=True, editable=False)
+    assinado_por = models.ForeignKey(to=USER_MODEL,
+                                     related_name="%(app_label)s_%(class)s_assinado_por", null=True,
+                                     blank=True, on_delete=models.SET_NULL, editable=False)
+
+    assinatura_removida_em = models.DateTimeField(blank=True, null=True, editable=False)
+    assinatura_removida_por = models.ForeignKey(to=USER_MODEL,
+                                     related_name="%(app_label)s_%(class)s_assinatura_removida_pors", null=True,
+                                     blank=True, on_delete=models.SET_NULL, editable=False)
+
     # rodape = ckeditor_fields.RichTextField(blank=True)
 
     versoes = HistoricalRecords()
@@ -112,6 +129,23 @@ class Documento(BaseModeloVersionado):
     def __str__(self):
         return self.titulo
 
+    def assinar_documento(self, user, *args, **kwargs):
+        if user:
+            self.assinado_por = user
+        self.assinado_em = timezone.now()
+        self.esta_assinado = True
+        self.save(*args, **kwargs)
+
+    def remover_assinatura_documento(self, user, *args, **kwargs):
+        if user:
+            self.assinatura_removida_por = user
+        self.assinatura_removida_em = timezone.now()
+        self.esta_assinado = False
+
+        self.assinado_em = None
+        self.assinado_por = None
+        self.assinatura = None
+        self.save(*args, **kwargs)
 #
 # class DocumentoConteudo(BaseModeloVersionado):
 #     documento = models.OneToOneField('Documento', related_name="conteudo", null=True, on_delete=models.SET_NULL,

@@ -52,6 +52,7 @@
 {% endblock left_menu %}
 
 {% block js_app %}
+    {{ block.super }}
     <script>if (!window.jQuery) {
         document.write('<script src="{% static 'django_documentos/js/jquery/1.11.3/jquery.min.js' %}"><\/script>');
         document.write('<script src="{% static 'django_documentos/js/jquery/1.11.3/jquery-migrate.min.js' %}"><\/script>');

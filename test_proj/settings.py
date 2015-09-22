@@ -37,8 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'debug_toolbar',
-
+    'autocomplete_light',
     'simple_history',
 
     'bootstrap3',
@@ -52,8 +51,10 @@ INSTALLED_APPS = (
     'wkhtmltopdf',
     'captcha',
     'crispy_forms',
-    # 'debug_toolbar',
     'django_documentos',
+    'debug_toolbar',
+
+    'devserver',
 )
 
 # django-simple-captcha
@@ -61,9 +62,9 @@ INSTALLED_APPS = (
 
 CAPTCHA_FOREGROUND_COLOR = '#991100'
 
-CAPTCHA_FONT_SIZE = 22
-# CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.math_challenge'
-CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.word_challenge'
+CAPTCHA_FONT_SIZE = 50
+CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.math_challenge'
+#CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.word_challenge'
 CAPTCHA_WORDS_DICTIONARY = '/usr/share/dict/brazilian'
 # django_wysiwyg
 DJANGO_WYSIWYG_FLAVOR = 'ckeditor'
@@ -255,6 +256,21 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
 )
+
+MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES + (
+    'devserver.middleware.DevServerMiddleware',
+)
+
+DEVSERVER_MODULES = (
+    'devserver.modules.sql.SQLRealTimeModule',
+    'devserver.modules.sql.SQLSummaryModule',
+    'devserver.modules.profile.ProfileSummaryModule',
+
+    # Modules not enabled by default
+    'devserver.modules.profile.LineProfilerModule',
+)
+
+DEVSERVER_AUTO_PROFILE = True  # profiles all views without the need of function decorator
 
 ROOT_URLCONF = 'test_proj.urls'
 

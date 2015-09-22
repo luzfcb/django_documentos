@@ -1,0 +1,27 @@
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+{% crispy form %}
+
+
+<script>if (!window.jQuery) {
+    document.write('<script src="{% static 'django_documentos/js/jquery/1.11.3/jquery.min.js' %}"><\/script>');
+    document.write('<script src="{% static 'django_documentos/js/jquery/1.11.3/jquery-migrate.min.js' %}"><\/script>');
+}
+</script>
+{% include 'autocomplete_light/static.html' %}
+
+{% if form %}
+    {{ form.media }}
+{% endif %}
+</body>
+</html>
+

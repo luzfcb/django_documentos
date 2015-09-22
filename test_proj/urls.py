@@ -35,6 +35,7 @@ urlpatterns = [
     url(r'^captcha/',
         include('captcha.urls'),
         ),
+    url(r'^autocomplete/', include('autocomplete_light.urls')),
     url(r'', include('django.contrib.auth.urls')),
 ]
 

@@ -8,3 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 class DjangoDocumentosAppConfig(AppConfig):
     name = 'django_documentos'
     verbose_name = _('Documentos')
+
+    def ready(self):
+
+        super(DjangoDocumentosAppConfig, self).ready()

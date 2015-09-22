@@ -13,7 +13,7 @@
 
         <ul class="list-group">
             {% for object in object_list %}
-                <li class="list-group-item">{{ object }} - <a class="btn btn-danger btn-xs" href="{% url 'documentos:update' object.pk %}">Editar</a></li>
+                <li class="list-group-item">{{ object }} - <a class="btn btn-danger btn-xs" href="{% url 'documentos:update' object.pk %}">Editar</a> - {% if object.esta_assinado %}Assinado {% endif %}</li>
             {% endfor %}
 
         </ul>

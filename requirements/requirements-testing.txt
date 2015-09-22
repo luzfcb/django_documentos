@@ -24,3 +24,7 @@ django-model-utils
 django-debug-toolbar
 -e git://github.com/luzfcb/django-simple-history.git@wip-generic-views#egg=django-simple-history
 -e git://github.com/maraujop/django-crispy-forms.git@dev#egg=django-crispy-forms
+
+django-autocomplete-light
+git+git://github.com/dcramer/django-devserver#egg=django-devserver
+line_profiler
