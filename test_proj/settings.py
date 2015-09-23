@@ -270,7 +270,7 @@ DEVSERVER_MODULES = (
     'devserver.modules.profile.LineProfilerModule',
 )
 
-DEVSERVER_AUTO_PROFILE = True  # profiles all views without the need of function decorator
+# DEVSERVER_AUTO_PROFILE = True  # profiles all views without the need of function decorator
 
 ROOT_URLCONF = 'test_proj.urls'
 

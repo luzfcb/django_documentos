@@ -133,9 +133,7 @@ class AssinarDocumentoHelperFormMixin(object):
 
 
 class ValidatePasswordForm(forms.Form):
-
-    # user2 = autocomplete_light.ModelChoiceField('UserAutocomplete')
-
+    user2 = autocomplete_light.ModelChoiceField('UserAutocomplete')
 
     password = forms.CharField(label="Sua senha",
                                widget=forms.PasswordInput)
