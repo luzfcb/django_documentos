@@ -38,6 +38,7 @@ requirements = [
 
 test_requirements = [
     'pytest',
+    'pytest-cov',
     'pytest-django',
     'django-wkhtmltopdf',
 ]
