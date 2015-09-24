@@ -1,9 +1,9 @@
 # PyTest for running the tests.
-pytest>=2.7.2
+pytest>=2.8.0
 pytest-django>=2.8.0
 pytest-cov
 pytest-sugar
-coverage>=4.0b2
+coverage>=4.0
 django-simple-captcha
 django-wkhtmltopdf
 django_coverage_plugin
