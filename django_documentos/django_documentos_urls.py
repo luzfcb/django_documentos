@@ -3,14 +3,13 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 from django.conf.urls import url
 
-from django_documentos.views import (
+from .settings import DJANGO_DOCUMENTOS_ENABLE_GENERAL_DASHBOARD
+from .temporatio_apagar import PDFRenderView, PDFRenderView2
+from .views import (
     AssinarDocumentoView, CloseView, DocumentoCreateView, DocumentoDashboardView, DocumentoDetailView,
     DocumentoGeneralDashboardView, DocumentoHistoryView, DocumentoListView, DocumentoRevertView, DocumentoUpdateView,
     DocumentoValidacaoView, PDFViewer,
 )
-
-from .settings import DJANGO_DOCUMENTOS_ENABLE_GENERAL_DASHBOARD
-from .temporatio_apagar import PDFRenderView, PDFRenderView2
 
 urlpatterns = [
     url(r'^$',

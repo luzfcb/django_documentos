@@ -1,22 +1,24 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function, unicode_literals
-import autocomplete_light
 
+import autocomplete_light
 from captcha.fields import CaptchaField
 from django import forms
-# from redactor.widgets import RedactorEditor
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.hashers import check_password
+from django.utils.translation import ugettext_lazy as _
 
 from ckeditor.widgets import CKEditorWidget
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import HTML, Submit
-from django.contrib.auth.hashers import check_password
-from django.utils.translation import ugettext_lazy as _
 
 from .models import Documento
 
 
+# from redactor.widgets import RedactorEditor
+
+
 class SaveHelper(FormHelper):
+
     def __init__(self, form=None):
         super(SaveHelper, self).__init__(form)
         self.layout.append(Submit(name='save', value='Salvar'))
@@ -25,12 +27,14 @@ class SaveHelper(FormHelper):
 
 
 class SaveHelperFormMixin(object):
+
     def __init__(self, *args, **kwargs):
         super(SaveHelperFormMixin, self).__init__(*args, **kwargs)
         self.helper = SaveHelper(self)
 
 
 class RevertHelper(FormHelper):
+
     def __init__(self, form=None):
         super(RevertHelper, self).__init__(form)
         self.layout.append(Submit(name='revert', value='Reverter'))
@@ -39,6 +43,7 @@ class RevertHelper(FormHelper):
 
 
 class RevertHelperFormMixin(object):
+
     def __init__(self, *args, **kwargs):
         super(RevertHelperFormMixin, self).__init__(*args, **kwargs)
         self.helper = RevertHelper(self)
@@ -67,6 +72,7 @@ class DocumentoFormCreate(SaveHelperFormMixin, NextFormMixin, IsPopUpMixin, form
 
 
 class DocumentoFormUpdate(SaveHelperFormMixin, forms.ModelForm):
+
     class Meta:
         model = Documento
         fields = '__all__'
@@ -77,12 +83,14 @@ class DocumentoFormUpdate(SaveHelperFormMixin, forms.ModelForm):
 
 
 class DocumentoRevertForm(RevertHelperFormMixin, forms.ModelForm):
+
     class Meta:
         model = Documento
         fields = '__all__'
 
 
 class ValidarHelper(FormHelper):
+
     def __init__(self, form=None):
         super(ValidarHelper, self).__init__(form)
         self.layout.append(
@@ -99,6 +107,7 @@ class ValidarHelper(FormHelper):
 
 
 class ValidarHelperFormMixin(object):
+
     def __init__(self, *args, **kwargs):
         super(ValidarHelperFormMixin, self).__init__(*args, **kwargs)
         self.helper = ValidarHelper(self)
@@ -111,6 +120,7 @@ class DocumetoValidarForm(ValidarHelperFormMixin, forms.Form):
 
 
 class AssinarDocumentoHelper(FormHelper):
+
     def __init__(self, form=None):
         super(AssinarDocumentoHelper, self).__init__(form)
         # self.layout.append(
@@ -127,13 +137,14 @@ class AssinarDocumentoHelper(FormHelper):
 
 
 class AssinarDocumentoHelperFormMixin(object):
+
     def __init__(self, *args, **kwargs):
         super(AssinarDocumentoHelperFormMixin, self).__init__(*args, **kwargs)
         self.helper = AssinarDocumentoHelper(self)
 
 
 class ValidatePasswordForm(forms.Form):
-    user2 = autocomplete_light.ModelChoiceField('UserAutocomplete')
+    user = autocomplete_light.ModelChoiceField('UserAutocomplete')
 
     password = forms.CharField(label="Sua senha",
                                widget=forms.PasswordInput)
@@ -145,12 +156,13 @@ class ValidatePasswordForm(forms.Form):
     }
 
     def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop('user')
+        # self.current_logged_user = kwargs.pop('current_logged_user')
         super(ValidatePasswordForm, self).__init__(*args, **kwargs)
 
     def clean_password(self):
         password = self.cleaned_data.get('password')
-        valid = check_password(password, self.user.password)
+        user = self.cleaned_data.get('user')
+        valid = check_password(password, user.password)
         if not valid:
             raise forms.ValidationError('Invalid password')
 
@@ -232,3 +244,17 @@ class ValidatePasswordForm(forms.Form):
 
 class AssinarDocumento(AssinarDocumentoHelperFormMixin, ValidatePasswordForm):
     pass
+
+# from django.contrib.auth.models import User
+#
+# class UserSelectForm(forms.Form):
+#     user = forms.ModelChoiceField(queryset=None)
+#
+#     def __init__(self, *args, **kwargs):
+#         user_queryset = kwargs.pop('user_queryset', User.objects.all())
+#         user = kwargs.pop('user', None)
+#         super(UserSelectForm, self).__init__(*args, **kwargs)
+#         self.fields['user'].queryset = user_queryset
+#         if user:
+#             # how to select default
+#             pass

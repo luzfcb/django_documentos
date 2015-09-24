@@ -155,7 +155,6 @@ class DocumentoListView(generic.ListView):
 
 
 class AuditavelViewMixin(object):
-
     def form_valid(self, form):
         if hasattr(self.request, 'user') and not isinstance(self.request.user, AnonymousUser):
             if not form.instance.criado_por:
@@ -307,7 +306,6 @@ class DocumentoDetailView(generic.DetailView):
 
 
 class DocumentoAssinadoRedirectMixin(generic.UpdateView):
-
     def dispatch(self, request, *args, **kwargs):
         ret = super(DocumentoAssinadoRedirectMixin, self).dispatch(request, *args, **kwargs)
         if self.object and self.object.esta_ativo and self.object.esta_assinado:
@@ -406,14 +404,21 @@ class AssinarDocumentoView(AuditavelViewMixin, generic.edit.FormView):
 
     success_url = reverse_lazy('documentos:list')
 
-    def get_form_kwargs(self):
-        form_kwargs = super(AssinarDocumentoView, self).get_form_kwargs()
-        form_kwargs.update({
-            'user': getattr(self.request, 'user', None)
-        }
-        )
-        return form_kwargs
+    def get_initial(self):
+        initial = super(AssinarDocumentoView, self).get_initial()
+        # copia o dicionario, para evitar mudar acidentalmente um dicionario mutavel
+        initial = initial.copy()
+        user = getattr(self.request, 'user', None)
+        if user and user.is_authenticated():
+            initial.update({
+                'user': user
+            }
+            )
+        return initial
 
+    # def get_initial(self):
+    #     user = self.request.user
+    #     return {'user': user}
     # def form_valid(self, form):
     #     return super(AssinarDocumentoView, self).form_valid(form)
 
@@ -424,6 +429,11 @@ class AssinarDocumentoView(AuditavelViewMixin, generic.edit.FormView):
         #     form.instance.modificado_por = self.request.user
         print('passou aqui')
         return super(AuditavelViewMixin, self).form_valid(form)
+
+    def get_success_url(self):
+        detail_url = reverse('documentos:assinar', kwargs={'pk': 6})
+        messages.add_message(self.request, messages.INFO, 'Documento assinado com sucesso')
+        return detail_url
 
     # def post(self, request, *args, **kwargs):
     #     if request.POST:
@@ -438,5 +448,5 @@ class AssinarDocumentoView(AuditavelViewMixin, generic.edit.FormView):
     #             print('form_assinar invalido')
     #     return super(AssinarDocumentoView, self).post(request, *args, **kwargs)
 
-    def get_assinar_documento_form_instance(self):
-        return AssinarDocumento(user=self.request.user)
+    # def get_assinar_documento_form_instance(self):
+    #     return AssinarDocumento(user=self.request.user)

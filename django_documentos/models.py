@@ -119,8 +119,9 @@ class Documento(BaseModeloVersionado):
 
     assinatura_removida_em = models.DateTimeField(blank=True, null=True, editable=False)
     assinatura_removida_por = models.ForeignKey(to=USER_MODEL,
-                                     related_name="%(app_label)s_%(class)s_assinatura_removida_pors", null=True,
-                                     blank=True, on_delete=models.SET_NULL, editable=False)
+                                                related_name="%(app_label)s_%(class)s_assinatura_removida_por",
+                                                null=True,
+                                                blank=True, on_delete=models.SET_NULL, editable=False)
 
     # rodape = ckeditor_fields.RichTextField(blank=True)
 
@@ -146,6 +147,7 @@ class Documento(BaseModeloVersionado):
         self.assinado_por = None
         self.assinatura = None
         self.save(*args, **kwargs)
+
 #
 # class DocumentoConteudo(BaseModeloVersionado):
 #     documento = models.OneToOneField('Documento', related_name="conteudo", null=True, on_delete=models.SET_NULL,
