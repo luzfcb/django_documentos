@@ -16,8 +16,10 @@
         </ul>
     {% endif %}
 
-{% crispy form %}
-
+    {% if form and object %}
+        Tem certeza que deseja assinar o documento {{ object.identificador_versao }}
+        {% crispy form %}
+    {% endif %}
 
 <script>if (!window.jQuery) {
     document.write('<script src="{% static 'django_documentos/js/jquery/1.11.3/jquery.min.js' %}"><\/script>');

@@ -16,10 +16,7 @@
         <a href="{% url 'documentos:history' pk=object.pk %}" class="btn btn-primary"> Historico de Modificações</a>
     {% endif %}
     {% if object %}
-        <a class="btn btn-primary"> Assinar Documento</a>
-        {% if form_assinar %}
-            {% crispy form_assinar %}
-        {% endif %}
+        <a class="btn btn-primary" href="{% url 'documentos:assinar' object.pk %}">Assinar Documento</a>
     {% endif %}
 
 

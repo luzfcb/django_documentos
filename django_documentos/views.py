@@ -10,10 +10,11 @@ from django.contrib.auth.models import AnonymousUser
 from django.core import signing
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse, reverse_lazy
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseForbidden
 from django.shortcuts import redirect, resolve_url
 # from django.utils.http import is_safe_url
 from django.views import generic
+from django.views.generic.detail import SingleObjectMixin, BaseDetailView
 
 from simple_history.views import HistoryRecordListViewMixin, RevertFromHistoryRecordViewMixin
 
@@ -305,9 +306,9 @@ class DocumentoDetailView(generic.DetailView):
         return context
 
 
-class DocumentoAssinadoRedirectMixin(generic.UpdateView):
-    def dispatch(self, request, *args, **kwargs):
-        ret = super(DocumentoAssinadoRedirectMixin, self).dispatch(request, *args, **kwargs)
+class DocumentoAssinadoRedirectMixin(object):
+    def get(self, request, *args, **kwargs):
+        ret = super(DocumentoAssinadoRedirectMixin, self).get(request, *args, **kwargs)
         if self.object and self.object.esta_ativo and self.object.esta_assinado:
             detail_url = reverse('documentos:detail', kwargs={'pk': self.object.pk})
             messages.add_message(request, messages.INFO, 'Documentos assinados só podem ser visualizados')
@@ -320,30 +321,6 @@ class DocumentoUpdateView(DocumentoAssinadoRedirectMixin, AuditavelViewMixin, ge
     model = Documento
     form_class = DocumentoFormCreate
     success_url = reverse_lazy('documentos:list')
-
-    def get_context_data(self, **kwargs):
-        context = super(DocumentoUpdateView, self).get_context_data(**kwargs)
-        context.update({
-            'form_assinar': self.get_assinar_documento_form_instance()
-        }
-        )
-        return context
-
-    def post(self, request, *args, **kwargs):
-        if request.POST:
-            form_assinar = AssinarDocumento(request.POST, user=self.request.user)
-            if form_assinar.is_valid():
-                documento = self.get_object()
-                documento.assinar_documento(user=self.request.user)
-                detail_url = reverse('documentos:detail', kwargs={'pk': documento.pk})
-                messages.add_message(request, messages.INFO, 'Documento assinado com sucesso')
-                return redirect(detail_url, permanent=False)
-            else:
-                print('form_assinar invalido')
-        return super(DocumentoUpdateView, self).post(request, *args, **kwargs)
-
-    def get_assinar_documento_form_instance(self):
-        return AssinarDocumento(user=self.request.user)
 
 
 class DocumentoHistoryView(HistoryRecordListViewMixin, generic.DetailView):
@@ -397,7 +374,7 @@ class PDFViewer(generic.TemplateView):
     template_name = 'django_documentos/pdf_viewer.html'
 
 
-class AssinarDocumentoView(AuditavelViewMixin, generic.edit.FormView):
+class AssinarDocumentoView(DocumentoAssinadoRedirectMixin, AuditavelViewMixin, generic.UpdateView):
     template_name = 'django_documentos/documento_assinar.html'
     form_class = AssinarDocumento
     model = Documento
@@ -411,42 +388,26 @@ class AssinarDocumentoView(AuditavelViewMixin, generic.edit.FormView):
         user = getattr(self.request, 'user', None)
         if user and user.is_authenticated():
             initial.update({
-                'user': user
+                'assinado_por': user,
             }
             )
         return initial
 
-    # def get_initial(self):
-    #     user = self.request.user
-    #     return {'user': user}
-    # def form_valid(self, form):
-    #     return super(AssinarDocumentoView, self).form_valid(form)
+    def get_form_kwargs(self):
+        kwargs = super(AssinarDocumentoView, self).get_form_kwargs()
+        current_logged_user = self.request.user
+        kwargs['current_logged_user'] = current_logged_user
+        return kwargs
 
     def form_valid(self, form):
-        # if hasattr(self.request, 'user') and not isinstance(self.request.user, AnonymousUser):
-        #     if not form.instance.criado_por:
-        #         form.instance.criado_por = self.request.user
-        #     form.instance.modificado_por = self.request.user
-        print('passou aqui')
-        return super(AuditavelViewMixin, self).form_valid(form)
+        ret = super(AssinarDocumentoView, self).form_valid(form)
+        assinado_por = form.cleaned_data.get('assinado_por', None)
+
+        msg = 'Documento n°{} assinado com sucesso por {}'.format(self.object.identificador_versao,
+                                                                   assinado_por.get_full_name().title())
+        messages.add_message(self.request, messages.INFO, msg)
+        return ret
 
     def get_success_url(self):
-        detail_url = reverse('documentos:assinar', kwargs={'pk': 6})
-        messages.add_message(self.request, messages.INFO, 'Documento assinado com sucesso')
+        detail_url = reverse('documentos:assinar', kwargs={'pk': self.object.pk})
         return detail_url
-
-    # def post(self, request, *args, **kwargs):
-    #     if request.POST:
-    #         form_assinar = AssinarDocumento(request.POST, user=self.request.user)
-    #         if form_assinar.is_valid():
-    #             documento = self.get_object()
-    #             documento.assinar_documento(user=self.request.user)
-    #             detail_url = reverse('documentos:detail', kwargs={'pk': documento.pk})
-    #             messages.add_message(request, messages.INFO, 'Documento assinado com sucesso')
-    #             return redirect(detail_url, permanent=False)
-    #         else:
-    #             print('form_assinar invalido')
-    #     return super(AssinarDocumentoView, self).post(request, *args, **kwargs)
-
-    # def get_assinar_documento_form_instance(self):
-    #     return AssinarDocumento(user=self.request.user)

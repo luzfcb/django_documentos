@@ -20,7 +20,7 @@ class UserAutocomplete(autocomplete_light.AutocompleteModelBase):
     # widget_attrs = {'data-widget-maximum-values': 3}
 
     def choice_label(self, choice):
-        return choice.get_full_name()
+        return choice.get_full_name().title()
 
     def choices_for_request(self):
         return super(UserAutocomplete, self).choices_for_request()

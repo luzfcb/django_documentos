@@ -13,6 +13,7 @@ from simple_history.models import HistoricalRecords
 from simple_history.views import MissingHistoryRecordsField
 
 # from redactor.fields import RedactorField
+from django_documentos.utils import identificador
 
 USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
 
@@ -114,7 +115,8 @@ class Documento(BaseModeloVersionado):
     esta_assinado = models.BooleanField(default=False, editable=True)
     assinado_em = models.DateTimeField(blank=True, null=True, editable=False)
     assinado_por = models.ForeignKey(to=USER_MODEL,
-                                     related_name="%(app_label)s_%(class)s_assinado_por", null=True,
+                                     related_name="%(app_label)s_%(class)s_assinado_por",
+                                     null=True,
                                      blank=True, on_delete=models.SET_NULL, editable=False)
 
     assinatura_removida_em = models.DateTimeField(blank=True, null=True, editable=False)
@@ -127,19 +129,25 @@ class Documento(BaseModeloVersionado):
 
     versoes = HistoricalRecords()
 
+    @property
+    def identificador_versao(self):
+        return identificador.document(self.pk, self.versao_numero)
+
     def __str__(self):
         return self.titulo
 
-    def assinar_documento(self, user, *args, **kwargs):
-        if user:
-            self.assinado_por = user
+    def assinar_documento(self, current_logged_user, *args, **kwargs):
+        # if current_logged_user:
+        #     self.assinado_por = current_logged_user
+
         self.assinado_em = timezone.now()
         self.esta_assinado = True
         self.save(*args, **kwargs)
 
-    def remover_assinatura_documento(self, user, *args, **kwargs):
-        if user:
-            self.assinatura_removida_por = user
+    def remover_assinatura_documento(self, current_logged_user, *args, **kwargs):
+        # if current_logged_user:
+        #     self.assinatura_removida_por = current_logged_user
+        self.assinado_por = None
         self.assinatura_removida_em = timezone.now()
         self.esta_assinado = False
 
