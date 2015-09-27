@@ -3,29 +3,29 @@ django_documentos
 =============================
 
 .. image:: https://badge.fury.io/py/django_documentos.svg
-     :target: https://badge.fury.io/py/django_documentos
+    :target: https://badge.fury.io/py/django_documentos
 
 .. image:: https://travis-ci.org/luzfcb/django_documentos.svg?branch=master
-     :target: https://travis-ci.org/luzfcb/django_documentos
+    :target: https://travis-ci.org/luzfcb/django_documentos
 
 .. image:: https://requires.io/github/luzfcb/django_documentos/requirements.svg?branch=master
-     :target: https://requires.io/github/luzfcb/django_documentos/requirements/?branch=master
-     :alt: Requirements Status
+    :target: https://requires.io/github/luzfcb/django_documentos/requirements/?branch=master
+    :alt: Requirements Status
 
 .. image:: http://codecov.io/github/luzfcb/django_documentos/coverage.svg?branch=master
-     :target: http://codecov.io/github/luzfcb/django_documentos?branch=master
+    :target: http://codecov.io/github/luzfcb/django_documentos?branch=master
 
 .. image:: https://landscape.io/github/luzfcb/django_documentos/master/landscape.svg?style=flat
-     :target: https://landscape.io/github/luzfcb/django_documentos/master
-     :alt: Code Health
+   :target: https://landscape.io/github/luzfcb/django_documentos/master
+   :alt: Code Health
 
 .. image:: https://www.quantifiedcode.com/api/v1/project/a7178204202b440180822033f188e543/badge.svg
-     :target: https://www.quantifiedcode.com/app/project/a7178204202b440180822033f188e543
-     :alt: Code issues
+    :target: https://www.quantifiedcode.com/app/project/a7178204202b440180822033f188e543
+    :alt: Code issues
 
 .. image:: https://badge.waffle.io/luzfcb/django_documentos.png?label=ready&title=Ready
-     :target: https://waffle.io/luzfcb/django_documentos
-     :alt: 'Stories in Ready'
+    :target: https://waffle.io/luzfcb/django_documentos
+    :alt: 'Stories in Ready'
 
 
 Note:
