@@ -44,18 +44,7 @@ def add_querystrings_to_url(url, querystrings_dict):
     return new_url
 
 
-# def mount_dynamic_form(request):
-#
-#     dynamic_fields = {
-#     'nome': fields.CharField(max_length=100, required=True, label='Nome', initial='Gustavo'),
-#     'idade': fields.IntegerField(label='Idade', min_value=0),
-#     'email': fields.EmailField(max_length=200, required=False, label='E-mail')
-#     }
-#
-#     DynamicForm = type('', (forms.Form,), dynamic_fields)
-#     form = DynamicForm()
-#
-#     return render_to_response('your_path/page.html',
-#     {'form': form},
-#     context_instance=RequestContext(request))
-#     }
+def intercalar(string, a_cada=4, caracter="."):
+    assert isinstance(string, six.string_types) and isinstance(caracter, six.string_types), 'Expected string'
+    assert isinstance(a_cada, int) and a_cada > 0, 'Expected positive integer'
+    return caracter.join(string[i:i + a_cada] for i in list(six.moves.xrange(0, len(string), a_cada)))

@@ -13,6 +13,7 @@ Pillow
 django-bootstrap3
 django-bootstrap-pagination
 django-extensions
+pygraphviz
 django-extra-views
 django-braces
 django-wysiwyg-redactor

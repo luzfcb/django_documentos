@@ -311,7 +311,8 @@ class DocumentoAssinadoRedirectMixin(object):
         ret = super(DocumentoAssinadoRedirectMixin, self).get(request, *args, **kwargs)
         if self.object and self.object.esta_ativo and self.object.esta_assinado:
             detail_url = reverse('documentos:detail', kwargs={'pk': self.object.pk})
-            messages.add_message(request, messages.INFO, 'Documentos assinados só podem ser visualizados')
+            messages.add_message(request, messages.INFO,
+                                 'Documentos assinados só podem ser visualizados - {}'.format(self.__class__.__name__))
             return redirect(detail_url, permanent=False)
         return ret
 
@@ -404,7 +405,7 @@ class AssinarDocumentoView(DocumentoAssinadoRedirectMixin, AuditavelViewMixin, g
         assinado_por = form.cleaned_data.get('assinado_por', None)
 
         msg = 'Documento n°{} assinado com sucesso por {}'.format(self.object.identificador_versao,
-                                                                   assinado_por.get_full_name().title())
+                                                                  assinado_por.get_full_name().title())
         messages.add_message(self.request, messages.INFO, msg)
         return ret
 

@@ -3,8 +3,8 @@ from __future__ import absolute_import, print_function
 
 import os
 import sys
-
 import pytest
+from django.utils import six
 
 __author__ = 'luzfcb'
 
@@ -15,8 +15,10 @@ __all__ = (
 PY3 = sys.version_info[0] == 3
 if PY3:
     text_type = str
+    range_func = range
 else:
     text_type = unicode
+    range_func = xrange
 
 DOCUMENT_MAX_DIGITS = 8
 DOCUMENT_VERSION_MAX_DIGITS = 3
@@ -40,6 +42,9 @@ def identifier(n, v):
 
 def document(n, v):
     return identifier(sequence(n, DOCUMENT_MAX_DIGITS), sequence(v, DOCUMENT_VERSION_MAX_DIGITS))
+
+
+
 
 
 if __name__ == "__main__":
