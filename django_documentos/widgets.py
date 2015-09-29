@@ -1,22 +1,24 @@
 from django import forms
-from .utils import intercalar
+from django.forms import widgets
 
 
-class SplitedHashWidget(forms.MultiWidget):
-    def __init__(self, *args, **kwargs):
-        super(SplitedHashWidget, self).__init__(*args, **kwargs)
-        self.widgets = [
-            forms.TextInput(),
-            forms.TextInput(),
-            forms.TextInput(),
-            forms.TextInput()
-        ]
+class SplitedHashWidget(widgets.MultiWidget):
+    def __init__(self, attrs=None, step=4):
+        assert isinstance(step, int) and step > 0
+        self.step = step
+        _widgets = [widgets.TextInput(attrs=attrs) for _ in range(0, self.step)]
+        super(SplitedHashWidget, self).__init__(widgets=_widgets, attrs=attrs)
 
     def decompress(self, value):
         if value:
-            return intercalar(value, a_cada=4, caracter='.')
-        return [None, None, None, None]
+            return [value[i: i + self.step] for i in range(0, len(value), self.step)]
+        return [None for _ in range(0, self.step)]
 
 
 class SplitedHashField(forms.MultiValueField):
-    widget = SplitedHashWidget
+    def __init__(self, *args, **kwargs):
+        super(SplitedHashField, self).__init__(*args, **kwargs)
+        self.widget = SplitedHashWidget()
+
+    def compress(self, data_list):
+        return ''.join(data_list)

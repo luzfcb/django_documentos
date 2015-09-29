@@ -370,6 +370,13 @@ class DocumentoValidacaoView(generic.FormView):
             return HttpResponse(json.dumps(to_json_responce), content_type='application/json')
         return super(DocumentoValidacaoView, self).get(request, *args, **kwargs)
 
+    def get_initial(self):
+        initial = super(DocumentoValidacaoView, self).get_initial()
+        initial.update({
+            'codigo_crc': 'ABCD' * 4
+        })
+        return initial
+
 
 class PDFViewer(generic.TemplateView):
     template_name = 'django_documentos/pdf_viewer.html'

@@ -11,6 +11,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import HTML, Submit
 from django.contrib.auth.hashers import check_password
 from django.utils.translation import ugettext_lazy as _
+from django_documentos.widgets import SplitedHashField
 
 from .models import Documento
 
@@ -105,7 +106,7 @@ class ValidarHelperFormMixin(object):
 
 class DocumetoValidarForm(ValidarHelperFormMixin, forms.Form):
     codigo_verificador = forms.CharField()
-    codigo_crc = forms.CharField()
+    codigo_crc = SplitedHashField()
     captcha = CaptchaField()
 
 
