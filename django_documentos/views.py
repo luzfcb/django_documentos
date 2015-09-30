@@ -360,6 +360,7 @@ class DocumentoRevertView(RevertFromHistoryRecordViewMixin, AuditavelViewMixin, 
 class DocumentoValidacaoView(generic.FormView):
     template_name = 'django_documentos/documento_validacao.html'
     form_class = DocumetoValidarForm
+    success_url = reverse_lazy('documentos:validar')
 
     def get(self, request, *args, **kwargs):
         if self.request.is_ajax() and request.GET and 'refresh_captcha' in request.GET:
@@ -372,9 +373,9 @@ class DocumentoValidacaoView(generic.FormView):
 
     def get_initial(self):
         initial = super(DocumentoValidacaoView, self).get_initial()
-        initial.update({
-            'codigo_crc': 'ABCD' * 4
-        })
+        # initial.update({
+        #     'codigo_crc': 'ABCD' * 4
+        # })
         return initial
 
 
