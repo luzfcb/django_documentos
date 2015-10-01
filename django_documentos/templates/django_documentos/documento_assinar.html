@@ -18,7 +18,13 @@
 
     {% if form and object %}
         Tem certeza que deseja assinar o documento {{ object.identificador_versao }}
-        {% crispy form %}
+{#        {% crispy form %}#}
+        <form action="{% url 'documentos:assinar' object.pk %}" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Salvar">
+
+        </form>
     {% endif %}
 
 <script>if (!window.jQuery) {

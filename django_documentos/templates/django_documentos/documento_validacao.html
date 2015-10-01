@@ -1,10 +1,24 @@
 {% extends "django_documentos/base.html" %}
+{% load staticfiles %}
 {% load crispy_forms_tags %}
 
+{% block extra_head_js %}
+        <script>if (!window.jQuery) {
+        document.write('<script src="{% static 'django_documentos/js/jquery/1.11.3/jquery.min.js' %}"><\/script>');
+        document.write('<script src="{% static 'django_documentos/js/jquery/1.11.3/jquery-migrate.min.js' %}"><\/script>');
+    }
+    </script>
+    <script src="{% static 'parsley/js/parsley.min.js' %}"></script>
+{% endblock extra_head_js %}
 {% block conteudo_app %}
 
     {% if form %}
-        {% crispy form %}
+        {#        {% crispy form %}#}
+        <form action="." method="post" data-parsley-validate>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Submit">
+        </form>
     {% else %}
         Nada para mostrar
     {% endif %}
@@ -15,6 +29,7 @@
     {% if form.media %}
         {{ form.media }}
     {% endif %}
+
     <script>
         {#        $('.js-captcha-refresh').click(function () {#}
         {#            $form = $(this).parents('form');#}
@@ -38,4 +53,5 @@
         }
 
     </script>
+
 {% endblock %}

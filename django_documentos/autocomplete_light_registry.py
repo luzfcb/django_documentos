@@ -12,6 +12,7 @@ class UserAutocomplete(autocomplete_light.AutocompleteModelBase):
     model = get_real_model_class(USER_MODEL)
     order_by = ['first_name', 'last_name']
 
+
     limit_choices = 10
     attrs = {
         'data-autcomplete-minimum-characters': 0,

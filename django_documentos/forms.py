@@ -11,8 +11,9 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import HTML, Submit
 from django.contrib.auth.hashers import check_password
 from django.utils.translation import ugettext_lazy as _
-from django_documentos.widgets import SplitedHashField, SplitField2
-
+from django_documentos.utils.module_loading import get_real_user_model_class
+from django_documentos.widgets import SplitedHashField, SplitField2, SplitWidget, SplitedHashField2
+from . import settings
 from .models import Documento
 
 
@@ -103,12 +104,22 @@ class ValidarHelperFormMixin(object):
         super(ValidarHelperFormMixin, self).__init__(*args, **kwargs)
         self.helper = ValidarHelper(self)
 
+from parsley.decorators import parsleyfy
 
-class DocumetoValidarForm(ValidarHelperFormMixin, forms.Form):
-    codigo_verificador = forms.CharField()
-    codigo_crc = SplitedHashField(step=4)
+
+class DocumetoValidarForm22(ValidarHelperFormMixin, forms.Form):
+    id = forms.CharField()
+    # codigo_crc = SplitedHashField(split_into=4)
+    # codigo_crc = forms.CharField(widget=SplitWidget(), initial='ABCDABCDABCDABCD')
+    hash_code = SplitedHashField2(initial='ABCDABCDABCDABCDBB')
     # captcha = CaptchaField()
 
+    # def clean_codigo_crc(self):
+    #     codigo_crc = self.cleaned_data.get('codigo_crc')
+    #     print('codigo_crc:', codigo_crc)
+    #     return codigo_crc
+
+DocumetoValidarForm = parsleyfy(DocumetoValidarForm22)
 
 class AssinarDocumentoHelper(FormHelper):
     def __init__(self, form=None):
@@ -206,7 +217,8 @@ class AssinarDocumentoHelperFormMixin(object):
 
 
 class AssinarDocumento(AssinarDocumentoHelperFormMixin, forms.ModelForm):
-    assinado_por = autocomplete_light.ModelChoiceField('UserAutocomplete', label='Usuario Assinante')
+    # assinado_por = autocomplete_light.ModelChoiceField('UserAutocomplete', label='Usuario Assinante')
+    assinado_por = forms.ModelChoiceField(get_real_user_model_class().objects.all().order_by('username'))
 
     password = forms.CharField(label="Sua senha",
                                widget=forms.PasswordInput)
@@ -223,7 +235,7 @@ class AssinarDocumento(AssinarDocumentoHelperFormMixin, forms.ModelForm):
 
     class Meta:
         model = Documento
-        fields = ('id',)
+        fields = '__all__'
 
     def clean_password(self):
         password = self.cleaned_data.get('password')
@@ -234,10 +246,12 @@ class AssinarDocumento(AssinarDocumentoHelperFormMixin, forms.ModelForm):
 
         return password
 
-    def save(self, commit=True):
-        documento = super(AssinarDocumento, self).save(False)
-        documento.assinar_documento(current_logged_user=self.current_logged_user)
-        return documento
+    # def save(self, commit=True):
+    #     documento = super(AssinarDocumento, self).save(False)
+    #     documento.esta_assinado = True
+    #     documento.assinado_por = self.cleaned_data.get('assinado_por')
+    #     documento.assinar_documento(current_logged_user=self.current_logged_user)
+    #     return documento
 
 
 class RemoverAssinaturaDocumento(AssinarDocumentoHelperFormMixin, forms.ModelForm):

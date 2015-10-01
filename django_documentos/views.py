@@ -309,11 +309,12 @@ class DocumentoDetailView(generic.DetailView):
 class DocumentoAssinadoRedirectMixin(object):
     def get(self, request, *args, **kwargs):
         ret = super(DocumentoAssinadoRedirectMixin, self).get(request, *args, **kwargs)
-        if self.object and self.object.esta_ativo and self.object.esta_assinado:
-            detail_url = reverse('documentos:detail', kwargs={'pk': self.object.pk})
-            messages.add_message(request, messages.INFO,
-                                 'Documentos assinados só podem ser visualizados - {}'.format(self.__class__.__name__))
-            return redirect(detail_url, permanent=False)
+        if self.object and self.object.esta_ativo:
+            # if self.object.esta_assinado:
+                detail_url = reverse('documentos:detail', kwargs={'pk': self.object.pk})
+                messages.add_message(request, messages.INFO,
+                                     'Documentos assinados só podem ser visualizados - {}'.format(self.__class__.__name__))
+                return redirect(detail_url, permanent=False)
         return ret
 
 
@@ -420,3 +421,19 @@ class AssinarDocumentoView(DocumentoAssinadoRedirectMixin, AuditavelViewMixin, g
     def get_success_url(self):
         detail_url = reverse('documentos:assinar', kwargs={'pk': self.object.pk})
         return detail_url
+
+
+class AssinarDocumentoView2(generic.UpdateView):
+    template_name = 'django_documentos/documento_assinar.html'
+    # form_class = AssinarDocumento
+    model = Documento
+    fields = ('conteudo', )
+
+    success_url = reverse_lazy('documentos:list')
+
+    def get_form_kwargs(self):
+        kwargs = super(AssinarDocumentoView2, self).get_form_kwargs()
+        current_logged_user = self.request.user
+        # kwargs['current_logged_user'] = current_logged_user
+        return kwargs
+

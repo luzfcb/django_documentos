@@ -1076,7 +1076,7 @@ Snap.is = is;
  [ method ]
  **
  * Snaps given value to given grid
- - values (array|number) given array of values or step of the grid
+ - values (array|number) given array of values or split_into of the grid
  - value (number) value to adjust
  - tolerance (number) #optional maximum distance to the target value that would trigger the snap. Default is `10`.
  = (number) adjusted value

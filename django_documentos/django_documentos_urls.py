@@ -9,7 +9,7 @@ from .views import (
     AssinarDocumentoView, CloseView, DocumentoCreateView, DocumentoDashboardView, DocumentoDetailView,
     DocumentoGeneralDashboardView, DocumentoHistoryView, DocumentoListView, DocumentoRevertView, DocumentoUpdateView,
     DocumentoValidacaoView, PDFViewer,
-)
+    AssinarDocumentoView2)
 
 urlpatterns = [
     url(r'^$',
@@ -49,7 +49,7 @@ urlpatterns = [
         name='close'
         ),
     url(r'^assinar/(?P<pk>\d+)/$',
-        AssinarDocumentoView.as_view(),
+        AssinarDocumentoView2.as_view(),
         name='assinar'
         ),
     url(r'^validar/$',

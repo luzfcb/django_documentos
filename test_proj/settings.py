@@ -52,9 +52,10 @@ INSTALLED_APPS = (
     'captcha',
     'crispy_forms',
     'django_documentos',
+    'parsley',
     'debug_toolbar',
 
-    'devserver',
+    # 'devserver',
 )
 
 # django-simple-captcha
@@ -257,18 +258,18 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.security.SecurityMiddleware',
 )
 
-MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES + (
-    'devserver.middleware.DevServerMiddleware',
-)
-
-DEVSERVER_MODULES = (
-    'devserver.modules.sql.SQLRealTimeModule',
-    'devserver.modules.sql.SQLSummaryModule',
-    'devserver.modules.profile.ProfileSummaryModule',
-
-    # Modules not enabled by default
-    'devserver.modules.profile.LineProfilerModule',
-)
+# MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES + (
+#     'devserver.middleware.DevServerMiddleware',
+# )
+#
+# DEVSERVER_MODULES = (
+#     'devserver.modules.sql.SQLRealTimeModule',
+#     'devserver.modules.sql.SQLSummaryModule',
+#     'devserver.modules.profile.ProfileSummaryModule',
+#
+#     # Modules not enabled by default
+#     'devserver.modules.profile.LineProfilerModule',
+# )
 
 # DEVSERVER_AUTO_PROFILE = True  # profiles all views without the need of function decorator
 
@@ -323,13 +324,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_producao')
 
 STATIC_URL = '/static/'
 
-# STATICFILES_DIRS = (
-#     os.path.join(BASE_DIR, 'static'),
-# )
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
 
 DJANGO_DOCUMENTOS_ENABLE_GENERAL_DASHBOARD = True
 

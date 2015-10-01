@@ -1,6 +1,7 @@
 from django.apps import apps
 from django.db import models
 from django.utils import six
+from ..settings import USER_MODEL
 
 from ..exceptions import InvalidDotPathToModelException, NonDjangoModelSubclassException
 
@@ -25,3 +26,7 @@ def get_real_model_class(klass_or_str):
         return klass_or_str
     else:
         raise NonDjangoModelSubclassException(klass_or_str)
+
+
+def get_real_user_model_class():
+    return get_real_model_class(USER_MODEL)

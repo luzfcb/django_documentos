@@ -18764,7 +18764,7 @@ var Font = (function FontClosure() {
             continue;
           } else if (GlyphsUnicode[glyphName] === undefined) {
             // (undocumented) c) Few heuristics to recognize unknown glyphs
-            // NOTE: Adobe Reader does not do this step, but OSX Preview does
+            // NOTE: Adobe Reader does not do this split_into, but OSX Preview does
             var code = 0;
             switch (glyphName[0]) {
               case 'G': // Gxx glyph
@@ -18826,10 +18826,10 @@ var Font = (function FontClosure() {
         var registry = properties.cidSystemInfo.registry;
         var ordering = properties.cidSystemInfo.ordering;
         // c) Construct a second CMap name by concatenating the registry and
-        // ordering obtained in step (b) in the format registry–ordering–UCS2
+        // ordering obtained in split_into (b) in the format registry–ordering–UCS2
         // (for example, Adobe–Japan1–UCS2).
         var ucs2CMapName = new Name(registry + '-' + ordering + '-UCS2');
-        // d) Obtain the CMap with the name constructed in step (c) (available
+        // d) Obtain the CMap with the name constructed in split_into (c) (available
         // from the ASN Web site; see the Bibliography).
         var ucs2CMap = CMapFactory.create(ucs2CMapName,
           { url: PDFJS.cMapUrl, packed: PDFJS.cMapPacked }, null);
@@ -18837,8 +18837,8 @@ var Font = (function FontClosure() {
         toUnicode = [];
         cMap.forEach(function(charcode, cid) {
           assert(cid <= 0xffff, 'Max size of CID is 65,535');
-          // e) Map the CID obtained in step (a) according to the CMap obtained
-          // in step (d), producing a Unicode value.
+          // e) Map the CID obtained in split_into (a) according to the CMap obtained
+          // in split_into (d), producing a Unicode value.
           var ucs2 = ucs2CMap.lookup(cid);
           if (ucs2) {
             toUnicode[charcode] =
@@ -37669,15 +37669,15 @@ var JpxImage = (function JpxImageClosure() {
       var K = 1.230174104914001;
       var K_ = 1 / K;
 
-      // step 1 is combined with step 3
+      // split_into 1 is combined with split_into 3
 
-      // step 2
+      // split_into 2
       j = offset - 3;
       for (n = len + 4; n--; j += 2) {
         x[j] *= K_;
       }
 
-      // step 1 & 3
+      // split_into 1 & 3
       j = offset - 2;
       current = delta * x[j -1];
       for (n = len + 3; n--; j += 2) {
@@ -37692,7 +37692,7 @@ var JpxImage = (function JpxImageClosure() {
         }
       }
 
-      // step 4
+      // split_into 4
       j = offset - 1;
       current = gamma * x[j - 1];
       for (n = len + 2; n--; j += 2) {
@@ -37707,7 +37707,7 @@ var JpxImage = (function JpxImageClosure() {
         }
       }
 
-      // step 5
+      // split_into 5
       j = offset;
       current = beta * x[j - 1];
       for (n = len + 1; n--; j += 2) {
@@ -37722,7 +37722,7 @@ var JpxImage = (function JpxImageClosure() {
         }
       }
 
-      // step 6
+      // split_into 6
       if (len !== 0) {
         j = offset + 1;
         current = alpha * x[j - 1];
