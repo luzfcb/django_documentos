@@ -78,10 +78,10 @@ hr.divider:before{
     content: '\00A0';
     width: 100%;
     text-align: center;
-    background: transparent url('../img/divider.jpg') no-repeat center;
+    background: transparent url('../solar/img/divider.jpg') no-repeat center;
 }
 hr.divider.help:before{
-    background: transparent url('../img/divider.png') no-repeat center;
+    background: transparent url('../solar/img/divider.png') no-repeat center;
 }
 
 div.divider-content{
@@ -99,7 +99,7 @@ div.divider-content{
 
 div.divider-content > span {
     background-color:#FFFFFF;
-    background-image: url('../img/divider.jpg');
+    background-image: url('../solar/img/divider.jpg');
     background-position:50% 50%;
     background-repeat:no-repeat no-repeat;
     display:block;
@@ -113,7 +113,7 @@ div.divider-content > span {
 }
 div.divider-content.help > span {
     background-color: transparent;
-    background-image: url('../img/divider.png');
+    background-image: url('../solar/img/divider.png');
 
 }
 
@@ -681,13 +681,13 @@ h1,h2,h3,h4,h5,h6{
 ::-webkit-scrollbar-button:end{display:block}
 
 ::-webkit-scrollbar-button:vertical:increment {
-    background: no-repeat url("../img/waffle_sprite27.png") -21px 0;
+    background: no-repeat url("../solar/img/waffle_sprite27.png") -21px 0;
     height:15px;
 }
 ::-webkit-scrollbar-button:vertical:decrement {
     border-top: 1px solid #ccc;
     border-bottom: 1px solid #ccc;
-    background: no-repeat url("../img/waffle_sprite27.png") -70px -62px;
+    background: no-repeat url("../solar/img/waffle_sprite27.png") -70px -62px;
     height: 16px;
 }
 
@@ -815,7 +815,7 @@ input[type="color"]:focus,
     color: #FFFFFF;
     text-align: center;
     text-decoration: none;
-    background: #444444 url('../img/bg-body-bar.jpg');
+    background: #444444 url('../solar/img/bg-body-bar.jpg');
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;

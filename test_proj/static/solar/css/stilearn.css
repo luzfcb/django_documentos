@@ -402,7 +402,7 @@ ul.dropdown-notification > li.dropdown-header:hover{
     display: block;
     height:100%;
     top: 60px;
-    background: #FFFFFF url('../img/noise.png');
+    background: #FFFFFF url('../solar/img/noise.png');
 /*    width: 14.893617021276595%;
     *width: 14.840425531914894%;*/
     width: 16%;
@@ -416,7 +416,7 @@ ul.dropdown-notification > li.dropdown-header:hover{
 .sidebar-right > .sidebar-right-header{
     padding: 10px 20px 10px 20px;
     border-bottom: 1px solid #CDCDCD;
-    background: #E9E9E9 url('../img/bg-content-header.png');
+    background: #E9E9E9 url('../solar/img/bg-content-header.png');
     color: #626262;
     height: 42px;
     max-height: 42px;
@@ -470,7 +470,7 @@ ul.dropdown-notification > li.dropdown-header:hover{
     font-size: .8em;
 }
 .sidebar-right > .sidebar-right-control{
-    background: #E9E9E9 url('../img/bg-content-header.png');
+    background: #E9E9E9 url('../solar/img/bg-content-header.png');
     font-size: .8em;
     height: 38px;
     margin: 0px;
@@ -512,7 +512,7 @@ ul.dropdown-notification > li.dropdown-header:hover{
     padding: 0px 10px;
 }
 .sidebar-right-control > ul.sr-control-item > li.active{
-    background: #FFFFFF url('../img/noise.png');
+    background: #FFFFFF url('../solar/img/noise.png');
 }
 .sidebar-right-control > ul.sr-control-item > li.active:after{
     position: absolute;
@@ -547,7 +547,7 @@ ul.dropdown-notification > li.dropdown-header:hover{
     list-style: none;
 }
 .side-contact ul.contact-list li.contact-alt:hover{
-    background: #f1f1f1 url('../img/noise.png');
+    background: #f1f1f1 url('../solar/img/noise.png');
 }
 .side-contact ul.contact-list .contact-alt:first-child{
     border: 1px solid #CDCDCD;
@@ -558,7 +558,7 @@ ul.dropdown-notification > li.dropdown-header:hover{
 }
 .side-contact ul.contact-list .contact-alt.active{
     border-left: none;
-    background: #FFFFFF url('../img/noise.png');
+    background: #FFFFFF url('../solar/img/noise.png');
     color: #00A0B1;
 }
 
@@ -610,14 +610,14 @@ ul.dropdown-notification > li.dropdown-header:hover{
     border: 1px solid #CDCDCD;
     border-bottom: none;
     overflow: hidden;
-    background: #FFFFFF url('../img/noise.png');
+    background: #FFFFFF url('../solar/img/noise.png');
 }
 .side-chat .chat-header{
     padding: 10px 5px;
     border-bottom: 1px solid #CDCDCD;
     height: 24px;
     color: #626262;
-    background: #f1f1f1 url('../img/noise.png');
+    background: #f1f1f1 url('../solar/img/noise.png');
 }
 .side-chat .chat-header *{
     margin: auto;
@@ -703,7 +703,7 @@ ul.dropdown-notification > li.dropdown-header:hover{
 .side-task > .task{
     margin: 0px;
     padding: 5px;
-    background: #EDEDED url('../img/bg-content.jpg');
+    background: #EDEDED url('../solar/img/bg-content.jpg');
     border-bottom: 1px solid #CDCDCD;
     white-space: nowrap;
     position: relative;
@@ -762,7 +762,7 @@ ul.dropdown-notification > li.dropdown-header:hover{
 }
 .side-activity-header p{
     display: inline-block;
-    background: #FFFFFF url('../img/noise.png');
+    background: #FFFFFF url('../solar/img/noise.png');
     padding-right: 5px;
 }
 
@@ -815,16 +815,16 @@ ul.dropdown-notification > li.dropdown-header:hover{
     white-space: nowrap;
     border: 1px solid #CDCDCD;
     border-top: none;
-    background: #EDEDED url('../img/bg-content.jpg');
+    background: #EDEDED url('../solar/img/bg-content.jpg');
 }
 
 .nav-side > li:hover{
-    background: #f1f1f1 url('../img/noise.png');
+    background: #f1f1f1 url('../solar/img/noise.png');
     color: #008299;
 }
 
 .nav-side > li.active{
-    background: #FFFFFF url('../img/noise.png');
+    background: #FFFFFF url('../solar/img/noise.png');
     border-left: none;
     border-right: 5px solid #008299;
 }
@@ -1119,7 +1119,7 @@ ul.dropdown-notification > li.dropdown-header:hover{
     list-style: none;
 }
 .content-breadcrumb > .breadcrumb{
-    background: #FFFFFF url('../img/noise.png');
+    background: #FFFFFF url('../solar/img/noise.png');
     font-size: .8em;
     margin: 0px;
     border-bottom: 1px solid #CDCDCD;
@@ -1161,7 +1161,7 @@ ul.dropdown-notification > li.dropdown-header:hover{
 .content > .content-body{
     padding: 0px 20px 20px 20px;
     font-size: .9em;
-    background: #FFFFFF url('../img/noise.png');
+    background: #FFFFFF url('../solar/img/noise.png');
 }
 /* end content-body */
 
@@ -1204,7 +1204,7 @@ ul.dropdown-notification > li.dropdown-header:hover{
     border-top: none;
     position: relative;
     padding: 10px 20px 10px 20px;
-    background: #FFFFFF url('../img/noise.png');
+    background: #FFFFFF url('../solar/img/noise.png');
 }
 .box > .box-body  form  .form-actions{
     margin-left: -20px;
@@ -1228,7 +1228,7 @@ ul.dropdown-notification > li.dropdown-header:hover{
     border: 1px solid #CDCDCD;
     padding: 5px;
     margin-bottom: 40px;
-    background: #FFFFFF url('../img/noise.png');
+    background: #FFFFFF url('../solar/img/noise.png');
 }
 
 .box-tab > .box-header .nav-pills{
@@ -2323,7 +2323,7 @@ ul.b-btn-group li{
     list-style: none;
 }
 .message-contact ul.contact-list li.contact-alt:hover{
-    background: #f1f1f1 url('../img/noise.png');
+    background: #f1f1f1 url('../solar/img/noise.png');
 }
 
 .message-contact ul.contact-list .contact-alt{
@@ -2408,7 +2408,7 @@ ul.b-btn-group li{
 .message-content, .new-message{
     border-bottom: none;
     overflow: hidden;
-    background: #FFFFFF url('../img/noise.png');
+    background: #FFFFFF url('../solar/img/noise.png');
 }
 .message-content .msg-body{
     height: 400px;
@@ -2435,18 +2435,18 @@ ul.b-btn-group li{
 }
 .msg-body .msg-in:hover,
 .msg-body .msg-out:hover{
-    background: #f1f1f1 url('../img/noise.png');
+    background: #f1f1f1 url('../solar/img/noise.png');
 }
 
 .msg-body .msg-in.selected,
 .msg-body .msg-out.selected{
     border-top: 1px solid #CDCDCD;
     border-bottom:  1px solid #A1A1A1;
-    background: #DDD url('../img/noise.png');
+    background: #DDD url('../solar/img/noise.png');
 }
 .msg-body .msg-in.selected:hover,
 .msg-body .msg-out.selected:hover{
-    background: #DDD url('../img/noise.png');
+    background: #DDD url('../solar/img/noise.png');
 }
 
 .msg-body .msg-in .msg-time,
@@ -2508,7 +2508,7 @@ ul.b-btn-group li{
 a[rel=to-top]{
     position: fixed;
     right: 10px;
-    background: #E9E9E9 url('../img/bg-content-header.png');
+    background: #E9E9E9 url('../solar/img/bg-content-header.png');
     color: #626262;
     bottom: 0px;
     margin: 0px;
@@ -2527,7 +2527,7 @@ a[rel=to-top]{
 
 a[rel=to-top]:hover{
     color: #F1F1F1;
-    background: #008299 url('../img/noise.png');
+    background: #008299 url('../solar/img/noise.png');
     border: 1px solid #00a0b1;
 }
 

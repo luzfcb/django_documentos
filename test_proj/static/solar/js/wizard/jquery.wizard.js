@@ -51,7 +51,7 @@ var excludesFilter,
 	beforeSubmit = "beforeSubmit";
 
 // Generate selectors and class names for common wizard elements
-$.each( "branch form header step wrapper".split( " " ), function() {
+$.each( "branch form header split_into wrapper".split( " " ), function() {
 	selector[ this ] = "." + ( className[ this ] = wizard + "-" + this );
 });
 
@@ -180,7 +180,7 @@ $.widget( "kf." + wizard, {
 			}
 		}
 
-		// Select initial step
+		// Select initial split_into
 		self.select.apply( self, arr( o.initialStep ) );
 	},
 
@@ -198,10 +198,10 @@ $.widget( "kf." + wizard, {
 		(function next() {
 			self._transition( stepIndex, function( step, branch ) {
 				if ( ( stepIndex = self.stepIndex( step, branch ) ) === -1 ) {
-					throw new Error( '[_fastForward]: Invalid step "' + step + '"' );
+					throw new Error( '[_fastForward]: Invalid split_into "' + step + '"' );
 
 				} else if ( $.inArray( stepIndex, stepsTaken ) >= 0 ) {
-					throw new Error( '[_fastForward]: Recursion detected on step "' + step + '"' );
+					throw new Error( '[_fastForward]: Recursion detected on split_into "' + step + '"' );
 
 				} else {
 					stepsTaken.push( stepIndex );
@@ -308,7 +308,7 @@ $.widget( "kf." + wizard, {
 		var o = this.options,
 			state = $.extend( true, {}, this._currentState );
 
-		// stepsTaken must be an array of at least one step
+		// stepsTaken must be an array of at least one split_into
 		stepsTaken = arr( stepsTaken || stepIndex );
 
 		state.step = this.elements.steps.eq( stepIndex );
@@ -350,7 +350,7 @@ $.widget( "kf." + wizard, {
 							state.branchesActivated.length - 1 );
 				}
 
-				// Don't remove the initial step
+				// Don't remove the initial split_into
 				if ( indexOfStep > 0 ) {
 					state.stepsActivated.splice( indexOfStep,
 							// IE requires this argument
@@ -389,13 +389,13 @@ $.widget( "kf." + wizard, {
 		var self = this;
 
 		// args: action
-		// step becomes the current step
+		// split_into becomes the current split_into
 		if ( $.isFunction( step ) ) {
 			action = step;
 			step = self._currentState.stepIndex;
 			branch = undefined;
 
-		// args: step, action
+		// args: split_into, action
 		} else if ( $.isFunction( branch ) ) {
 			action = branch;
 			branch = undefined;
@@ -420,7 +420,7 @@ $.widget( "kf." + wizard, {
 		// waiting instead for the transition function to handle the call
 		if ( response !== undefined && response !== false ) {
 
-			// Response could be array like [ step, branch ]
+			// Response could be array like [ split_into, branch ]
 			action.apply( self, arr( response ) );
 		}
 
@@ -572,7 +572,7 @@ $.widget( "kf." + wizard, {
 
 	select: function( event, step, branch, relative, history ) {
 
-		// args: step, branch, relative, history
+		// args: split_into, branch, relative, history
 		if ( !( event instanceof $.Event ) ) {
 			history = relative;
 			relative = branch;
@@ -585,20 +585,20 @@ $.widget( "kf." + wizard, {
 			return;
 		}
 
-		// args: [ step, branch ], relative, history
+		// args: [ split_into, branch ], relative, history
 		if ( $.isArray( step ) ) {
 			history = relative;
 			relative = branch;
 			branch = step[ 1 ];
 			step = step[ 0 ];
 
-		// args: step, relative, history
+		// args: split_into, relative, history
 		} else if ( typeof branch === bool ) {
 			history = relative;
 			relative = branch;
 			branch = undefined;
 
-		// args: step, history
+		// args: split_into, history
 		} else if ( $.isArray( branch ) ) {
 			history = branch;
 			branch = undefined;
@@ -614,13 +614,13 @@ $.widget( "kf." + wizard, {
 			return this._currentState;
 		}
 
-		// args: [ step, branch ], stepsTaken
+		// args: [ split_into, branch ], stepsTaken
 		if ( $.isArray( step ) ) {
 			stepsTaken = branch;
 			branch = step[ 1 ];
 			step = step[ 0 ];
 
-		// args: step, stepsTaken
+		// args: split_into, stepsTaken
 		} else if ( $.isArray( branch ) ) {
 			stepsTaken = branch;
 			branch = undefined;
@@ -634,7 +634,7 @@ $.widget( "kf." + wizard, {
 			return this._currentState.step;
 		}
 
-		// args: [ step, branch ]
+		// args: [ split_into, branch ]
 		if ( $.isArray( step ) ) {
 			branch = step[ 1 ];
 			step = step[ 0 ];
@@ -643,13 +643,13 @@ $.widget( "kf." + wizard, {
 		var $step,
 			type = typeof step;
 
-		// Searching for a step by index
+		// Searching for a split_into by index
 		if ( type === num ) {
 			$step = this._find( step,
 				// Search within branch, if defined, otherwise search all steps
 				branch !== undefined ? this.steps( branch ) : this.elements.steps );
 
-		// Searching for a step or branch by string ID, DOM element or jQuery object
+		// Searching for a split_into or branch by string ID, DOM element or jQuery object
 		} else {
 			$step = this._find( step, this.elements.steps.add( this.elements.branches ) );
 
@@ -670,13 +670,13 @@ $.widget( "kf." + wizard, {
 
 		var $step;
 
-		// args: [ step, branch ], relative
+		// args: [ split_into, branch ], relative
 		if ( $.isArray( step ) ) {
 			relative = branch;
 			branch = step[ 1 ];
 			step = step[ 0 ];
 
-		// args: step, relative
+		// args: split_into, relative
 		} else if ( typeof branch === bool ) {
 			relative = branch;
 			branch = undefined;

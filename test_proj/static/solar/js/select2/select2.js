@@ -344,7 +344,7 @@
             text = data.text;
             // if text is not a function we assume it to be a key name
             if (!$.isFunction(text)) {
-              dataText = data.text; // we need to store this in a separate variable because in the next step data gets reset and data.text is no longer available
+              dataText = data.text; // we need to store this in a separate variable because in the next split_into data gets reset and data.text is no longer available
               text = function (item) { return item[dataText]; };
             }
             data = data.results;
