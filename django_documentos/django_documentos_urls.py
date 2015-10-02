@@ -49,7 +49,7 @@ urlpatterns = [
         name='close'
         ),
     url(r'^assinar/(?P<pk>\d+)/$',
-        AssinarDocumentoView2.as_view(),
+        AssinarDocumentoView.as_view(),
         name='assinar'
         ),
     url(r'^validar/$',

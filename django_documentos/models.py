@@ -244,10 +244,10 @@ class Documento(models.Model):
                         'app_label': self._meta.app_label,
                         'cls': self.__class__.__name__
                     })
-        if self.esta_assinado:
-            self.assinar_documento(None)
-        else:
-            self.remover_assinatura_documento(None)
+        # if self.esta_assinado:
+        #     self.assinar_documento(None)
+        # else:
+        #     self.remover_assinatura_documento(None)
         super(Documento, self).save(*args, **kwargs)
 
     @property
@@ -285,7 +285,7 @@ class Documento(models.Model):
         except Exception as e:
 
             print('deu pau aqui: ', e)
-            # self.save(*args, **kwargs)
+        self.save(*args, **kwargs)
 
     def remover_assinatura_documento(self, current_logged_user, *args, **kwargs):
         # if current_logged_user:
@@ -296,4 +296,4 @@ class Documento(models.Model):
         self.assinado_em = None
         self.assinado_por = None
         self.assinatura_hash = ''
-        # self.save(*args, **kwargs)
+        self.save(*args, **kwargs)

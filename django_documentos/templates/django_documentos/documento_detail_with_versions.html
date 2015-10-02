@@ -9,14 +9,7 @@
 
     <article>
 
-        {% if object %}
-            <page size="A4">
-                {{ object.conteudo|safe }}
-            </page>
 
-        {% else %}
-            Nada para mostrar
-        {% endif %}
         <div class="no-print">
             {% if history_records_object_list %}
                 <div class="list-group ">
@@ -74,6 +67,14 @@
                 </div>
             {% endif %}
         </div>
+        {% if object %}
+            <page size="A4">
+                {{ object.conteudo|safe }}
+            </page>
+
+        {% else %}
+            Nada para mostrar
+        {% endif %}
     </article>
 
 {% endblock conteudo_app %}

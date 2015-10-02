@@ -20,6 +20,9 @@
             {% endfor %}
         </ul>
     {% endif %}
+    {% if object %}
+        <a href="{% url 'documentos:history' pk=object.pk %}" class="btn btn-primary"> Historico de Modificações</a>
+    {% endif %}
 
     <article>
         {% if object %}

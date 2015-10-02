@@ -11,7 +11,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import HTML, Submit
 from django.contrib.auth.hashers import check_password
 from django.utils.translation import ugettext_lazy as _
-from djangular.forms import NgModelFormMixin, NgModelForm
+from djangular.forms import NgModelFormMixin, NgModelForm, NgFormValidationMixin
 from djangular.forms import NgDeclarativeFieldsMetaclass
 from django_documentos.utils.module_loading import get_real_user_model_class
 from django_documentos.widgets import SplitedHashField, SplitField2, SplitWidget, SplitedHashField2
@@ -117,7 +117,7 @@ class DocumetoValidarForm(ValidarHelperFormMixin, forms.ModelForm):
     assinatura_hash = SplitedHashField2(label='Codigo CRC',
                                         initial='ABCDABCDABCDABCD'
                                         )
-    # captcha = CaptchaField()
+    captcha = CaptchaField()
     class Meta:
         model = Documento
         fields = ('assinatura_hash', )
@@ -224,8 +224,8 @@ class AssinarDocumentoHelperFormMixin(object):
 
 
 class AssinarDocumento(AssinarDocumentoHelperFormMixin, forms.ModelForm):
-    # assinado_por = autocomplete_light.ModelChoiceField('UserAutocomplete', label='Usuario Assinante')
-    assinado_por = forms.ModelChoiceField(get_real_user_model_class().objects.all().order_by('username'))
+    assinado_por = autocomplete_light.ModelChoiceField('UserAutocomplete', label='Usuario Assinante')
+    # assinado_por = forms.ModelChoiceField(get_real_user_model_class().objects.all().order_by('username'))
 
     password = forms.CharField(label="Sua senha",
                                widget=forms.PasswordInput)
@@ -254,12 +254,12 @@ class AssinarDocumento(AssinarDocumentoHelperFormMixin, forms.ModelForm):
 
         return password
 
-    # def save(self, commit=True):
-    #     documento = super(AssinarDocumento, self).save(False)
-    #     documento.esta_assinado = True
-    #     documento.assinado_por = self.cleaned_data.get('assinado_por')
-    #     documento.assinar_documento(current_logged_user=self.current_logged_user)
-    #     return documento
+    def save(self, commit=True):
+        documento = super(AssinarDocumento, self).save(False)
+        documento.esta_assinado = True
+        documento.assinado_por = self.cleaned_data.get('assinado_por')
+        documento.assinar_documento(current_logged_user=self.current_logged_user)
+        return documento
 
 
 class RemoverAssinaturaDocumento(AssinarDocumentoHelperFormMixin, forms.ModelForm):

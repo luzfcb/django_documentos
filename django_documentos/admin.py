@@ -35,7 +35,7 @@ class DocumentContentAdmin(admin.ModelAdmin):
 class DocTeste(SimpleHistoryAdmin):
     list_display = (
         # 'criado_em', 'criado_por', 'versao_numero', 'assinatura_hash', 'visualizar_versao'
-        'identificador_versao', 'assinatura_hash', 'criado_em', 'titulo', 'criado_por', 'modificado_em',
+        'identificador_versao', 'esta_assinado', 'assinatura_hash', 'criado_em', 'titulo', 'criado_por', 'modificado_em',
         'modificado_por', 'revertido_em', 'revertido_por',
         'revertido_da_versao', 'esta_ativo', 'esta_bloqueado', 'versao_numero', 'visualizar_versao'
     )

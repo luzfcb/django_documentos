@@ -29,13 +29,15 @@ class SplitWidget(widgets.MultiWidget):
                                                   range(0, len(value), self.split_into)]
         for max_length in fields_max_length:
             at = attrs.copy()
-            patterns = r'^[A-Za-z0-9]{{{minlength},{maxlength}}}$'.format(minlength=max_length, maxlength=max_length)
+            pattern = r'^[A-Za-z0-9]{{{minlength},{maxlength}}}$'.format(minlength=max_length, maxlength=max_length)
 
-            at.update({'maxlength': max_length, 'minlength': max_length,
-                       'data-minlength': max_length,
-                       'patterns': patterns,
-                       # 'title': 'Insira o valor correto uai'
-                       })
+            at.update({
+                'maxlength': max_length,
+                'minlength': max_length,
+                # 'data-minlength': max_length,
+                'pattern': pattern,
+                # 'title': 'Insira o valor correto uai'
+            })
             attrbs.append(at)
 
         _widgets = [widgets.TextInput(attrs=at) for at in attrbs]
@@ -119,15 +121,6 @@ class SplitedHashField2(forms.MultiValueField):
 
     def compress(self, data_list):
         return ''.join(data_list)
-
-    def widget_attrs(self, widget):
-        print('widget_attrs:', dir(widget))
-        a = {
-            'split_into': self.split_into, 'value_size': self.value_size
-        }
-
-        return a
-        # return super(SplitedHashField2, self).widget_attrs(widget)
 
 
 class SplitedHashWidget(widgets.MultiWidget):
