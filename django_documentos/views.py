@@ -425,15 +425,15 @@ class AssinarDocumentoView(DocumentoAssinadoRedirectMixin, AuditavelViewMixin, g
 
 class AssinarDocumentoView2(generic.UpdateView):
     template_name = 'django_documentos/documento_assinar.html'
-    # form_class = AssinarDocumento
+    form_class = AssinarDocumento
     model = Documento
-    fields = ('conteudo', )
+    # fields = ('conteudo', )
 
     success_url = reverse_lazy('documentos:list')
 
     def get_form_kwargs(self):
         kwargs = super(AssinarDocumentoView2, self).get_form_kwargs()
         current_logged_user = self.request.user
-        # kwargs['current_logged_user'] = current_logged_user
+        kwargs['current_logged_user'] = current_logged_user
         return kwargs
 

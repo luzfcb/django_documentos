@@ -53,6 +53,7 @@ INSTALLED_APPS = (
     'crispy_forms',
     'django_documentos',
     'parsley',
+    'djangular',
     'debug_toolbar',
 
     # 'devserver',

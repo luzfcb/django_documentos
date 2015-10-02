@@ -18,6 +18,7 @@ pygraphviz
 django-extra-views
 django-braces
 django-wysiwyg-redactor
+django-angular
 # django-ckeditor
 -e git://github.com/django-ckeditor/django-ckeditor.git@master#egg=django-ckeditor
 

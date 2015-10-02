@@ -3,21 +3,28 @@
 {% load crispy_forms_tags %}
 
 {% block extra_head_js %}
-        <script>if (!window.jQuery) {
+    <link type="text/css" href="{% static "djangular/css/bootstrap3.css" %}" rel="stylesheet">
+    <link type="text/css" href="{% static "djangular/css/styles.css" %}" rel="stylesheet">
+    <script>if (!window.jQuery) {
         document.write('<script src="{% static 'django_documentos/js/jquery/1.11.3/jquery.min.js' %}"><\/script>');
         document.write('<script src="{% static 'django_documentos/js/jquery/1.11.3/jquery-migrate.min.js' %}"><\/script>');
     }
     </script>
     <script src="{% static 'parsley/js/parsley.min.js' %}"></script>
+    <script src="{% static 'djangular/js/django-angular.js' %}" type="text/javascript"></script>
+    <script type="text/javascript">
+        angular.module('djangular-demo', ['ng.django.forms']);
+    </script>
+
 {% endblock extra_head_js %}
 {% block conteudo_app %}
 
     {% if form %}
         {#        {% crispy form %}#}
-        <form action="." method="post" data-parsley-validate>
+        <form name="{{ form.form_name }}" action="." method="post" validate>
             {% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit" value="Submit">
+            {{ form }}
+            <button type="submit" ng-disabled="{{ form.form_name }}.$invalid" class="btn btn-primary">Submit</button>
         </form>
     {% else %}
         Nada para mostrar

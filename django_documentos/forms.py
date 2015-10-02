@@ -11,6 +11,8 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import HTML, Submit
 from django.contrib.auth.hashers import check_password
 from django.utils.translation import ugettext_lazy as _
+from djangular.forms import NgModelFormMixin, NgModelForm
+from djangular.forms import NgDeclarativeFieldsMetaclass
 from django_documentos.utils.module_loading import get_real_user_model_class
 from django_documentos.widgets import SplitedHashField, SplitField2, SplitWidget, SplitedHashField2
 from . import settings
@@ -107,19 +109,24 @@ class ValidarHelperFormMixin(object):
 from parsley.decorators import parsleyfy
 
 
-class DocumetoValidarForm22(ValidarHelperFormMixin, forms.Form):
-    id = forms.CharField()
+class DocumetoValidarForm(ValidarHelperFormMixin, forms.ModelForm):
+    form_name = 'documento-validar-form'
+    # id = forms.CharField()
     # codigo_crc = SplitedHashField(split_into=4)
     # codigo_crc = forms.CharField(widget=SplitWidget(), initial='ABCDABCDABCDABCD')
-    hash_code = SplitedHashField2(initial='ABCDABCDABCDABCDBB')
+    assinatura_hash = SplitedHashField2(label='Codigo CRC',
+                                        initial='ABCDABCDABCDABCD'
+                                        )
     # captcha = CaptchaField()
-
+    class Meta:
+        model = Documento
+        fields = ('assinatura_hash', )
     # def clean_codigo_crc(self):
     #     codigo_crc = self.cleaned_data.get('codigo_crc')
     #     print('codigo_crc:', codigo_crc)
     #     return codigo_crc
 
-DocumetoValidarForm = parsleyfy(DocumetoValidarForm22)
+# DocumetoValidarForm = parsleyfy(DocumetoValidarForm22)
 
 class AssinarDocumentoHelper(FormHelper):
     def __init__(self, form=None):
@@ -235,7 +242,8 @@ class AssinarDocumento(AssinarDocumentoHelperFormMixin, forms.ModelForm):
 
     class Meta:
         model = Documento
-        fields = '__all__'
+        # fields = '__all__'
+        fields = ('assinado_por', )
 
     def clean_password(self):
         password = self.cleaned_data.get('password')

@@ -16,15 +16,29 @@ validate_ascii_e_numeros = RegexValidator(ascii_e_numeros_re,
 
 
 class SplitWidget(widgets.MultiWidget):
-    def __init__(self, attrs=None, split_into=4, value_size=None):
+    def __init__(self, attrs=None, split_into=4, value_size=None, value=None, fields_max_length=None):
         assert isinstance(split_into, int) and split_into > 0, '"split_into" parameter expect a positive integer'
-        if value_size is None:
-            self.value_size = self.split_into
-        assert isinstance(value_size, int) and split_into > -1, '"value_size" parameter expect a positive integer'
         self.split_into = split_into
-        self.value_size = value_size
+        # assert isinstance(value_size, int) and split_into > -1, '"value_size" parameter expect a positive integer'
+        self.value_size = value_size or self.split_into
+        value = value
 
-        _widgets = [widgets.TextInput(attrs=attrs) for __ in range(0, self.value_size, self.split_into)]
+        attrs = attrs or {}
+        attrbs = []
+        fields_max_length = fields_max_length or [len(value[i: i + self.split_into]) for i in
+                                                  range(0, len(value), self.split_into)]
+        for max_length in fields_max_length:
+            at = attrs.copy()
+            patterns = r'^[A-Za-z0-9]{{{minlength},{maxlength}}}$'.format(minlength=max_length, maxlength=max_length)
+
+            at.update({'maxlength': max_length, 'minlength': max_length,
+                       'data-minlength': max_length,
+                       'patterns': patterns,
+                       # 'title': 'Insira o valor correto uai'
+                       })
+            attrbs.append(at)
+
+        _widgets = [widgets.TextInput(attrs=at) for at in attrbs]
         super(SplitWidget, self).__init__(widgets=_widgets, attrs=attrs)
         # print(self.__class__.__name__)
         # pprint(dir(self), depth=2)
@@ -43,18 +57,31 @@ class SplitWidget(widgets.MultiWidget):
 
 class SplitedHashField2(forms.MultiValueField):
     default_validators = [validate_ascii_e_numeros]
+    # widget = SplitWidget
 
-    def __init__(self, split_into=4, fields=(), *args, **kwargs):
+    def __init__(self, split_into=4, *args, **kwargs):
         assert isinstance(split_into, int) and split_into > 0, '"split_into" parameter expect a positive integer'
-        value_size = len(kwargs.get('initial')) if kwargs.get('initial', None) else None
-        self.max_length = split_into
-        self.min_length = split_into
+        kwargs.pop('widget', None)  # descarta qualquer widget
+        value = kwargs.get('initial', None) or 'A' * split_into
+        self.value_size = len(value)
         self.split_into = split_into
-        if not fields:
-            fields = [forms.RegexField(regex=ascii_e_numeros_re, max_length=self.max_length, min_length=self.min_length) for _ in range(0, self.split_into)]
-        super(SplitedHashField2, self).__init__(fields, *args, **kwargs)
 
-        self.widget = SplitWidget(split_into=self.split_into, value_size=value_size)
+        fields_max_length = [len(value[i: i + self.split_into]) for i in
+                             range(0, len(value), self.split_into)]
+        regexes = {}
+        fields = []
+        for max_length in fields_max_length:
+            if not regexes.get(max_length):
+                regexes[max_length] = re.compile(
+                    r'^[A-Za-z0-9]{{{minlength},{maxlength}}}$'.format(minlength=max_length, maxlength=max_length))
+            fields.append(forms.RegexField(regex=regexes[max_length], max_length=max_length, min_length=max_length))
+
+        self.widget = SplitWidget(split_into=self.split_into, value_size=self.value_size, value=value,
+                                  fields_max_length=fields_max_length)
+        super(SplitedHashField2, self).__init__(fields, *args, **kwargs)
+        print('')
+
+
         # if self.max_length is not None:
         #     self.validators.append(validators.MinLengthValidator(int(self.max_length)))
         # if self.min_length is not None:
@@ -93,6 +120,15 @@ class SplitedHashField2(forms.MultiValueField):
     def compress(self, data_list):
         return ''.join(data_list)
 
+    def widget_attrs(self, widget):
+        print('widget_attrs:', dir(widget))
+        a = {
+            'split_into': self.split_into, 'value_size': self.value_size
+        }
+
+        return a
+        # return super(SplitedHashField2, self).widget_attrs(widget)
+
 
 class SplitedHashWidget(widgets.MultiWidget):
     def __init__(self, attrs=None, step=4):
@@ -119,7 +155,7 @@ class SplitedHashField(forms.MultiValueField):
             self.validators.append(validators.MinLengthValidator(int(self.max_length)))
         if self.min_length is not None:
             self.validators.append(validators.MaxLengthValidator(int(self.min_length)))
-        # print(self)
+            # print(self)
 
     def widget_attrs(self, widget):
         attrs = super(SplitedHashField, self).widget_attrs(widget)
