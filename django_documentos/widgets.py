@@ -5,6 +5,8 @@ from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.forms import widgets
 from django.utils.translation import ugettext
+from .utils.split_utils import gsplit
+import collections
 
 import re
 
@@ -123,73 +125,94 @@ class SplitedHashField2(forms.MultiValueField):
         return ''.join(data_list)
 
 
-class SplitedHashWidget(widgets.MultiWidget):
-    def __init__(self, attrs=None, step=4):
-        assert isinstance(step, int) and step > 0, '"split_into" parameter expect a positive integer'
-        self.step = step
-        _widgets = [widgets.TextInput(attrs=attrs) for __ in range(0, self.step)]
-        super(SplitedHashWidget, self).__init__(widgets=_widgets, attrs=attrs)
+class SplitWidget2(widgets.MultiWidget):
+    def __init__(self, attrs=None, split_guide=None, merge_last=True, value=None):
+        assert isinstance(split_guide, collections.Iterable) and all(
+            isinstance(x, int) and x > 0 for x in split_guide), 'Expected a Tuple of positive integers greater than zero'
+        self.split_guide = split_guide
+        self.merge_last = merge_last
+        self.split_len = len(self.split_guide)
+        attrs = attrs or {}
+        attrbs = []
+
+        for max_length in self.split_guide:
+            at = attrs.copy()
+            pattern = r'^[A-Za-z0-9]{{{minlength},{maxlength}}}$'.format(minlength=max_length, maxlength=max_length)
+
+            at.update({
+                'maxlength': max_length,
+                'minlength': max_length,
+                # 'data-minlength': max_length,
+                'pattern': pattern,
+                # 'title': 'Insira o valor correto uai'
+            })
+            attrbs.append(at)
+
+        _widgets = [widgets.TextInput(attrs=at) for at in attrbs]
+        super(SplitWidget2, self).__init__(widgets=_widgets, attrs=attrs)
+        # print(self.__class__.__name__)
+        # pprint(dir(self), depth=2)
+        # pprint(dir(self), depth=2)
 
     def decompress(self, value):
         if value:
-            return [value[i: i + self.step] for i in range(0, len(value), self.step)]
-        return [None for __ in range(0, self.step)]
+            return gsplit(value, self.split_guide, self.merge_last)
+        return [None for __ in self.split_guide]
 
 
-class SplitedHashField(forms.MultiValueField):
-    def __init__(self, step=4, *args, **kwargs):
-        assert isinstance(step, int) and step > 0, '"split_into" parameter expected positive integer'
-        self.max_length = step
-        self.min_length = step
-        self.step = step
-        super(SplitedHashField, self).__init__(*args, **kwargs)
-        self.widget = SplitedHashWidget(step=self.step)
-        if self.max_length is not None:
-            self.validators.append(validators.MinLengthValidator(int(self.max_length)))
-        if self.min_length is not None:
-            self.validators.append(validators.MaxLengthValidator(int(self.min_length)))
-            # print(self)
+class SplitedHashField3(forms.MultiValueField):
+    default_validators = [validate_ascii_e_numeros]
+    # widget = SplitWidget
 
-    def widget_attrs(self, widget):
-        attrs = super(SplitedHashField, self).widget_attrs(widget)
-        if self.max_length is not None:
-            # The HTML attribute is maxlength, not max_length.
-            attrs.update({'maxlength': str(self.max_length)})
-        return attrs
+    def __init__(self, split_guide=None, merge_last=True, *args, **kwargs):
+        # assert isinstance(split_guide, int) and split_guide > 0, '"split_guide" parameter expect a positive integer'
+        self.split_guide = split_guide
+        self.split_len = len(self.split_guide)
+        kwargs.pop('widget', None)  # descarta qualquer widget
+        value = kwargs.get('initial', None) or 'A' * self.split_len
+        self.value_size = len(value)
+
+        regexes = {}
+        fields = []
+        for max_length in self.split_guide:
+            if not regexes.get(max_length):
+                regexes[max_length] = re.compile(
+                    r'^[A-Za-z0-9]{{{minlength},{maxlength}}}$'.format(minlength=max_length, maxlength=max_length))
+            fields.append(forms.RegexField(regex=regexes[max_length], max_length=max_length, min_length=max_length))
+
+        self.widget = SplitWidget2(split_guide=self.split_guide, merge_last=False)
+        super(SplitedHashField3, self).__init__(fields, *args, **kwargs)
+
+
+    def clean(self, value):
+        pre_clean = super(SplitedHashField3, self).clean(value)
+        print('clean', value)
+        # if pre_clean:
+        #     for data in pre_clean:
+        #         if data and len(data) < self.split_into:
+        #             raise ValidationError(self.error_messages['required'], code='required')
+        #         else:
+        #             raise ValidationError(self.error_messages['required'], code='required')
+        return ''.join(pre_clean)
+
+    def to_python(self, value):
+        print('pre_to_python:', value)
+        # value = ''.join(value)
+        ret = super(SplitedHashField3, self).to_python(value)
+        print('to_python:', value)
+        return ret
 
     def validate(self, value):
-        print('value:', value, 'len:', len(value))
-
-        return super(SplitedHashField, self).validate(value)
+        print('validate:', value)
+        # if value:
+        #     for data in value:
+        #         if data and len(data) < self.split_into:
+        #             raise ValidationError(self.error_messages['required'], code='required')
+        #         else:
+        #             raise ValidationError(self.error_messages['required'], code='required')
+        return super(SplitedHashField3, self).validate(value)
 
     def compress(self, data_list):
-        if data_list:
-            for data in data_list:
-                if data and len(data) < self.step:
-                    raise ValidationError(self.error_messages['required'], code='required')
-                else:
-                    raise ValidationError(self.error_messages['required'], code='required')
         return ''.join(data_list)
 
 
-class SplitField2(forms.MultiValueField):
-    widget = SplitedHashWidget
-
-    def __init__(self, step=4, fields=(), *args, **kwargs):
-        assert isinstance(step, int) and step > 0
-        self.step = step
-        fields = tuple(
-            [forms.CharField(max_length=self.step, min_length=self.step) for __ in range(0, self.step)]
-        )
-        super(SplitField2, self).__init__(fields=fields, *args, **kwargs)
-
-    def widget_attrs(self, widget):
-        a = widget
-
-        ret = super(SplitField2, self).widget_attrs(widget)
-        ret.update(
-            {
-                'onkeyup': "saltaCampo(this,4,5);"
-            }
-        )
-        return ret
