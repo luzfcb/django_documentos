@@ -16,7 +16,7 @@
     <a href="{% url 'documentos:list' %}">
         Lista de documentos
     </a>
-     |
+    |
     <a href="{% url 'documentos:validar' %}">
         Validar
     </a>
@@ -41,23 +41,25 @@
     </a>
     <p>
     <p>
-    <a href="{% url 'documentos:create' %}?next=/list/?teste=1" target="_blank">
-        Criar novo v1 - Nova aba
-    </a>
+        <a href="{% url 'documentos:create' %}?next=/list/?teste=1" target="_blank">
+            Criar novo v1 - Nova aba
+        </a>
     <p>
     <p>
-{#    <a href="{% url 'documentos:create' %}?next=https://www.google.com" class="djpopup">#}
-{#        Criar novo v2#}
-{#    </a>#}
+        {#    <a href="{% url 'documentos:create' %}?next=https://www.google.com" class="djpopup">#}
+        {#        Criar novo v2#}
+        {#    </a>#}
 
-    <a href="{% url 'documentos:create' %}?popup=1&next=http://127.0.0.1:8004/list/?teste=1" id="create3" class="djpopup" data-fullscreen="no" data-scrollbars="no"
-       alt="my link text">
-        Criar novo v5
-    </a>
+        <a href="{% url 'documentos:create' %}?popup=1&next=http://127.0.0.1:8004/list/?teste=1" id="create3"
+           class="djpopup" data-fullscreen="no" data-scrollbars="no"
+           alt="my link text">
+            Criar novo v5
+        </a>
     <p>
     <p>
     {# adicone a classe djpopup para abrir a url em uma popup #}
-    <a href="{% url 'documentos:create' %}?popup=1&next=/list/?teste=1" id="create3" class="djpopup" data-fullscreen="no" data-scrollbars="no"
+    <a href="{% url 'documentos:create' %}?popup=1&next=/list/?teste=1" id="create3" class="djpopup"
+       data-fullscreen="no" data-scrollbars="no"
        alt="my link text">
         Criar novo v6
     </a>
@@ -81,4 +83,18 @@
 {% block js_app %}
     {{ block.super }}
     <script type="text/javascript" src="{% static "django_documentos/js/django_documentos.js" %}"></script>
+{#    <script type="text/javascript" src="{% static "django_documentos/js/platform.js" %}"></script>#}
+{#    <script type="text/javascript">#}
+{#        console.log(platform.os.family);#}
+{#        //Linux|Android == 42#}
+{#        //iOS on Chrome and Safari == 124#}
+{#        //iOS on Firefox == 44#}
+{#        //Win == 44#}
+{#        //alert(platform.os.family);#}
+{#        window.addEventListener("keyup", function (e) {#}
+{#            if (e.keyCode == 42) {#}
+{#                alert("The 'print screen' key is pressed");#}
+{#            }#}
+{#        });#}
+{#    </script>#}
 {% endblock js_app %}

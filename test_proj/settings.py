@@ -37,6 +37,11 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'test_app',
+
+)
+
+INSTALLED_APPS = INSTALLED_APPS + (
     'autocomplete_light',
     'simple_history',
 
@@ -66,7 +71,7 @@ CAPTCHA_FOREGROUND_COLOR = '#991100'
 
 CAPTCHA_FONT_SIZE = 50
 CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.math_challenge'
-#CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.word_challenge'
+# CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.word_challenge'
 CAPTCHA_WORDS_DICTIONARY = '/usr/share/dict/brazilian'
 # django_wysiwyg
 DJANGO_WYSIWYG_FLAVOR = 'ckeditor'

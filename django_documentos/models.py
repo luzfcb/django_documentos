@@ -297,3 +297,15 @@ class Documento(models.Model):
         self.assinado_por = None
         self.assinatura_hash = ''
         self.save(*args, **kwargs)
+
+    class Meta:
+        ordering = ['criado_em']
+        permissions = (
+            ("pode_criar_documento", "Pode Criar documento"),
+            ("pode_editar_documento", "Pode Editar documento"),
+            ("pode_assinar_documento", "Pode Assinar documento"),
+            ("pode_desativar_documento", "Pode Desativar documento"),
+            ("pode_visualizar_versoes_anteriores_documento", "Pode Visualizar versoes anteriores de documento"),
+            ("pode_reverter_para_uma_versao_anterior_documento", "Pode Reverter documento para uma versão anterior"),
+            ("pode_imprimir", "Pode Imprimir documento"),
+        )

@@ -358,8 +358,9 @@ class DocumentoRevertView(RevertFromHistoryRecordViewMixin, AuditavelViewMixin, 
         return super(DocumentoRevertView, self).form_valid(form)
 
 
-class DocumentoValidacaoView(generic.FormView):
+class DocumentoValidacaoView(generic.UpdateView):
     template_name = 'django_documentos/documento_validacao.html'
+    model = Documento
     form_class = DocumetoValidarForm
     success_url = reverse_lazy('documentos:validar')
 

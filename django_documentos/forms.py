@@ -23,8 +23,10 @@ class SaveHelper(FormHelper):
     def __init__(self, form=None):
         super(SaveHelper, self).__init__(form)
         self.layout.append(Submit(name='save', value='Salvar'))
+        self.form_method = 'post'
         self.form_show_errors = True
         self.render_required_fields = True
+        self.render_unmentioned_fields = True
 
 
 class SaveHelperFormMixin(object):
@@ -119,7 +121,7 @@ class DocumetoValidarForm(ValidarHelperFormMixin, forms.ModelForm):
     #                                     )
     assinatura_hash = SplitedHashField3(label='Codigo CRC',
                                         split_guide=(4, 3, 2),
-                                        initial='AAAABBBCCDDDDDD'
+                                        #initial='AAAABBBCCDDDDDD'
                                         )
     captcha = CaptchaField()
     class Meta:
