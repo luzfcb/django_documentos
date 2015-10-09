@@ -52,6 +52,7 @@ INSTALLED_APPS = INSTALLED_APPS + (
     'braces',
     'redactor',
     'ckeditor',
+    'ckeditor_uploader',
     'django_wysiwyg',
     'wkhtmltopdf',
     'captcha',
@@ -66,7 +67,11 @@ INSTALLED_APPS = INSTALLED_APPS + (
 
 # django-simple-captcha
 
-
+CAPTCHA_FONT_PATH = (
+    os.path.join(os.path.dirname(BASE_DIR), 'django_documentos', 'fontes', 'HomemadeApple.ttf'),
+    os.path.join(os.path.dirname(BASE_DIR), 'django_documentos', 'fontes', 'RockSalt.ttf'),
+    os.path.join(os.path.dirname(BASE_DIR), 'django_documentos', 'fontes', 'ShadowsIntoLight.ttf'),
+)
 CAPTCHA_FOREGROUND_COLOR = '#991100'
 
 CAPTCHA_FONT_SIZE = 50
@@ -206,6 +211,7 @@ CKEDITOR_CONFIGS = {
             # 'top': "document.getElementById('toolbar-editor')",
             'top': "toolbarLocation",
         },
+        'toolbarLocation': 'bottom',
         'extraPlugins': ','.join(
             [
                 # 'cwjdsjcsconfineselection',

@@ -20,7 +20,8 @@ django-braces
 django-wysiwyg-redactor
 django-angular
 # django-ckeditor
--e git://github.com/django-ckeditor/django-ckeditor.git@master#egg=django-ckeditor
+# -e git://github.com/django-ckeditor/django-ckeditor.git@master#egg=django-ckeditor
+-e git://github.com/luzfcb/django-ckeditor.git@update-to-4.5.4#egg=django-ckeditor
 
 django-wysiwyg
 django-model-utils

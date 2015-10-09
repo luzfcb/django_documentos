@@ -31,7 +31,7 @@ urlpatterns = [
                      namespace='documentos')
         ),
     url(r'^editor_redactor/', include('redactor.urls')),
-    url(r'^ckeditor/', include('ckeditor.urls')),
+    url(r'^ckeditor/', include('ckeditor_uploader.urls')),
     url(r'^captcha/',
         include('captcha.urls'),
         ),

@@ -39,11 +39,11 @@
             display: block;
         }
 
-        {#        @media all {#}
-        {#            .page-break {#}
-        {#                display: none;#}
-        {#            }#}
-        {#        }#}
+{#        @media all {#}
+{#            .page-break {#}
+{#                display: none;#}
+{#            }#}
+{#        }#}
 
         @media print {
             .cke_pagebreak {
@@ -61,11 +61,10 @@
     <article id="cke_editable">
         {% if form %}
             <a id="teste" href="{% url 'documentos:create' %}{% if popup %}?popup=1{% endif %}">Verifique a Validade</a>
-
+            <div id="codigo_qr"></div>
             <div id="success_div"></div>
             <div id="error_div"></div>
             <form action="
-
                     {% url 'documentos:create' %}{% if popup or next_page_url %}?{% endif %}{% if popup %}popup=1{% endif %}{% if next_page_url %}&{{ next_kwarg_name }}={{ next_page_url }}{% endif %}"
                   method="post" id="documento_create">
                 {% csrf_token %}
@@ -140,7 +139,70 @@
     {% endif %}
 
     <script type="text/javascript" src="{% static "django_documentos/js/autosize.js" %}"></script>
+    <script src="{% static 'django_documentos/js/jquery.qrcode.min.js' %}"></script>
+    <script src="{% static 'django_documentos/js/jquery.are-you-sure.js' %}"></script>
     <script>
+        {#        autosize(document.querySelectorAll('textarea'));#}
+        var teste = $("#teste");
+        var opcoes = {
+            // render method: 'canvas', 'image' or 'div'
+            render: 'image',
+
+            // version range somewhere in 1 .. 40
+            minVersion: 1,
+            maxVersion: 40,
+
+            // error correction level: 'L', 'M', 'Q' or 'H'
+            ecLevel: 'H',
+
+            // offset in pixel if drawn onto existing canvas
+            left: 0,
+            top: 0,
+
+            // size in pixel
+            size: 100,
+
+            // code color or image element
+            fill: '#000',
+
+            // background color or image element, null for transparent background
+            background: null,
+
+            // content
+            text: teste.attr("href"),
+
+            // corner radius relative to module width: 0.0 .. 0.5
+            radius: 0.5,
+
+            // quiet zone in modules
+            quiet: 0,
+
+            // modes
+            // 0: normal
+            // 1: label strip
+            // 2: label box
+            // 3: image strip
+            // 4: image box
+            mode: 2,
+
+            mSize: 0.1,
+            mPosX: 0.5,
+            mPosY: 0.5,
+
+            label: 'Solar',
+            fontname: 'sans',
+            fontcolor: '#ff8300',
+
+            image: null
+        };
+
+        $("#codigo_qr").qrcode(opcoes);
+        {% if next_page_url %}
+
+        {% endif %}
+        $('form').areYouSure(
+                {'message': "{% trans "Suas modificações ainda não foram salvas" %}"}
+        );
         {% if popup %}
             {# coloca o editor em fullscreen se for uma janela popup#}
             CKEDITOR.on('instanceReady',
@@ -149,6 +211,15 @@
                         editor.execCommand('maximize');
                     });
         {% endif %}
-
+        {#        CKEDITOR.disableAutoInline = true;#}
+        {#        CKEDITOR.replace('editor2', {#}
+        {#            extraPlugins: 'sharedspace',#}
+        {#            removePlugins: 'maximize,resize',#}
+        {#            height: 410,#}
+        {#            sharedSpaces: {#}
+        {#                top: 'toolbar-editor',#}
+        {#                bottom: 'bottom'#}
+        {#            }#}
+        {#        });#}
     </script>
 {% endblock %}
