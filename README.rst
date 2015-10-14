@@ -30,6 +30,8 @@ django_documentos
 
 Note:
     WIP - incomplete and non-functional work !!!
+    
+    Incompleto, feio e não funciona :-P
 
 Simples sistema de gerenciamento de documentos digitais
 
@@ -41,15 +43,33 @@ The full documentation is at https://django_documentos.readthedocs.org.
 Quickstart
 ----------
 
+Requirements::
+
+    pip install -e git://github.com/luzfcb/django-ckeditor.git@update-to-4.5.4#egg=django-ckeditor
+    pip install -e git://github.com/luzfcb/django-simple-history.git@wip-generic-views#egg=django-simple-history
+    pip install -e git://github.com/maraujop/django-crispy-forms.git@dev#egg=django-crispy-forms
+    pip install django-extra-views django-braces django-model-utils django-autocomplete-light django-simple-captcha django-bootstrap-pagination django-wkhtmltopdf
+
+
 Install django_documentos::
 
     pip install django_documentos
+
 
 Then use it in a Django Project, put on settings file, into ``INSTALLED_APPS``::
 
     INSTALLED_APPS = [
         ...
         'simple_history',
+        'autocomplete_light',
+        'bootstrap_pagination',
+        'extra_views',
+        'braces',
+        'captcha',
+        'crispy_forms',
+        'ckeditor',
+        'ckeditor_uploader',
+    
         'django_documentos',
     ]
 
@@ -60,8 +80,12 @@ and ``urls`` file::
 
     urlpatterns = [
         ...
-        url(r'', include(django_documentos_urls, namespace='documentos')),
-        url(r'^ckeditor/', include('ckeditor.urls')),
+        url(r'^documentos/', include(django_documentos_urls, namespace='documentos')),
+        url(r'^ckeditor/', include('ckeditor_uploader.urls')),
+        url(r'^captcha/',
+            include('captcha.urls'),
+            ),
+        url(r'^autocomplete/', include('autocomplete_light.urls')),
     ]
 
 
