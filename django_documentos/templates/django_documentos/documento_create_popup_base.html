@@ -1,26 +1,10 @@
-{% load staticfiles bootstrap3 %}
+{% load staticfiles %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title></title>
-
-
     {% block css_app %}
-
-        {% bootstrap_css %}
-        <style>
-            {#            textarea {#}
-            {#                -webkit-box-sizing: border-box;#}
-            {#                -moz-box-sizing: border-box;#}
-            {#                box-sizing: border-box;#}
-            {##}
-            {#                width: 100%;#}
-            {#            }#}
-
-
-        </style>
-
     {% endblock %}
     {% block extra_head_js %}
     {% endblock extra_head_js %}s
@@ -41,7 +25,7 @@
     {#    autosize(document.querySelectorAll('textarea'));#}
 </script>
 <div id="boot">
-    {% bootstrap_javascript %}
+
 </div>
 {% block js_app %}
 {% endblock %}

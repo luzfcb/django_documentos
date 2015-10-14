@@ -11,8 +11,6 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import HTML, Submit
 from django.contrib.auth.hashers import check_password
 from django.utils.translation import ugettext_lazy as _
-from djangular.forms import NgModelFormMixin, NgModelForm, NgFormValidationMixin
-from djangular.forms import NgDeclarativeFieldsMetaclass
 from django_documentos.utils.module_loading import get_real_user_model_class
 from django_documentos.widgets import SplitWidget, SplitedHashField2, SplitedHashField3
 from . import settings
@@ -108,7 +106,6 @@ class ValidarHelperFormMixin(object):
         super(ValidarHelperFormMixin, self).__init__(*args, **kwargs)
         self.helper = ValidarHelper(self)
 
-from parsley.decorators import parsleyfy
 
 
 class DocumetoValidarForm(ValidarHelperFormMixin, forms.ModelForm):

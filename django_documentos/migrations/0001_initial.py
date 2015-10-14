@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.db import models, migrations
+from django.db import migrations, models
 import django.utils.timezone
 import ckeditor.fields
 import django.db.models.deletion
@@ -21,14 +21,14 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('versao_numero', models.IntegerField(default=1, editable=False, auto_created=True)),
                 ('revertido_da_versao', models.IntegerField(default=None, editable=False, null=True, auto_created=True, blank=True)),
+                ('titulo', models.CharField(max_length=500, editable=False, blank=True)),
+                ('conteudo', ckeditor.fields.RichTextField()),
                 ('criado_em', models.DateTimeField(default=django.utils.timezone.now, editable=False, blank=True)),
                 ('modificado_em', models.DateTimeField(auto_now=True, null=True)),
                 ('revertido_em', models.DateTimeField(null=True, editable=False, blank=True)),
                 ('esta_ativo', models.NullBooleanField(default=True, editable=False)),
                 ('esta_bloqueado', models.NullBooleanField(default=False, editable=False)),
                 ('bloqueado_em', models.DateTimeField(null=True, editable=False, blank=True)),
-                ('titulo', models.CharField(max_length=500, editable=False, blank=True)),
-                ('conteudo', ckeditor.fields.RichTextField()),
                 ('assinatura_hash', models.TextField(editable=False, blank=True)),
                 ('esta_assinado', models.BooleanField(default=False)),
                 ('assinado_em', models.DateTimeField(null=True, editable=False, blank=True)),
@@ -42,7 +42,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'ordering': ['criado_em'],
-                'abstract': False,
+                'permissions': (('pode_criar_documento', 'Pode Criar documento'), ('pode_editar_documento', 'Pode Editar documento'), ('pode_assinar_documento', 'Pode Assinar documento'), ('pode_desativar_documento', 'Pode Desativar documento'), ('pode_visualizar_versoes_anteriores_documento', 'Pode Visualizar versoes anteriores de documento'), ('pode_reverter_para_uma_versao_anterior_documento', 'Pode Reverter documento para uma vers\xe3o anterior'), ('pode_imprimir', 'Pode Imprimir documento')),
             },
         ),
         migrations.CreateModel(
@@ -51,14 +51,14 @@ class Migration(migrations.Migration):
                 ('id', models.IntegerField(verbose_name='ID', db_index=True, auto_created=True, blank=True)),
                 ('versao_numero', models.IntegerField(default=1, editable=False, auto_created=True)),
                 ('revertido_da_versao', models.IntegerField(default=None, editable=False, null=True, auto_created=True, blank=True)),
+                ('titulo', models.CharField(max_length=500, editable=False, blank=True)),
+                ('conteudo', ckeditor.fields.RichTextField()),
                 ('criado_em', models.DateTimeField(default=django.utils.timezone.now, editable=False, blank=True)),
                 ('modificado_em', models.DateTimeField(null=True, editable=False, blank=True)),
                 ('revertido_em', models.DateTimeField(null=True, editable=False, blank=True)),
                 ('esta_ativo', models.NullBooleanField(default=True, editable=False)),
                 ('esta_bloqueado', models.NullBooleanField(default=False, editable=False)),
                 ('bloqueado_em', models.DateTimeField(null=True, editable=False, blank=True)),
-                ('titulo', models.CharField(max_length=500, editable=False, blank=True)),
-                ('conteudo', ckeditor.fields.RichTextField()),
                 ('assinatura_hash', models.TextField(editable=False, blank=True)),
                 ('esta_assinado', models.BooleanField(default=False)),
                 ('assinado_em', models.DateTimeField(null=True, editable=False, blank=True)),

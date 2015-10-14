@@ -3,7 +3,7 @@ from __future__ import absolute_import, print_function
 
 import os
 import sys
-import pytest
+
 from django.utils import six
 
 __author__ = 'luzfcb'
@@ -48,4 +48,5 @@ def document(n, v):
 
 
 if __name__ == "__main__":
+    import pytest
     pytest.main(args=['-vv', os.path.join(__file__)], )

@@ -100,11 +100,11 @@ class NextURLMixin(generic.View):
                     self.__class__.__name__))
 
         if self.next_page_url is not None:
-            print('if self.next_page_url is not None:')
+            # print('if self.next_page_url is not None:')
             next_page = resolve_url(self.next_page_url)
 
         if next_kwarg_name in self.request.POST or next_kwarg_name in self.request.GET:
-            print('if next_kwarg_name in self.request.POST or next_kwarg_name in self.request.GET: id:', id(self))
+            # print('if next_kwarg_name in self.request.POST or next_kwarg_name in self.request.GET: id:', id(self))
             next_page = self.request.POST.get(next_kwarg_name,
                                               self.request.GET.get(next_kwarg_name))
             # Security check -- don't allow redirection to a different host.
@@ -113,11 +113,6 @@ class NextURLMixin(generic.View):
 
         return next_page
 
-    # def dispatch(self, request, *args, **kwargs):
-    #     ret = super(NextURLMixin, self).dispatch(request, *args, **kwargs)
-    #
-    #
-    #     return ret
     def form_valid(self, form):
         self.next_page_url = form.cleaned_data.get('proximo')
         return super(NextURLMixin, self).form_valid(form)
@@ -163,60 +158,25 @@ class AuditavelViewMixin(object):
             form.instance.modificado_por = self.request.user
         return super(AuditavelViewMixin, self).form_valid(form)
 
+class PopupMixin(object):
 
-# def set_query_parameter(url, pairs):
-#     """Given a URL, set or replace a query parameter and return the
-#     modified URL.
-#
-#     >>> set_query_parameter('http://example.com?foo=bar&biz=baz', 'foo', 'stuff')
-#     'http://example.com?foo=stuff&biz=baz'
-#
-#     """
-#
-#     # url2 = uri_to_iri(url)
-#     scheme, netloc, path, query_string, fragment = urlsplit(url)
-#     query_params = parse_qs(query_string)
-#
-#     # query_params[param_name] = [param_value]
-#     query_params.update(
-#         pairs
-#     )
-#     new_query_string = urlencode(query_params, doseq=True)
-#     # teste = uri_to_iri(new_query_string)
-#
-#     new_url = urlunsplit((scheme, netloc, path, new_query_string, fragment))
-#     print('--------------')
-#     pprint(locals())
-#     print('--------------')
-#     return new_url
+    def get_initial(self):
+        initial = super(PopupMixin, self).get_initial()
+        initial.update({'is_popup': self.get_is_popup(), })
+        return initial
 
+    def get_is_popup(self):
+        if self.request.GET.get('popup', False):
+            return True
+        else:
+            return False
 
-# def url_path_join(*parts):
-#     """Normalize url parts and join them with a slash."""
-#     schemes, netlocs, paths, queries, fragments = zip(*(urlsplit(part) for part in parts))
-#     scheme, netloc, query, fragment = first_of_each(schemes, netlocs, queries, fragments)
-#     path = '/'.join(x.strip('/') for x in paths if x)
-#     return urlunsplit((scheme, netloc, path, query, fragment))
-#
-#
-# def first_of_each(*sequences):
-#     return (next((x for x in sequence if x), '') for sequence in sequences)
+    def get_context_data(self, **kwargs):
+        context = super(PopupMixin, self).get_context_data(**kwargs)
+        context['popup'] = self.get_is_popup()
+        return context
 
-# def add_get_args_to_url(url, arg_dict):
-#     # import urllib
-#     # urllib.quote_plus()
-#     url_parts = urlparse(url)
-#
-#     qs_args = parse_qs(url_parts[4])
-#     qs_args.update(arg_dict)
-#
-#     new_qs = urlencode(qs_args, True)
-#
-#     ret = urlunparse(list(url_parts[0:4]) + [new_qs] + list(url_parts[5:]))
-#     #pprint(locals(), indent=4)
-#     return ret
-
-class DocumentoCreateView(AjaxableResponseMixin, NextURLMixin, AuditavelViewMixin, generic.CreateView):
+class DocumentoCreateView(AjaxableResponseMixin, NextURLMixin, PopupMixin, AuditavelViewMixin, generic.CreateView):
     template_name = 'django_documentos/documento_create.html'
     model = Documento
     form_class = DocumentoFormCreate
@@ -242,7 +202,7 @@ class DocumentoCreateView(AjaxableResponseMixin, NextURLMixin, AuditavelViewMixi
 
         next_url = add_querystrings_to_url(next_page_url, doc)
         if not is_popup and next_page_url:
-            print('aqui')
+            # print('aqui')
             return next_url
 
         if not next_page_url:
@@ -254,27 +214,10 @@ class DocumentoCreateView(AjaxableResponseMixin, NextURLMixin, AuditavelViewMixi
 
     def get_initial(self):
         initial = super(DocumentoCreateView, self).get_initial()
-        initial.update({'is_popup': self.get_is_popup(),
+        initial.update({
                         'conteudo': BIG_SAMPLE_HTML}
                        )
         return initial
-
-    def get_is_popup(self):
-        if self.request.GET.get('popup', False):
-            self.is_popup = True
-        else:
-            self.is_popup = False
-        return self.is_popup
-
-    def get_context_data(self, **kwargs):
-        context = super(DocumentoCreateView, self).get_context_data(**kwargs)
-        context['popup'] = self.get_is_popup()
-        return context
-
-    def get_form(self, form_class=None):
-        form = super(DocumentoCreateView, self).get_form(form_class=form_class)
-        # print(form)
-        return form
 
 
 class CloseView(NextURLMixin, generic.TemplateView):
@@ -318,11 +261,34 @@ class DocumentoAssinadoRedirectMixin(object):
         return ret
 
 
-class DocumentoUpdateView(DocumentoAssinadoRedirectMixin, AuditavelViewMixin, generic.UpdateView):
+class DocumentoUpdateView(DocumentoAssinadoRedirectMixin, AuditavelViewMixin, NextURLMixin, PopupMixin, generic.UpdateView):
     template_name = 'django_documentos/documento_update.html'
     model = Documento
     form_class = DocumentoFormCreate
-    success_url = reverse_lazy('documentos:list')
+    # success_url = reverse_lazy('documentos:list')
+    def get_success_url(self):
+        next_kwarg_name = self.get_next_kwarg_name()
+        next_page_url = self.get_next_page_url()
+        is_popup = self.get_is_popup()
+
+        document_param_name = 'document'
+        document_param_value = self.object.pk
+
+        doc = {
+            document_param_name: document_param_value
+        }
+
+        next_url = add_querystrings_to_url(next_page_url, doc)
+        if not is_popup and next_page_url:
+            # print('aqui')
+            return next_url
+
+        if not next_page_url:
+            return reverse('documentos:detail', {'pk': self.object.pk})
+
+        close_url = add_querystrings_to_url(reverse('documentos:close'), {next_kwarg_name: next_url})
+
+        return close_url
 
 
 class DocumentoHistoryView(HistoryRecordListViewMixin, generic.DetailView):
@@ -331,7 +297,7 @@ class DocumentoHistoryView(HistoryRecordListViewMixin, generic.DetailView):
     history_records_paginate_by = 2
 
 
-class DocumentoRevertView(RevertFromHistoryRecordViewMixin, AuditavelViewMixin, generic.UpdateView):
+class DocumentoRevertView(RevertFromHistoryRecordViewMixin, NextURLMixin, AuditavelViewMixin, generic.UpdateView):
     template_name = 'django_documentos/documento_revert.html'
     model = Documento
     form_class = DocumentoRevertForm

@@ -182,6 +182,7 @@ class Documento(models.Model):
     titulo = models.CharField(blank=True, max_length=500, editable=False)
 
     conteudo = ckeditor_fields.RichTextField()
+
     criado_em = models.DateTimeField(default=timezone.now, blank=True, editable=False)
     criado_por = models.ForeignKey(to=USER_MODEL,
                                    related_name="%(app_label)s_%(class)s_criado_por", null=True,

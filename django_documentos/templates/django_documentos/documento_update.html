@@ -1,5 +1,5 @@
-{% extends "django_documentos/base.html" %}
-{% load bootstrap3 %}
+{% extends popup|yesno:"django_documentos/documento_create_popup_base.html,django_documentos/base.html" %}
+
 {% load crispy_forms_tags %}
 
 {% block titulo %}
@@ -21,21 +21,10 @@
 
 
     {% if form %}
-        <form action="." method="post">
+            <form action="{% url 'documentos:update' object.pk %}{% if popup or next_page_url %}?{% endif %}{% if popup %}popup=1{% endif %}{% if next_page_url %}&{{ next_kwarg_name }}={{ next_page_url }}{% endif %}"
+                  method="post" id="documento_update">
             {% csrf_token %}
-            {% bootstrap_form form %}
-            {% if inlines %}
-                {% for formset in inlines %}
-                    <div id="formset-{{ forloop.counter|stringformat:"05d" }}">
-                        {% bootstrap_formset formset %}
-                    </div>
-                {% endfor %}
-            {% endif %}
-            {% buttons %}
-                <button type="submit" class="btn btn-primary">
-                    {% bootstrap_icon "star" %} Submit
-                </button>
-            {% endbuttons %}
+            {% crispy form %}
         </form>
     {% endif %}
 
@@ -45,5 +34,15 @@
     {{ block.super }}
     {% if form.media %}
         {{ form.media }}
+    {% endif %}
+    {% if popup %}
+        <script>
+            {# coloca o editor em fullscreen se for uma janela popup#}
+            CKEDITOR.on('instanceReady',
+                    function (evt) {
+                        var editor = evt.editor;
+                        editor.execCommand('maximize');
+                    });
+        </script>
     {% endif %}
 {% endblock %}

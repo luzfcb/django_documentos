@@ -3,7 +3,7 @@
 {#{% extends popup %}#}
 
 {#{% extends "django_documentos/base.html" %}#}
-{% load bootstrap3 staticfiles %}
+{% load staticfiles %}
 
 {#{% block titulo %}#}
 {#    Criar Documento#}
@@ -64,9 +64,7 @@
 
             <div id="success_div"></div>
             <div id="error_div"></div>
-            <form action="
-
-                    {% url 'documentos:create' %}{% if popup or next_page_url %}?{% endif %}{% if popup %}popup=1{% endif %}{% if next_page_url %}&{{ next_kwarg_name }}={{ next_page_url }}{% endif %}"
+            <form action="{% url 'documentos:create' %}{% if popup or next_page_url %}?{% endif %}{% if popup %}popup=1{% endif %}{% if next_page_url %}&{{ next_kwarg_name }}={{ next_page_url }}{% endif %}"
                   method="post" id="documento_create">
                 {% csrf_token %}
 
@@ -87,24 +85,10 @@
     <script src="{% static 'django_documentos/js/prettyprint.js' %}"></script>
 
     {% if form.media %}
-        <script>
-            {#            var htmlElement = document.getElementById('toolbar-editor');#}
-            {#            CKEDITOR.editorConfig = function (config) {#}
-            {#                // Define changes to default configuration here. For example:#}
-            {#                // config.language = 'fr';#}
-            {#                // config.uiColor = '#AADC6E';#}
-            {#                config.sharedSpaces = {#}
-            {#                    top: htmlElement#}
-            {#                }#}
-            {#            };#}
-
-
-        </script>
         {{ form.media }}
     {% endif %}
     {% if popup %}
         <script>
-            {#        #}
             {% if not popup %}
                 function OnClose() {
                     "use strict";
@@ -117,38 +101,18 @@
                 }
                 window.onunload = OnClose;
             {% endif %}
-            {#            $('#documento_create').on('submit', '#enviar', function () {#}
-            {#                $.ajax({#}
-            {#                    type: $(this).attr('method'),#}
-            {#                    url: $(this).attr('action'),#}
-            {#                    data: $(this).serialize(),#}
-            {#                    success: function () { // on success..#}
-            {#                        var sucess_div = $('#success_div');#}
-            {#                        sucess_div.append('Changes saved'); // update the DIV#}
-            {#                        sucess_div.toggleClass('alert alert-success'); // unhide#}
-            {#                    },#}
-            {#                    error: function (xhr, ajaxOptions, thrownError) { // on error..#}
-            {#                        var error_div = $('#error_div');#}
-            {#                        error_div.append(xhr); // update the DIV#}
-            {#                        error_div.toggleClass('alert alert-error'); // unhide#}
-            {#                    }#}
-            {#                });#}
-            {#                return false;#}
-            {#            });#}
-
         </script>
     {% endif %}
 
     <script type="text/javascript" src="{% static "django_documentos/js/autosize.js" %}"></script>
-    <script>
-        {% if popup %}
+    {% if popup %}
+        <script>
             {# coloca o editor em fullscreen se for uma janela popup#}
             CKEDITOR.on('instanceReady',
                     function (evt) {
                         var editor = evt.editor;
                         editor.execCommand('maximize');
                     });
-        {% endif %}
-
-    </script>
+        </script>
+    {% endif %}
 {% endblock %}
