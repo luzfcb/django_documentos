@@ -25,23 +25,26 @@ jQuery(document).ready(function ($) {
 	jQuery(document).on('click', '.djpopup', function () {
 
 		var popUpObj;
-
-		var id = $(this).attr('id');
-		var w = $(this).data('width');
-		var h = $(this).data('height');
-		var s = $(this).data('scrollbars');
-		var fullscreen = $(this).data('fullscreen');
-		if (fullscreen === "no") {
-			console.log(fullscreen);
-		} else {
-			console.log('nada');
-		}
-
-		id = uuid.v4();
-		var left = (screen.width / 2) - (w / 2);
-		var top = (screen.height / 2) - (h / 2);
-		var features = 'scrollbars=' + s + ',resizable=yes,width=' + w + ',height=' + h + ',top=' + top + ',left=' + left + ',modal=yes';
+		//var id = $(this).attr('id');
+		var id = uuid.v4();
 		var url_to_open = $(this).prop("href");
+
+
+		//var w = $(this).data('width');
+		//var h = $(this).data('height');
+		//var s = $(this).data('scrollbars');
+		//var fullscreen = $(this).data('fullscreen');
+		//if (fullscreen === "no") {
+		//	console.log(fullscreen);
+		//} else {
+		//	console.log('nada');
+		//}
+        //
+        //
+		//var left = (screen.width / 2) - (w / 2);
+		//var top = (screen.height / 2) - (h / 2);
+		//var features = 'scrollbars=' + s + ',resizable=yes,width=' + w + ',height=' + h + ',top=' + top + ',left=' + left + ',modal=yes';
+		//
 
 		if (!contem(url_to_open, 'popup=')) {
 			if (contem(url_to_open, '?')) {
@@ -82,12 +85,13 @@ jQuery(document).ready(function ($) {
 	});
 
 	function autoHideModalDivIfPopUPClosed(popUpObj) {
-		var timer = setInterval(function () {
-			if (popUpObj.closed) {
-				clearInterval(timer);
-				HideModalDiv('');
-			}
-		}, 500);
+			var timer = setInterval(function () {
+				if (popUpObj.closed) {
+					clearInterval(timer);
+					HideModalDiv('');
+				}
+			}, 500);
+
 	}
 
 	function LoadModalDiv(popUpObj) {
@@ -96,7 +100,7 @@ jQuery(document).ready(function ($) {
 		if (bcgDiv === null) {
 			bcgDiv = document.createElement("div");
 			bcgDiv.setAttribute("id", jdDivBackground_id);
-			bcgDiv.setAttribute("style", " position:fixed; top:0px; left:0px;background-color:black; z-index:100;opacity: 0.8;filter:alpha(opacity=60); -moz-opacity: 0.8; overflow:hidden; display:none");
+			bcgDiv.setAttribute("style", " position:fixed; top:0px; left:0px;background-color:black; z-index:100000;opacity: 0.8;filter:alpha(opacity=60); -moz-opacity: 0.8; overflow:hidden; display:none");
 			document.body.appendChild(bcgDiv);
 		}
 

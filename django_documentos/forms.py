@@ -57,6 +57,7 @@ class NextFormMixin(forms.Form):
 
 class DocumentoFormCreate(SaveHelperFormMixin, NextFormMixin, IsPopUpMixin, forms.ModelForm):
     # cabecalho = ckeditor_fields.RichTextField(blank=True)
+    titulo = forms.CharField(max_length=500, widget=forms.HiddenInput())
     conteudo = forms.CharField(widget=CKEditorWidget(), label='')
 
     # rodape = ckeditor_fields.RichTextField(blank=True)

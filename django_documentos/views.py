@@ -158,6 +158,7 @@ class AuditavelViewMixin(object):
             form.instance.modificado_por = self.request.user
         return super(AuditavelViewMixin, self).form_valid(form)
 
+
 class PopupMixin(object):
 
     def get_initial(self):
@@ -175,6 +176,7 @@ class PopupMixin(object):
         context = super(PopupMixin, self).get_context_data(**kwargs)
         context['popup'] = self.get_is_popup()
         return context
+
 
 class DocumentoCreateView(AjaxableResponseMixin, NextURLMixin, PopupMixin, AuditavelViewMixin, generic.CreateView):
     template_name = 'django_documentos/documento_create.html'
@@ -217,7 +219,16 @@ class DocumentoCreateView(AjaxableResponseMixin, NextURLMixin, PopupMixin, Audit
         initial.update({
                         'conteudo': BIG_SAMPLE_HTML}
                        )
+        if self.get_titulo():
+            initial.update({
+                'titulo': self.get_titulo()
+            })
+        from pprint import pprint
+        pprint(initial)
         return initial
+
+    def get_titulo(self):
+        return self.request.GET.get('djdtitulo', False)
 
 
 class CloseView(NextURLMixin, generic.TemplateView):
@@ -266,6 +277,7 @@ class DocumentoUpdateView(DocumentoAssinadoRedirectMixin, AuditavelViewMixin, Ne
     model = Documento
     form_class = DocumentoFormCreate
     # success_url = reverse_lazy('documentos:list')
+
     def get_success_url(self):
         next_kwarg_name = self.get_next_kwarg_name()
         next_page_url = self.get_next_page_url()
