@@ -5,6 +5,7 @@ from django import template
 from django.forms.models import modelform_factory
 
 from simple_history.forms import new_readonly_form_class
+from ..utils import identificador
 
 register = template.Library()
 
@@ -27,3 +28,10 @@ def as_form_media(model_instance):
     form_instance = readonly_new_form_class(instance=model_instance)
 
     return form_instance.media
+
+
+@register.filter
+def identificador_versao(model_instance):
+    if model_instance:
+        return identificador.document(model_instance.pk, model_instance.versao_numero)
+

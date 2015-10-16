@@ -13,14 +13,20 @@
         <div class="no-print">
             {% if history_records_object_list %}
                 <div class="list-group ">
-                    {% for history_records_object in history_records_object_list %}
-                        <a class="list-group-item" href="{% url 'documentos:revert' pk=history_records_object.pk %}">
-                            <p class="list-group-item-text">
-                                {{ history_records_object }} <span class="badge">Visualizar/restaurar</span>
-                            </p>
-                        </a>
-
-                    {% endfor %}
+                    <ul>
+                        {% for history_records_object in history_records_object_list %}
+                            <li>
+                                <a class="list-group-item"
+                                   href="{% url 'documentos:revert' pk=history_records_object.pk %}">
+                                    <p class="list-group-item-text">
+                                        {{ history_records_object|identificador_versao }} - Criado
+                                        por {{ history_records_object.criador_por.username }}
+                                        {{ history_records_object }} <span class="badge">Visualizar/restaurar</span>
+                                    </p>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
                 </div>
 
                 {% if  history_records_is_paginated %}
@@ -67,14 +73,14 @@
                 </div>
             {% endif %}
         </div>
-{#        {% if object %}#}
-{#            <page size="A4">#}
-{#                {{ object.conteudo|safe }}#}
-{#            </page>#}
-{##}
-{#        {% else %}#}
-{#            Nada para mostrar#}
-{#        {% endif %}#}
+        {#        {% if object %}#}
+        {#            <page size="A4">#}
+        {#                {{ object.conteudo|safe }}#}
+        {#            </page>#}
+        {##}
+        {#        {% else %}#}
+        {#            Nada para mostrar#}
+        {#        {% endif %}#}
     </article>
 
 {% endblock conteudo_app %}

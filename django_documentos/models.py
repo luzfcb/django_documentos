@@ -179,7 +179,7 @@ USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
 
 @python_2_unicode_compatible
 class Documento(models.Model):
-    titulo = models.CharField(blank=True, max_length=500, editable=False)
+    titulo = models.CharField(blank=True, max_length=500, editable=True)
 
     conteudo = ckeditor_fields.RichTextField()
 
