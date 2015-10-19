@@ -1,4 +1,4 @@
-{% extends "django_documentos/documento_detail_base.html" %}
+{% extends popup|yesno:"django_documentos/documento_detail_popup_base.html,django_documentos/documento_detail_base.html" %}
 {% load django_documentos_tags %}
 
 
@@ -11,7 +11,7 @@
 
 
 {% block conteudo_app %}
-    {{ block.super }}
+{#    {{ block.super }}#}
 
     {% if messages %}
         <ul class="messages">
@@ -24,7 +24,7 @@
         <a href="{% url 'documentos:history' pk=object.pk %}" class="btn btn-primary"> Historico de Modificações</a>
     {% endif %}
 
-    <article>
+
         {% if object %}
                         {{ object.conteudo|safe }}
             <br>
@@ -35,5 +35,5 @@
         {% else %}
             Nada para mostrar
         {% endif %}
-    </article>
+
 {% endblock conteudo_app %}

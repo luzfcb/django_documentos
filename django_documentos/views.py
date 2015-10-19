@@ -13,6 +13,7 @@ from django.core.urlresolvers import reverse, reverse_lazy
 from django.http import HttpResponse, JsonResponse, HttpResponseForbidden
 from django.shortcuts import redirect, resolve_url
 # from django.utils.http import is_safe_url
+from django.utils import six
 from django.views import generic
 from django.views.generic.detail import SingleObjectMixin, BaseDetailView
 
@@ -160,7 +161,6 @@ class AuditavelViewMixin(object):
 
 
 class PopupMixin(object):
-
     def get_initial(self):
         initial = super(PopupMixin, self).get_initial()
         initial.update({'is_popup': self.get_is_popup(), })
@@ -178,7 +178,35 @@ class PopupMixin(object):
         return context
 
 
-class DocumentoCreateView(AjaxableResponseMixin, NextURLMixin, PopupMixin, AuditavelViewMixin, generic.CreateView):
+class CopyDocumentContentMixin(object):
+
+    def get_initial(self):
+        initial = super(CopyDocumentContentMixin, self).get_initial()
+        documento_instance = self.get_documento_instance()
+        if documento_instance:
+            initial.update({
+                'conteudo': documento_instance.conteudo}
+            )
+        return initial
+
+    def get_documento_pk(self):
+        documento_pk = self.request.GET.get('djddoc', False)
+        if documento_pk:
+            if isinstance(documento_pk, six.string_types):
+                documento_pk = int(documento_pk)
+            if documento_pk <= 0:
+                return False
+        return documento_pk
+
+    def get_documento_instance(self):
+        documento_pk = self.get_documento_pk()
+        if documento_pk:
+            return self.model.objects.get(id=documento_pk)
+        return documento_pk
+
+
+class DocumentoCreateView(AjaxableResponseMixin, CopyDocumentContentMixin, NextURLMixin, PopupMixin, AuditavelViewMixin,
+                          generic.CreateView):
     template_name = 'django_documentos/documento_create.html'
     model = Documento
     form_class = DocumentoFormCreate
@@ -216,9 +244,9 @@ class DocumentoCreateView(AjaxableResponseMixin, NextURLMixin, PopupMixin, Audit
 
     def get_initial(self):
         initial = super(DocumentoCreateView, self).get_initial()
-        initial.update({
-                        'conteudo': BIG_SAMPLE_HTML}
-                       )
+        # initial.update({
+        #                 'conteudo': BIG_SAMPLE_HTML}
+        #                )
         if self.get_titulo():
             initial.update({
                 'titulo': self.get_titulo()
@@ -240,7 +268,7 @@ class CloseView(NextURLMixin, generic.TemplateView):
         return context
 
 
-class DocumentoDetailView(generic.DetailView):
+class DocumentoDetailView(PopupMixin, generic.DetailView):
     template_name = 'django_documentos/documento_detail.html'
     model = Documento
 
@@ -267,12 +295,14 @@ class DocumentoAssinadoRedirectMixin(object):
             if self.object.esta_assinado:
                 detail_url = reverse('documentos:detail', kwargs={'pk': self.object.pk})
                 messages.add_message(request, messages.INFO,
-                                     'Documentos assinados só podem ser visualizados - {}'.format(self.__class__.__name__))
+                                     'Documentos assinados só podem ser visualizados - {}'.format(
+                                         self.__class__.__name__))
                 return redirect(detail_url, permanent=False)
         return ret
 
 
-class DocumentoUpdateView(DocumentoAssinadoRedirectMixin, AuditavelViewMixin, NextURLMixin, PopupMixin, generic.UpdateView):
+class DocumentoUpdateView(DocumentoAssinadoRedirectMixin, AuditavelViewMixin, NextURLMixin, PopupMixin,
+                          generic.UpdateView):
     template_name = 'django_documentos/documento_update.html'
     model = Documento
     form_class = DocumentoFormCreate
@@ -415,4 +445,3 @@ class AssinarDocumentoView2(generic.UpdateView):
         current_logged_user = self.request.user
         kwargs['current_logged_user'] = current_logged_user
         return kwargs
-

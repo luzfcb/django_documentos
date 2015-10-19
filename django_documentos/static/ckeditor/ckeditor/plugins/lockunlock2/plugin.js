@@ -34,7 +34,6 @@ var contador = 0;
 			// Put ur init code here.
 			editor.widgets.add('lockunlock2', {
 				// Widget code.
-				vaca: 'muuu',
 				//dialog: 'lockunlock2',
 				pathName: lang.pathName,
 				// We need to have wrapping element, otherwise there are issues in
@@ -76,7 +75,6 @@ var contador = 0;
 						//console.log("getSelectedHtml: " + editor.getSelectedHtml(true));
 
 						//div.appendHtml(selected_html);
-						//this.element.setText('[[' + this.data.name + 'vaca]]');
 						//console.dir(this.element);
 						this.element.appendHtml(selected_html);
 					}
