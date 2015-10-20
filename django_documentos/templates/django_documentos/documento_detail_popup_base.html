@@ -13,12 +13,12 @@
             article {
                 background: white;
                 width: 21cm;
-            {#            height: 29.7cm;#} display: block;
                 margin: 0 auto 0.5cm;
                 box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
 
                 padding: 30px;
-            {#            font-size: 11pt;#}{#            font-family: Arial;#}{#            text-justify: distribute;#} line-height: 22pt;
+
+                line-height: 22pt;
             }
 
             @media print {
@@ -33,11 +33,11 @@
                 display: block;
             }
 
-            {#        @media all {#}
-            {#            .page-break {#}
-            {#                display: none;#}
-            {#            }#}
-            {#        }#}
+                    @media all {
+                        .page-break {
+                            display: none;
+                        }
+                    }
 
             @media print {
                 .cke_pagebreak {
@@ -48,7 +48,7 @@
         </style>
     {% endblock %}
     {% block extra_head_js %}
-    {% endblock extra_head_js %}s
+    {% endblock extra_head_js %}
 </head>
 <body>
 <article>
@@ -56,17 +56,18 @@
 
     {% endblock conteudo_app %}
 </article>
-<script>if (!window.jQuery) {
-    document.write('<script src="{% static 'django_documentos/js/jquery/1.11.3/jquery.min.js' %}"><\/script>');
-    document.write('<script src="{% static 'django_documentos/js/jquery/1.11.3/jquery-migrate.min.js' %}"><\/script>');
-}
-</script>
+{#<script>#}
+{#    if (!window.jQuery) {#}
+{#        document.write('<script src="{% static 'django_documentos/js/jquery/1.11.3/jquery.min.js' %}"><\/script>');#}
+{#        document.write('<script src="{% static 'django_documentos/js/jquery/1.11.3/jquery-migrate.min.js' %}"><\/script>');#}
+{#    }#}
+{#</script>#}
 
-<script src="{% static 'django_documentos/js/jquery.qrcode.min.js' %}"></script>
-<script type="text/javascript" src="{% static "django_documentos/js/autosize.js" %}"></script>
-<script>
-    {#    autosize(document.querySelectorAll('textarea'));#}
-</script>
+{#<script src="{% static 'django_documentos/js/jquery.qrcode.min.js' %}"></script>#}
+{#<script type="text/javascript" src="{% static "django_documentos/js/autosize.js" %}"></script>#}
+{#<script>#}
+{#        autosize(document.querySelectorAll('textarea'));#}
+{#</script>#}
 
 {% block js_app %}
 {% endblock %}

@@ -7,7 +7,7 @@ from django.db import models
 from django.db.models import Max
 from django.utils import timezone
 from django.utils.six import python_2_unicode_compatible
-from model_utils import tracker
+from model_utils import tracker, FieldTracker
 
 from ckeditor import fields as ckeditor_fields
 from simple_history.models import HistoricalRecords
@@ -177,6 +177,13 @@ USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
 #         # self.save(*args, **kwargs)
 
 
+class DocumentoManager(models.Manager):
+    def get_queryset(self):
+        return super(DocumentoManager, self).get_queryset().filter(esta_ativo=True)
+
+    def assinados(self):
+        return super(DocumentoManager, self).get_queryset().filter(esta_assinado=True)
+
 @python_2_unicode_compatible
 class Documento(models.Model):
     titulo = models.CharField(blank=True, max_length=500, editable=True)
@@ -224,6 +231,8 @@ class Documento(models.Model):
     versao_numero = models.IntegerField(default=1, auto_created=True, editable=False)
 
     versoes = HistoricalRecords()
+    objects = DocumentoManager()
+    # tracker = FieldTracker()
 
     def save(self, *args, **kwargs):
 
