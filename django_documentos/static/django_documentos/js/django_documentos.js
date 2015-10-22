@@ -28,7 +28,9 @@ jQuery(document).ready(function ($) {
 		//var id = $(this).attr('id');
 		var id = uuid.v4();
 		var url_to_open = $(this).prop("href");
-
+		var desabilitado = $(this).attr("disabled");
+		console.log(desabilitado);
+		if(!desabilitado){
 
 		//var w = $(this).data('width');
 		//var h = $(this).data('height');
@@ -39,8 +41,8 @@ jQuery(document).ready(function ($) {
 		//} else {
 		//	console.log('nada');
 		//}
-        //
-        //
+		//
+		//
 		//var left = (screen.width / 2) - (w / 2);
 		//var top = (screen.height / 2) - (h / 2);
 		//var features = 'scrollbars=' + s + ',resizable=yes,width=' + w + ',height=' + h + ',top=' + top + ',left=' + left + ',modal=yes';
@@ -50,9 +52,9 @@ jQuery(document).ready(function ($) {
 			if (contem(url_to_open, '?')) {
 				url_to_open = inserirApos('?', url_to_open, "popup=1&");
 			} else {
-				if(contem(url_to_open, '#')){
+				if (contem(url_to_open, '#')) {
 					url_to_open = inserirAntes('#', url_to_open, "?popup=1");
-				}else{
+				} else {
 					url_to_open = url_to_open + "?popup=1"
 				}
 			}
@@ -80,6 +82,7 @@ jQuery(document).ready(function ($) {
 
 		LoadModalDiv(popUpObj);
 		autoHideModalDivIfPopUPClosed(popUpObj);
+	}
 		return false;
 
 	});
