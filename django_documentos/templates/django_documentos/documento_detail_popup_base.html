@@ -8,9 +8,11 @@
         <style>
             body {
                 background: rgb(204, 204, 204);
+                z-index: 10;
             }
 
             article {
+                z-index: 20;
                 background: white;
                 width: 21cm;
                 margin: 0 auto 0.5cm;
@@ -33,11 +35,11 @@
                 display: block;
             }
 
-                    @media all {
-                        .page-break {
-                            display: none;
-                        }
-                    }
+            @media all {
+                .page-break {
+                    display: none;
+                }
+            }
 
             @media print {
                 .cke_pagebreak {
@@ -45,16 +47,34 @@
                     page-break-before: always;
                 }
             }
+
+
+            #bg-text {
+                color: lightgrey;
+                font-size: 80px;
+                z-index: -200;
+                background-repeat: repeat;
+                background-repeat: repeat;
+                transform: rotate(300deg);
+                -webkit-transform: rotate(300deg);
+
+            }
+
         </style>
+
     {% endblock %}
     {% block extra_head_js %}
     {% endblock extra_head_js %}
 </head>
 <body>
 <article>
-    {% block conteudo_app %}
 
-    {% endblock conteudo_app %}
+
+        {% block conteudo_app %}
+
+        {% endblock conteudo_app %}
+        <p id="bg-text">Rascunho</p>
+
 </article>
 {#<script>#}
 {#    if (!window.jQuery) {#}

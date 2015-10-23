@@ -16,3 +16,8 @@ http://codepen.io/anon/pen/EjWmON
 http://jsfiddle.net/oleq/yf5hgkuj/
 
 http://tableless.com.br/dicas-de-css-para-impressao/
+
+
+http://codepen.io/Haxz/pen/qEZNRL
+
+http://codepen.io/YuvarajTana/pen/auiqx
