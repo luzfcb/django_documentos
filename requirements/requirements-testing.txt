@@ -12,6 +12,7 @@ codecov
 Pillow
 django-bootstrap3
 django-bootstrap-pagination
+django-spurl
 django-extensions
 django-parsley
 pygraphviz

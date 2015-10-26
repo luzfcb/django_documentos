@@ -269,7 +269,8 @@ class CloseView(NextURLMixin, generic.TemplateView):
 
 
 class DocumentoDetailView(PopupMixin, generic.DetailView):
-    template_name = 'django_documentos/documento_detail.html'
+    # template_name = 'django_documentos/documento_detail.html'
+    template_name = 'django_documentos/documento_validacao_detail.html'
     model = Documento
 
     def get_context_data(self, **kwargs):
@@ -370,7 +371,10 @@ class DocumentoValidacaoView(generic.FormView):
     template_name = 'django_documentos/documento_validacao.html'
     model = Documento
     form_class = DocumetoValidarForm
-    success_url = reverse_lazy('documentos:validar')
+
+    def __init__(self, *args, **kwargs):
+        super(DocumentoValidacaoView, self).__init__(*args, **kwargs)
+        self.documento_instance = None
 
     def get(self, request, *args, **kwargs):
         if self.request.is_ajax() and request.GET and 'refresh_captcha' in request.GET:
@@ -383,11 +387,31 @@ class DocumentoValidacaoView(generic.FormView):
 
     def get_initial(self):
         initial = super(DocumentoValidacaoView, self).get_initial()
+        assinatura_hash = self.request.GET.get('h')
+        if assinatura_hash:
+            cleaned_hash = assinatura_hash.split('$')[-1]
+            initial.update({
+                'assinatura_hash': cleaned_hash
+            })
         # initial.update({
         #     'codigo_crc': 'ABCD' * 4
         # })
         return initial
 
+    def get_success_url(self):
+        pk = self.get_object().pk
+        return reverse_lazy('documentos:validar-detail', kwargs={'pk': pk})
+
+    def get_object(self):
+        return self.documento_instance
+
+    def form_valid(self, form):
+        self.documento_instance = form.documento
+        return super(DocumentoValidacaoView, self).form_valid(form)
+
+
+class DocumentoDetailValidarView(DocumentoDetailView):
+    template_name = 'django_documentos/documento_validacao_detail.html'
 
 class PDFViewer(generic.TemplateView):
     template_name = 'django_documentos/pdf_viewer.html'
@@ -428,7 +452,7 @@ class AssinarDocumentoView(DocumentoAssinadoRedirectMixin, AuditavelViewMixin, g
         return ret
 
     def get_success_url(self):
-        detail_url = reverse('documentos:assinar', kwargs={'pk': self.object.pk})
+        detail_url = reverse('documentos:validar-detail', kwargs={'pk': self.object.pk})
         return detail_url
 
 
@@ -445,3 +469,8 @@ class AssinarDocumentoView2(generic.UpdateView):
         current_logged_user = self.request.user
         kwargs['current_logged_user'] = current_logged_user
         return kwargs
+
+
+class ImprimirView(generic.TemplateView):
+    template_name = 'django_documentos/documento_print.html'
+

@@ -1,22 +1,22 @@
-function contem(a, b){
+function contem(a, b) {
 	return String.prototype.indexOf.call(String.prototype.toLowerCase.call(a), String.prototype.toLowerCase.call(b)) !== -1;
 }
-function inserirApos(caracter, strOriginal, strParaInserir){
+function inserirApos(caracter, strOriginal, strParaInserir) {
 	// obs: insere no inicio se caractere nao for encontrado
 	var idx = String.prototype.indexOf.call(strOriginal, caracter);
-	if(idx == strOriginal.length){
+	if (idx == strOriginal.length) {
 		return strOriginal + strParaInserir
-	}else {
+	} else {
 		idx = idx + 1;
 		return (strOriginal.slice(0, idx) + strParaInserir + strOriginal.slice(idx + Math.abs(0)));
 	}
 }
-function inserirAntes(caracter, strOriginal, strParaInserir){
+function inserirAntes(caracter, strOriginal, strParaInserir) {
 	// obs: insere no inicio se caractere nao for encontrado
 	var idx = String.prototype.indexOf.call(strOriginal, caracter);
-	if(idx == strOriginal.length || idx < 0){
+	if (idx == strOriginal.length || idx < 0) {
 		return strParaInserir + strOriginal
-	}else {
+	} else {
 		return (strOriginal.slice(0, idx) + strParaInserir + strOriginal.slice(idx + Math.abs(0)));
 	}
 }
@@ -29,71 +29,84 @@ jQuery(document).ready(function ($) {
 		var id = uuid.v4();
 		var url_to_open = $(this).prop("href");
 		var desabilitado = $(this).attr("disabled");
-		console.log(desabilitado);
-		if(!desabilitado){
 
-		//var w = $(this).data('width');
-		//var h = $(this).data('height');
-		//var s = $(this).data('scrollbars');
-		//var fullscreen = $(this).data('fullscreen');
-		//if (fullscreen === "no") {
-		//	console.log(fullscreen);
-		//} else {
-		//	console.log('nada');
-		//}
-		//
-		//
-		//var left = (screen.width / 2) - (w / 2);
-		//var top = (screen.height / 2) - (h / 2);
-		//var features = 'scrollbars=' + s + ',resizable=yes,width=' + w + ',height=' + h + ',top=' + top + ',left=' + left + ',modal=yes';
-		//
+		if (!desabilitado) {
 
-		if (!contem(url_to_open, 'popup=')) {
-			if (contem(url_to_open, '?')) {
-				url_to_open = inserirApos('?', url_to_open, "popup=1&");
-			} else {
-				if (contem(url_to_open, '#')) {
-					url_to_open = inserirAntes('#', url_to_open, "?popup=1");
+
+			//var h = $(this).data('height');
+			//var s = $(this).data('scrollbars');
+			//var fullscreen = $(this).data('fullscreen');
+			//if (fullscreen === "no") {
+			//	console.log(fullscreen);
+			//} else {
+			//	console.log('nada');
+			//}
+			//
+			//
+			//var left = (screen.width / 2) - (w / 2);
+			//var top = (screen.height / 2) - (h / 2);
+			//var features = 'scrollbars=' + s + ',resizable=yes,width=' + w + ',height=' + h + ',top=' + top + ',left=' + left + ',modal=yes';
+			//
+
+			if (!contem(url_to_open, 'popup=')) {
+				if (contem(url_to_open, '?')) {
+					url_to_open = inserirApos('?', url_to_open, "popup=1&");
 				} else {
-					url_to_open = url_to_open + "?popup=1"
+					if (contem(url_to_open, '#')) {
+						url_to_open = inserirAntes('#', url_to_open, "?popup=1");
+					} else {
+						url_to_open = url_to_open + "?popup=1"
+					}
 				}
 			}
+			// var popup_windows_options = 'all=yes';
+			var popup_windows_options = "toolbar=no," +
+			    "scrollbars=no," +
+			    "location=no," +
+			    "statusbar=no," +
+			    "menubar=no," +
+			    "resizable=0," +
+			    "width=980," +
+			    "height=980," +
+			    //"left = 490," +
+			    //"top=300"
+				"";
+
+			popUpObj = window.open(url_to_open, id, popup_windows_options);
+
+			if (window.focus) {
+				popUpObj.focus();
+			}
+
+
+			//popUpObj = window.open(url_to_open,
+			//    id,
+			//    "ModalPopUp",
+			//    "toolbar=no," +
+			//    "scrollbars=no," +
+			//    "location=no," +
+			//    "statusbar=no," +
+			//    "menubar=no," +
+			//    "resizable=0," +
+			//    "width=100," +
+			//    "height=100," +
+			//    "left = 490," +
+			//    "top=300");
+
+			LoadModalDiv(popUpObj);
+			autoHideModalDivIfPopUPClosed(popUpObj);
 		}
-		popUpObj = window.open(url_to_open, id, 'all=yes');
-
-		if (window.focus) {
-			popUpObj.focus();
-		}
-
-
-		//popUpObj = window.open(url_to_open,
-		//    id,
-		//    "ModalPopUp",
-		//    "toolbar=no," +
-		//    "scrollbars=no," +
-		//    "location=no," +
-		//    "statusbar=no," +
-		//    "menubar=no," +
-		//    "resizable=0," +
-		//    "width=100," +
-		//    "height=100," +
-		//    "left = 490," +
-		//    "top=300");
-
-		LoadModalDiv(popUpObj);
-		autoHideModalDivIfPopUPClosed(popUpObj);
-	}
 		return false;
 
 	});
 
 	function autoHideModalDivIfPopUPClosed(popUpObj) {
-			var timer = setInterval(function () {
-				if (popUpObj.closed) {
-					clearInterval(timer);
-					HideModalDiv('');
-				}
-			}, 500);
+		var timer = setInterval(function () {
+			if (popUpObj.closed) {
+				clearInterval(timer);
+				HideModalDiv('');
+			}
+		}, 500);
 
 	}
 

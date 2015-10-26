@@ -1,16 +1,9 @@
-{% extends "django_documentos/base.html" %}
+{% extends "django_documentos/documento_assinar_base.html" %}
 {% load staticfiles %}
 {% load crispy_forms_tags %}
 
-{#<!DOCTYPE html>#}
-{#<html lang="en">#}
-{#<head>#}
-{#    <meta charset="UTF-8">#}
-{#    <title></title>#}
-{#    <link type="text/css" href="{% static "djangular/css/bootstrap3.css" %}" rel="stylesheet">#}
-{#    <link type="text/css" href="{% static "djangular/css/styles.css" %}" rel="stylesheet">#}
-{#</head>#}
-<body>
+
+
 {% block conteudo_app %}
     {% if messages %}
         <ul class="messages">
@@ -23,12 +16,6 @@
     {% if form and object %}
         Tem certeza que deseja assinar o documento {{ object.identificador_versao }}
         {% crispy form %}
-        {#        <form  name="{{ form.form_name }}" action="{% url 'documentos:assinar' object.pk %}" method="post">#}
-        {#            {% csrf_token %}#}
-        {#            {{ form }}#}
-        {#            <input type="submit" value="Salvar">#}
-        {##}
-        {#        </form>#}
     {% endif %}
 
 {% endblock conteudo_app %}
@@ -43,7 +30,6 @@
     {% if form %}
         {{ form.media }}
     {% endif %}
-    <script src="{% static 'djangular/js/django-angular.min.js' %}" type="text/javascript"></script>
 
 {% endblock js_app %}
 

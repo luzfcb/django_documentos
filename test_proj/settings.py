@@ -51,6 +51,7 @@ INSTALLED_APPS = INSTALLED_APPS + (
     'extra_views',
     'braces',
     'redactor',
+    'spurl',
     'ckeditor',
     'ckeditor_uploader',
     'django_wysiwyg',

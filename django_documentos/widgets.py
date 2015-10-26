@@ -171,7 +171,7 @@ class SplitedHashField3(forms.MultiValueField):
         kwargs.pop('widget', None)  # descarta qualquer widget
         value = kwargs.get('initial', None) or 'A' * self.split_len
         self.value_size = len(value)
-        print(value)
+        print('SplitedHashField3:', value)
         regexes = {}
         fields = []
         for max_length in self.split_guide:
@@ -186,7 +186,7 @@ class SplitedHashField3(forms.MultiValueField):
 
     def clean(self, value):
         pre_clean = super(SplitedHashField3, self).clean(value)
-        print('clean', value)
+        print('SplitedHashField3:', 'clean', value)
         # if pre_clean:
         #     for data in pre_clean:
         #         if data and len(data) < self.split_into:
@@ -206,7 +206,7 @@ class SplitedHashField3(forms.MultiValueField):
         return super(SplitedHashField3, self).prepare_value(value)
 
     def validate(self, value):
-        print('validate:', value)
+        print('SplitedHashField3', 'validate:', value)
         # if value:
         #     for data in value:
         #         if data and len(data) < self.split_into:

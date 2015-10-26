@@ -3,6 +3,7 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 from django.contrib import admin
 from django.core.urlresolvers import reverse
+from django.utils import timezone
 from django.utils.html import format_html
 
 from simple_history.admin import SimpleHistoryAdmin
@@ -35,7 +36,8 @@ class DocumentContentAdmin(admin.ModelAdmin):
 class DocTeste(SimpleHistoryAdmin):
     list_display = (
         # 'criado_em', 'criado_por', 'versao_numero', 'assinatura_hash', 'visualizar_versao'
-        'identificador_versao', 'esta_assinado', 'assinatura_hash', 'criado_em', 'titulo', 'criado_por', 'modificado_em',
+        'identificador_versao', 'esta_assinado', 'assinatura_hash', 'criado_em', 'titulo', 'criado_por',
+        'modificado_em',
         'modificado_por', 'revertido_em', 'revertido_por',
         'revertido_da_versao', 'esta_ativo', 'esta_bloqueado', 'versao_numero', 'visualizar_versao'
     )
@@ -50,6 +52,7 @@ class DocTeste(SimpleHistoryAdmin):
     # readonly_fields = ('criado_em', 'criado_por', 'modificado_em', 'modificado_por', 'revertido_em', 'revertido_por',
     #                    'revertido_da_versao',
     #                    )
+    actions = ['remover_assinatura', ]
 
     def visualizar_versao(self, obj):
         url_triplet = self.admin_site.name, self.model._meta.app_label, self.model._meta.model_name
@@ -60,6 +63,12 @@ class DocTeste(SimpleHistoryAdmin):
 
     visualizar_versao.allow_tags = True
     visualizar_versao.short_description = "Visualizar Versões"
+
+    def remover_assinatura(self, request, queryset):
+        queryset.update(assinatura_hash='', esta_assinado=False, assinado_em=None, assinado_por=None,
+                        assinatura_removida_em=timezone.now(), assinatura_removida_por=request.user)
+
+    remover_assinatura.short_description = "Remove assinatura dos documentos selecionados"
 
     def save_model(self, request, obj, form, change):
         if not obj.criado_por:

@@ -214,7 +214,7 @@ class Documento(models.Model):
                                       related_name="%(app_label)s_%(class)s_bloqueado_por", null=True,
                                       blank=True, on_delete=models.SET_NULL, editable=False)
 
-    assinatura_hash = models.TextField(blank=True, editable=False)
+    assinatura_hash = models.TextField(blank=True, editable=False, unique=True)
 
     esta_assinado = models.BooleanField(default=False, editable=True)
     assinado_em = models.DateTimeField(blank=True, null=True, editable=False)
@@ -233,6 +233,12 @@ class Documento(models.Model):
     versoes = HistoricalRecords()
     objects = DocumentoManager()
     # tracker = FieldTracker()
+
+    @property
+    def assinatura_hash_upper_limpo(self):
+        if self.assinatura_hash:
+            return self.assinatura_hash.upper().split('$')[-1]
+        return None
 
     def save(self, *args, **kwargs):
 
@@ -254,10 +260,10 @@ class Documento(models.Model):
                         'app_label': self._meta.app_label,
                         'cls': self.__class__.__name__
                     })
-        # if self.esta_assinado:
-        #     self.assinar_documento(None)
-        # else:
-        #     self.remover_assinatura_documento(None)
+        if not self.esta_assinado:
+            self.assinatura_hash = ""
+        if self.assinado_por:
+            print(self.assinado_por.pk, ':', self.assinado_por.get_full_name())
         super(Documento, self).save(*args, **kwargs)
 
     @property

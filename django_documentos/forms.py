@@ -94,7 +94,7 @@ class ValidarHelper(FormHelper):
 
         )
 
-        self.layout.append(Submit(name='validar', value='Validar'))
+        self.layout.append(Submit(name='validar', value='Verificar validade'))
         self.form_method = 'post'
         self.form_show_errors = True
         self.form_action = 'documentos:validar'
@@ -108,9 +108,7 @@ class ValidarHelperFormMixin(object):
         self.helper = ValidarHelper(self)
 
 
-
-class DocumetoValidarForm(ValidarHelperFormMixin, forms.ModelForm):
-    form_name = 'documento-validar-form'
+class DocumetoValidarForm(ValidarHelperFormMixin, forms.Form):
     # id = forms.CharField()
     # codigo_crc = SplitedHashField(split_into=4)
     # codigo_crc = forms.CharField(widget=SplitWidget(), initial='ABCDABCDABCDABCD')
@@ -118,17 +116,34 @@ class DocumetoValidarForm(ValidarHelperFormMixin, forms.ModelForm):
     #                                     initial='ABCDABCDABCDABCD'
     #                                     )
     assinatura_hash = SplitedHashField3(label='Codigo CRC',
-                                        split_guide=(4, 3, 2),
-                                        #initial='AAAABBBCCDDDDDD'
+                                        split_guide=(10, 10, 10, 10),
+                                        # initial='AAAABBBCCDDDDDD'
                                         )
     captcha = CaptchaField()
+
+    def __init__(self, *args, **kwargs):
+        super(DocumetoValidarForm, self).__init__(*args, **kwargs)
+        self.documento = None
+
+    def clean_assinatura_hash(self):
+        assinatura_hash = self.cleaned_data['assinatura_hash']
+        assinatura_hash = "sha1$djdocumentos${}".format(assinatura_hash.lower())
+        try:
+            self.documento = Documento.objects.get(assinatura_hash=assinatura_hash)
+        except Exception as e:
+                raise forms.ValidationError(
+                    "O documento não é valido"
+                )
+        return assinatura_hash
+
     class Meta:
         model = Documento
-        fields = ('assinatura_hash', )
-    # def clean_codigo_crc(self):
-    #     codigo_crc = self.cleaned_data.get('codigo_crc')
-    #     print('codigo_crc:', codigo_crc)
-    #     return codigo_crc
+        fields = ('assinatura_hash',)
+        # def clean_codigo_crc(self):
+        #     codigo_crc = self.cleaned_data.get('codigo_crc')
+        #     print('codigo_crc:', codigo_crc)
+        #     return codigo_crc
+
 
 # DocumetoValidarForm = parsleyfy(DocumetoValidarForm22)
 
@@ -174,7 +189,12 @@ class AssinarDocumento(AssinarDocumentoHelperFormMixin, forms.ModelForm):
     class Meta:
         model = Documento
         # fields = '__all__'
-        fields = ('assinado_por', )
+        fields = ('assinado_por',)
+
+    def clean_assinado_por(self):
+        assinado_por = self.cleaned_data.get('assinado_por')
+        print('AssinarDocumento: pk', assinado_por.pk, 'username', assinado_por.get_full_name())
+        return assinado_por
 
     def clean_password(self):
         password = self.cleaned_data.get('password')

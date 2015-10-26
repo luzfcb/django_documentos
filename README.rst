@@ -69,6 +69,7 @@ Then use it in a Django Project, put on settings file, into ``INSTALLED_APPS``::
         'crispy_forms',
         'ckeditor',
         'ckeditor_uploader',
+        'spurl',
     
         'django_documentos',
     ]

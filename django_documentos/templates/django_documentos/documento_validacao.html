@@ -1,7 +1,6 @@
-{% extends "django_documentos/base.html" %}
+{% extends "django_documentos/documento_validacao_base.html" %}
 {% load staticfiles %}
 {% load crispy_forms_tags %}
-{% load djangular_tags %}
 
 {% block extra_head_js %}
     <link type="text/css" href="{% static "djangular/css/bootstrap3.css" %}" rel="stylesheet">
@@ -18,12 +17,15 @@
 {% block conteudo_app %}
 
     {% if form %}
-        {#        {% crispy form %}#}
-        <form name="{{ form.form_name }}" action="." method="post">
-            {% csrf_token %}
-            {{ form }}
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
+                {% crispy form %}
+{#        <form name="{{ form.form_name }}" action="." method="post">#}
+{#            {% csrf_token %}#}
+{#            {{ form }}#}
+{##}
+{#            <div>#}
+{#                <button type="submit" class="btn btn-primary">Verificar validade</button>#}
+{#            </div>#}
+{#        </form>#}
     {% else %}
         Nada para mostrar
     {% endif %}
