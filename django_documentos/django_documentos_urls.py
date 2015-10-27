@@ -9,7 +9,7 @@ from .views import (
     AssinarDocumentoView, CloseView, DocumentoCreateView, DocumentoDashboardView, DocumentoDetailView,
     DocumentoGeneralDashboardView, DocumentoHistoryView, DocumentoListView, DocumentoRevertView, DocumentoUpdateView,
     DocumentoValidacaoView, PDFViewer,
-    AssinarDocumentoView2, DocumentoDetailValidarView)
+    AssinarDocumentoView2, DocumentoDetailValidarView, ImprimirView)
 
 urlpatterns = [
     url(r'^$',
@@ -59,6 +59,10 @@ urlpatterns = [
     url(r'^validar/visualizar/(?P<pk>\d+)/$',
         DocumentoDetailValidarView.as_view(),
         name='validar-detail'
+        ),
+    url(r'^imprimir/(?P<pk>\d+)/$',
+        ImprimirView.as_view(),
+        name='imprimir'
         ),
     url(r'^pdf-file/$',
         PDFViewer.as_view(),

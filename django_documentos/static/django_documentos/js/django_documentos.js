@@ -1,3 +1,13 @@
+
+var zeropad = function(n,c) {
+    var s = String(n);
+    if (s.length< c) { return zeropad("0" + n,c) }
+    else { return s } };
+
+var identificador_doc = function(id_doc, versao_doc){
+	return zeropad(id_doc, 8) + 'v' + zeropad(versao_doc, 3);
+};
+
 function contem(a, b) {
 	return String.prototype.indexOf.call(String.prototype.toLowerCase.call(a), String.prototype.toLowerCase.call(b)) !== -1;
 }

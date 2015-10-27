@@ -471,6 +471,6 @@ class AssinarDocumentoView2(generic.UpdateView):
         return kwargs
 
 
-class ImprimirView(generic.TemplateView):
+class ImprimirView(DocumentoDetailView):
     template_name = 'django_documentos/documento_print.html'
 

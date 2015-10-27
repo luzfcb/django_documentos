@@ -37,38 +37,6 @@ def identificador_versao(model_instance):
         return identificador.document(model_instance.pk, model_instance.versao_numero)
 
 
-class AbsoluteURLNode(URLNode):
-    def __init__(self, view_name, args, kwargs, asvar):
-        super(AbsoluteURLNode, self).__init__(view_name,
-            args,
-            kwargs,
-            None)
-        self.abs_asvar = asvar
-
-    def render(self, context):
-        path = super(AbsoluteURLNode, self).render(context)
-        url = context['request'].build_absolute_uri(path)
-
-        if self.abs_asvar:
-            context[self.abs_asvar] = url
-            return ''
-        else:
-            return url
-
-
-def absurl(parser, token):
-    node_instance = url(parser, token)
-    return AbsoluteURLNode(view_name=node_instance.view_name,
-        args=node_instance.args,
-        kwargs=node_instance.kwargs,
-        asvar=node_instance.asvar)
-
-
-absurl = register.tag(absurl)
-
-register = template.Library()
-
-
 """
 Usage: {{ url|absolute_uri:request }}
 
