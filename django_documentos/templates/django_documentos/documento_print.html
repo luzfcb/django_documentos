@@ -72,7 +72,7 @@
 
             .signin-form {
 
-                //margin-top: 150px;
+            / / margin-top : 150 px;
             }
 
             #bg-text {
@@ -145,7 +145,7 @@
     {% block extra_head_js %}
     {% endblock extra_head_js %}
 </head>
-<body>
+<body onload="sccPrintAndCloseOnLoad('@Request.QueryString["PrintAndClose"]');" >
 {##}
 {#<!-- section header -->#}
 {#<header class="header affix fixed no-print" data-spy="affix" data-offset-top="0">#}
@@ -398,9 +398,37 @@
     });
     //doc.save('teste.pdf');
 
-window.print();
+    window.print();
 </script>
 
+{#<script>#}
+{#    function OnClose() {#}
+{#        "use strict";#}
+{#        if (window.opener != null && !window.opener.closed) {#}
+{#            window.opener.HideModalDiv();#}
+{#            {% if next_page_url %}#}
+{#                window.opener.redirecionar("{{ next_page_url }}");#}
+{#            {% endif %}#}
+{#        }#}
+{#    }#}
+{#    window.onunload = OnClose;#}
+{#    window.close();#}
+{#</script>#}
+
+<script>
+    function printAndCloseOnLoad(printAndClose) {
+        if (printAndClose) {
+            // close self without prompting
+            window.open('', '_self', '');
+            window.close();
+        }
+    }
+
+    $(document).ready(function () {
+        if (window.location.search.indexOf("PrintAndClose=") > 0)
+            print();
+    });
+</script>
 {% block js_app %}
 {% endblock %}
 </body>

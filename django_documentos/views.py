@@ -268,7 +268,7 @@ class CloseView(NextURLMixin, generic.TemplateView):
         return context
 
 
-class DocumentoDetailView(PopupMixin, generic.DetailView):
+class DocumentoDetailView(NextURLMixin, PopupMixin, generic.DetailView):
     # template_name = 'django_documentos/documento_detail.html'
     template_name = 'django_documentos/documento_validacao_detail.html'
     model = Documento
@@ -334,7 +334,7 @@ class DocumentoUpdateView(DocumentoAssinadoRedirectMixin, AuditavelViewMixin, Ne
         return close_url
 
 
-class DocumentoHistoryView(HistoryRecordListViewMixin, generic.DetailView):
+class DocumentoHistoryView(HistoryRecordListViewMixin, NextURLMixin, PopupMixin, generic.DetailView):
     template_name = 'django_documentos/documento_detail_with_versions.html'
     model = Documento
     history_records_paginate_by = 2
