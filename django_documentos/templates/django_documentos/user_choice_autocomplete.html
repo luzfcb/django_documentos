@@ -1,0 +1,20 @@
+{% load i18n %}
+
+<span class="block person" data-value="{{ choice.pk }}">
+    <img src="{{ choice.servidor.foto.url }}" />
+    {{ choice.first_name }} {{ choice.last_name }}
+
+{#    <a href="{{ choice.get_absolute_url }}">#}
+{#        {{ choice.first_name }} {{ choice.last_name }}#}
+{#    </a>#}
+{##}
+{#    <a href="{% url 'admin:persons_person_change' choice.pk %}">#}
+{#        {% trans 'Edit person' %}#}
+{#    </a>#}
+{##}
+{#    {% if choice.company %}#}
+{#    <a href="{{ choice.get_absolute_url }}">#}
+{#        {{ choice.company }}#}
+{#    </a>#}
+{#    {% endif %}#}
+</span>

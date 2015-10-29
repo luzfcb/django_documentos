@@ -6,6 +6,7 @@ from django.contrib.auth.hashers import SHA1PasswordHasher
 from django.db import models
 from django.db.models import Max
 from django.utils import timezone
+from django.utils.crypto import get_random_string
 from django.utils.six import python_2_unicode_compatible
 from model_utils import tracker, FieldTracker
 
@@ -214,7 +215,8 @@ class Documento(models.Model):
                                       related_name="%(app_label)s_%(class)s_bloqueado_por", null=True,
                                       blank=True, on_delete=models.SET_NULL, editable=False)
 
-    assinatura_hash = models.TextField(blank=True, editable=False, unique=True)
+    assinatura_hash = models.TextField(blank=True, editable=False, unique=True, null=True)
+    # assinatura_salto = models.TextField(blank=True, editable=False, unique=True, null=True)
 
     esta_assinado = models.BooleanField(default=False, editable=True)
     assinado_em = models.DateTimeField(blank=True, null=True, editable=False)
@@ -261,7 +263,7 @@ class Documento(models.Model):
                         'cls': self.__class__.__name__
                     })
         if not self.esta_assinado:
-            self.assinatura_hash = ""
+            self.assinatura_hash = None
         if self.assinado_por:
             print(self.assinado_por.pk, ':', self.assinado_por.get_full_name())
         super(Documento, self).save(*args, **kwargs)
@@ -281,15 +283,17 @@ class Documento(models.Model):
     def __str__(self):
         return '{}-{}-{}'.format(self.pk, self.versao_numero, getattr(self, 'esta_assinado', ''))
 
-    def assinar_documento(self, current_logged_user, *args, **kwargs):
+    def assinar_documento(self, assinado_por, current_logged_user, *args, **kwargs):
         # if current_logged_user:
         #     self.assinado_por = current_logged_user
         try:
-            u = get_real_user_model_class().objects.all()[0]
-            self.assinado_por = u
+            # u = get_real_user_model_class().objects.all()[0]
+            self.assinado_por = assinado_por
             self.assinado_em = timezone.now()
             self.esta_assinado = True
-            print(locals())
+            self.modificado_por = current_logged_user
+            # self.assinatura_salto = get_random_string(length=8, allowed_chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
+
             para_hash = '{username}-{conteudo}-{assinado_em}'.format(  # username=self.assinado_por.username,
                                                                        username=self.criado_por.username,
                                                                        conteudo=self.conteudo,
@@ -298,20 +302,23 @@ class Documento(models.Model):
                                                                        )
             password_hasher = SHA1PasswordHasher()
             self.assinatura_hash = password_hasher.encode(para_hash, 'djdocumentos')
+            # self.assinatura_hash = password_hasher.encode(para_hash, self.assinatura_salto)
         except Exception as e:
 
             print('deu pau aqui: ', e)
         self.save(*args, **kwargs)
 
-    def remover_assinatura_documento(self, current_logged_user, *args, **kwargs):
+    def remover_assinatura_documento(self, assinatura_removida_por, current_logged_user, *args, **kwargs):
         # if current_logged_user:
         #     self.assinatura_removida_por = current_logged_user
         self.assinatura_removida_em = timezone.now()
+        self.assinatura_removida_por = assinatura_removida_por
+        self.modificado_por = current_logged_user
         self.esta_assinado = False
-
         self.assinado_em = None
         self.assinado_por = None
-        self.assinatura_hash = ''
+        self.assinatura_hash = None
+        # self.assinatura_salto = None
         self.save(*args, **kwargs)
 
     class Meta:

@@ -39,7 +39,8 @@ class DocTeste(SimpleHistoryAdmin):
         'identificador_versao', 'esta_assinado', 'assinatura_hash', 'criado_em', 'titulo', 'criado_por',
         'modificado_em',
         'modificado_por', 'revertido_em', 'revertido_por',
-        'revertido_da_versao', 'esta_ativo', 'esta_bloqueado', 'versao_numero', 'visualizar_versao'
+        'revertido_da_versao', 'esta_ativo', 'esta_bloqueado', 'versao_numero', 'visualizar_versao',
+        'assinado_em', 'assinado_por', 'assinatura_removida_em', 'assinatura_removida_por'
     )
 
     readonly_fields = (

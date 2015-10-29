@@ -170,7 +170,7 @@ class AssinarDocumentoHelperFormMixin(object):
 
 
 class AssinarDocumento(AssinarDocumentoHelperFormMixin, forms.ModelForm):
-    assinado_por = autocomplete_light.ModelChoiceField('UserAutocomplete', label='Usuario Assinante')
+    assinado_por = autocomplete_light.ModelChoiceField('UserAutocomplete', label='Usuario Assinante', to_field_name='pk')
     # assinado_por = forms.ModelChoiceField(get_real_user_model_class().objects.all().order_by('username'))
 
     password = forms.CharField(label="Sua senha",
@@ -207,9 +207,10 @@ class AssinarDocumento(AssinarDocumentoHelperFormMixin, forms.ModelForm):
 
     def save(self, commit=True):
         documento = super(AssinarDocumento, self).save(False)
-        documento.esta_assinado = True
-        documento.assinado_por = self.cleaned_data.get('assinado_por')
-        documento.assinar_documento(current_logged_user=self.current_logged_user)
+        documento.assinar_documento(
+            assinado_por=self.cleaned_data.get('assinado_por'),
+            current_logged_user=self.current_logged_user
+        )
         return documento
 
 

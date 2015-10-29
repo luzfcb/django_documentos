@@ -14,7 +14,7 @@
     {% endif %}
 
     {% if form and object %}
-        Tem certeza que deseja assinar o documento {{ object.identificador_versao }}
+        Tem certeza que deseja assinar o documento {{ object.titulo }} {{ object.identificador_versao }}
         {% crispy form %}
     {% endif %}
 
