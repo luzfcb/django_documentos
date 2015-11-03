@@ -468,8 +468,12 @@ CKEDITOR.dialog.add("base64imageDialog", function (editor) {
 				}
 
 			}
-			if (css.length > 0) newImg.setAttribute("style", css.join(""));
+			console.log("CSS:");
+			console.log(css);
 
+			if (css.length > 0) newImg.setAttribute("style", css.join(""));
+			console.log("style:");
+			console.log(newImg.getAttribute("style"));
 			/* Insert new image */
 			if (!selectedImg) editor.insertElement(newImg);
 

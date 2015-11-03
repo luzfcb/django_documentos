@@ -1,0 +1,83 @@
+﻿{% load staticfiles %}
+
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Documento</title>
+        <link rel="stylesheet" href="{% static "documentos/css/estilo.css" %}" type="text/css" />
+        <style type="text/css">
+            @page {
+                {% if watermark %}
+                    background-image: url({% static "documentos/img/marca.jpg" %});
+                {% endif %}
+                size: a4;
+                top: 6cm;
+                bottom: 2.0cm;
+                left: 2.5cm;
+                right: 2.5cm;
+                @frame header {
+                    -pdf-frame-content:cabecalho;
+                    top:1.0cm;
+                    margin-left:1.0cm;
+                    margin-right:1.0cm;
+                    height: 3.0cm;
+                }
+                @frame footer {
+                    -pdf-frame-content: numero;
+                    bottom: 0.0cm;
+                    height: 1cm;
+                    /*margin-left: 15.5cm;*/
+                }
+            }
+        </style>
+    </head>
+    
+    <body>
+    	<div id="container">
+        	<div id="cabecalho">
+            	<img src="{% static "documentos/img/brasao.jpg" %}" height="101px" width="100px">
+                <h1 class="brasao">PREFEITURA MUNICIPAL DE PALMAS</h1>
+                <h1 class="brasao">{{ documento.secretaria }}</h1>
+                <h1 class="brasao">{{ documento.origem.nome }}</h1>
+            </div>
+            <div id="conteudo">
+	            <article id="artigo">
+                    <h3 class="oficio">{{ documento.tipo_documento }} {{ documento.numero }}/{{ documento.data_criacao.year }}/{{ documento.origem.abreviacao }}/{{ documento.secretaria.abreviacao }}</h3>
+                    <h3 class="data">
+                        Palmas, {{ documento.data_criacao|date:'d' }} de {{ documento.data_criacao|date:'F' }} de {{ documento.data_criacao|date:'Y' }}.
+                    </h3>
+
+                    {% if documento.destinatario %}
+                        <p class="alinhar_esquerda">A Sua Senhoria o(a) Senhor(a)</p>
+                        <p class="alinhar_esquerda">
+                            <span class="negrito">{{ documento.destinatario.get_full_name }}</span>
+                            {% if documento.destinatario.user_profile.cargo %}
+                                <span>, {{ documento.destinatario.user_profile.cargo }}</span>
+                            {% endif %}
+                        </p>
+                    {% endif %}
+
+                    <p class="alinhar_esquerda">{{ documento.setor_de_destino.nome }}</p>
+                    <p class="assunto"><span class="negrito">Assunto:</span> "{{ documento.assunto }}"</p>
+                    <div id="mensagem">
+                        {{ documento.mensagem|safe }}
+                    </div>
+                </article>
+            </div>
+            <br/><br/><br/><br/><br/><br/><br/>
+
+            <div id="rodape">
+	            <h3 class="rodape"><span class="negrito">{{ documento.remetente.get_full_name }}</span></h3>
+                <h3 class="rodape">{{ documento.remetente.user_profile.cargo }}</h3>
+            </div>
+
+            <div id="numero">
+                <!--<pdf:pagenumber/>-->
+                {% if documento.hash %}
+                    {{ documento.hash }}
+                {% endif %}
+            </div>
+        </div>
+    </body>
+</html>

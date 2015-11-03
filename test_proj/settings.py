@@ -66,6 +66,8 @@ INSTALLED_APPS = INSTALLED_APPS + (
     # 'devserver',
 )
 
+PHANTOMJS_BIN = '/usr/bin/phantomjs'
+
 # django-simple-captcha
 
 CAPTCHA_FONT_PATH = (

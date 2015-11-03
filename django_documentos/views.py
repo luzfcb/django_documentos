@@ -16,7 +16,7 @@ from django.shortcuts import redirect, resolve_url
 from django.utils import six
 from django.views import generic
 from django.views.generic.detail import SingleObjectMixin, BaseDetailView
-
+from phantom_pdf import render_to_pdf
 from simple_history.views import HistoryRecordListViewMixin, RevertFromHistoryRecordViewMixin
 
 from .forms import AssinarDocumento, DocumentoFormCreate, DocumentoRevertForm, DocumetoValidarForm
@@ -474,3 +474,23 @@ class AssinarDocumentoView2(generic.UpdateView):
 class ImprimirView(DocumentoDetailView):
     template_name = 'django_documentos/documento_print.html'
 
+    def render_to_response(self, context, **response_kwargs):
+        """
+        Returns a response, using the `response_class` for this
+        view, with a template rendered with the given context.
+
+        If any keyword arguments are provided, they will be
+        passed to the constructor of the response class.
+        """
+
+        if self.request.GET.get('pdf'):
+            return render_to_pdf(self.request, 'saida', format='A4', orientation='portrait')
+        else:
+            response_kwargs.setdefault('content_type', self.content_type)
+            return self.response_class(
+                request=self.request,
+                template=self.get_template_names(),
+                context=context,
+                using=self.template_engine,
+                **response_kwargs
+            )
