@@ -104,7 +104,7 @@ CKEDITOR_CONFIGS = {
         'skin': 'moono',
         # 'skin': 'office2013',
         'toolbar_Basic': [
-            {'name': 'document', 'items': ['Source', '-', 'Save', 'Preview', 'Print', '-', 'Templates']},
+            {'name': 'document', 'items': ['Source', '-', 'Save', '-', 'PasteFromWord']},
             {'name': 'basicstyles',
              'items': ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat']},
 
@@ -219,6 +219,8 @@ CKEDITOR_CONFIGS = {
             [
                 # 'cwjdsjcsconfineselection',
                 # 'fixed',
+                'pastefromword',
+
                 'lockunlock',
                 'lockunlock2',
                 'abbr',

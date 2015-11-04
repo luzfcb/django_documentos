@@ -153,10 +153,13 @@ class DocumentoListView(generic.ListView):
 
     def get_queryset(self):
         qs = super(DocumentoListView, self).get_queryset()
-        if self.request.user.is_authenticated():
-            qs.filter(
-                Q(criado_por_id=self.request.user) | Q(assinado_por=self.request.user)
-            ).order_by('assinado_por')
+        # if self.request.user.is_authenticated():
+
+        qs = qs.filter(
+            (
+                Q(criado_por_id=self.request.user.pk) | Q(assinado_por_id=self.request.user.pk)
+            )
+        ).order_by('assinado_por')
 
         return qs
 

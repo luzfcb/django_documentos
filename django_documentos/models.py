@@ -287,7 +287,6 @@ class Documento(models.Model):
         # if current_logged_user:
         #     self.assinado_por = current_logged_user
         try:
-            # u = get_real_user_model_class().objects.all()[0]
             self.assinado_por = assinado_por
             self.assinado_em = timezone.now()
             self.esta_assinado = True
