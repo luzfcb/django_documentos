@@ -10,6 +10,7 @@ from django.contrib.auth.models import AnonymousUser
 from django.core import signing
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse, reverse_lazy
+from django.db.models import Q
 from django.http import HttpResponse, JsonResponse, HttpResponseForbidden
 from django.shortcuts import redirect, resolve_url
 # from django.utils.http import is_safe_url
@@ -74,7 +75,7 @@ class DocumentoDashboardView(generic.TemplateView):
         return context
 
 
-class NextURLMixin(generic.View):
+class NextURLMixin(object):
     next_kwarg_name = 'next'
     next_page_url = None
 
@@ -150,6 +151,14 @@ class DocumentoListView(generic.ListView):
         rend = super(DocumentoListView, self).render_to_response(context, **response_kwargs)
         return rend
 
+    def get_queryset(self):
+        qs = super(DocumentoListView, self).get_queryset()
+        if self.request.user.is_authenticated():
+            qs.filter(
+                Q(criado_por_id=self.request.user) | Q(assinado_por=self.request.user)
+            ).order_by('assinado_por')
+
+        return qs
 
 class AuditavelViewMixin(object):
     def form_valid(self, form):
@@ -264,6 +273,10 @@ class CloseView(NextURLMixin, generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(CloseView, self).get_context_data(**kwargs)
+        context.update({
+                'close': self.request.GET.get('close')
+            }
+        )
 
         return context
 

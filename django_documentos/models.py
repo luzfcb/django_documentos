@@ -294,10 +294,11 @@ class Documento(models.Model):
             self.modificado_por = current_logged_user
             # self.assinatura_salto = get_random_string(length=8, allowed_chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
 
-            para_hash = '{username}-{conteudo}-{assinado_em}'.format(  # username=self.assinado_por.username,
+            para_hash = '{username}-{conteudo}-{versao}-{assinado_em}'.format(  # username=self.assinado_por.username,
                                                                        username=self.criado_por.username,
                                                                        conteudo=self.conteudo,
-                                                                       assinado_em='asdasd'
+                                                                       versao=self.versao_numero,
+                                                                       assinado_em=self.assinado_em.strftime("%Y-%m-%d %H:%M:%S.%f")
                                                                        # assinado_em=self.assinado_em
                                                                        )
             password_hasher = SHA1PasswordHasher()
