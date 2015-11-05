@@ -325,29 +325,37 @@ class DocumentoUpdateView(DocumentoAssinadoRedirectMixin, AuditavelViewMixin, Ne
     form_class = DocumentoFormCreate
     # success_url = reverse_lazy('documentos:list')
 
+    # def get_success_url(self):
+    #     next_kwarg_name = self.get_next_kwarg_name()
+    #     next_page_url = self.get_next_page_url()
+    #     is_popup = self.get_is_popup()
+    #
+    #     document_param_name = 'document'
+    #     document_param_value = self.object.pk
+    #
+    #     doc = {
+    #         document_param_name: document_param_value
+    #     }
+    #
+    #     next_url = add_querystrings_to_url(next_page_url, doc)
+    #     if not is_popup and next_page_url:
+    #         # print('aqui')
+    #         return next_url
+    #
+    #     if not next_page_url:
+    #         return reverse('documentos:detail', {'pk': self.object.pk})
+    #
+    #     close_url = add_querystrings_to_url(reverse('documentos:close'), {next_kwarg_name: next_url})
+    #
+    #     return close_url
     def get_success_url(self):
         next_kwarg_name = self.get_next_kwarg_name()
         next_page_url = self.get_next_page_url()
         is_popup = self.get_is_popup()
-
-        document_param_name = 'document'
-        document_param_value = self.object.pk
-
-        doc = {
-            document_param_name: document_param_value
-        }
-
-        next_url = add_querystrings_to_url(next_page_url, doc)
-        if not is_popup and next_page_url:
-            # print('aqui')
-            return next_url
-
-        if not next_page_url:
-            return reverse('documentos:detail', {'pk': self.object.pk})
-
-        close_url = add_querystrings_to_url(reverse('documentos:close'), {next_kwarg_name: next_url})
-
-        return close_url
+        new_url = add_querystrings_to_url(reverse('documentos:update', kwargs={'pk': self.object.pk}), {next_kwarg_name: next_page_url})
+        if is_popup:
+            new_url = add_querystrings_to_url(new_url, {'popup': 1})
+        return new_url
 
 
 class DocumentoHistoryView(HistoryRecordListViewMixin, NextURLMixin, PopupMixin, generic.DetailView):
