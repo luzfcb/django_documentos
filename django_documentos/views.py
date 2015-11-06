@@ -318,12 +318,16 @@ class DocumentoAssinadoRedirectMixin(object):
         return ret
 
 
-class DocumentoUpdateView(DocumentoAssinadoRedirectMixin, AuditavelViewMixin, NextURLMixin, PopupMixin,
+class DocumentoUpdateView(DocumentoAssinadoRedirectMixin,
+                          AuditavelViewMixin,
+                          #NextURLMixin,
+                          PopupMixin,
                           generic.UpdateView):
-    template_name = 'django_documentos/documento_update.html'
+    template_name = 'django_documentos/documento_update_2_ck_manual.html'
     model = Documento
     form_class = DocumentoFormCreate
     # success_url = reverse_lazy('documentos:list')
+    success_url = None
 
     # def get_success_url(self):
     #     next_kwarg_name = self.get_next_kwarg_name()
@@ -348,14 +352,38 @@ class DocumentoUpdateView(DocumentoAssinadoRedirectMixin, AuditavelViewMixin, Ne
     #     close_url = add_querystrings_to_url(reverse('documentos:close'), {next_kwarg_name: next_url})
     #
     #     return close_url
-    def get_success_url(self):
-        next_kwarg_name = self.get_next_kwarg_name()
-        next_page_url = self.get_next_page_url()
-        is_popup = self.get_is_popup()
-        new_url = add_querystrings_to_url(reverse('documentos:update', kwargs={'pk': self.object.pk}), {next_kwarg_name: next_page_url})
-        if is_popup:
-            new_url = add_querystrings_to_url(new_url, {'popup': 1})
-        return new_url
+    # def get_success_url(self):
+    #     next_kwarg_name = self.get_next_kwarg_name()
+    #     next_page_url = self.get_next_page_url()
+    #     is_popup = self.get_is_popup()
+    #     new_url = add_querystrings_to_url(reverse('documentos:update', kwargs={'pk': self.object.pk}), {next_kwarg_name: next_page_url})
+    #     if is_popup:
+    #         new_url = add_querystrings_to_url(new_url, {'popup': 1})
+    #     return new_url
+
+    def form_invalid(self, form):
+        response = super(DocumentoUpdateView, self).form_invalid(form)
+        if self.request.is_ajax():
+            return JsonResponse(form.errors, status=400)
+        else:
+            return response
+
+    def form_valid(self, form):
+        # We make sure to call the parent's form_valid() method because
+        # it might do some processing (in the case of CreateView, it will
+        # call form.save() for example).
+        response = super(DocumentoUpdateView, self).form_valid(form)
+        if self.request.is_ajax():
+            print('eh ajax')
+            data = {
+                'pk': self.object.pk,
+                'conteudo': self.object.conteudo
+            }
+            return JsonResponse(data)
+        else:
+            return response
+
+
 
 
 class DocumentoHistoryView(HistoryRecordListViewMixin, NextURLMixin, PopupMixin, generic.DetailView):

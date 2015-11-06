@@ -1,0 +1,1 @@
+﻿CKEDITOR.plugins.setLang("base64image","pl",{alt:"Tekst zastępczy",lockRatio:"Zablokuj proporcje",vSpace:"Odstęp pionowy",hSpace:"Odstęp poziomy",border:"Obramowanie"});

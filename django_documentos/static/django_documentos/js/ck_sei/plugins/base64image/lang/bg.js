@@ -1,0 +1,1 @@
+﻿CKEDITOR.plugins.setLang("base64image","bg",{alt:"Алтернативен текст",lockRatio:"Заключване на съотношението",vSpace:"Вертикален отстъп",hSpace:"Хоризонтален отстъп",border:"Рамка"});

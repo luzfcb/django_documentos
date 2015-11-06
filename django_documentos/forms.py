@@ -71,6 +71,11 @@ class DocumentoFormCreate(SaveHelperFormMixin, NextFormMixin, IsPopUpMixin, form
 
 
 class DocumentoFormUpdate(SaveHelperFormMixin, forms.ModelForm):
+    # cabecalho = ckeditor_fields.RichTextField(blank=True)
+    titulo = forms.CharField(max_length=500, widget=forms.HiddenInput())
+    conteudo = forms.CharField(widget=CKEditorWidget(), label='')
+
+    # rodape = ckeditor_fields.RichTextField(blank=True)
     class Meta:
         model = Documento
         fields = '__all__'

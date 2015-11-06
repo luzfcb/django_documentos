@@ -1,0 +1,1 @@
+﻿CKEDITOR.plugins.setLang("base64image","hr",{alt:"Alternativni tekst",lockRatio:"Zaključaj odnos",vSpace:"VSpace",hSpace:"HSpace",border:"Okvir"});

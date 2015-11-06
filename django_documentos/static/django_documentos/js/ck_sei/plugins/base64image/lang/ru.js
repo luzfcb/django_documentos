@@ -1,0 +1,1 @@
+﻿CKEDITOR.plugins.setLang("base64image","ru",{alt:"Альтернативный текст",lockRatio:"Сохранять пропорции",vSpace:"Вертик. отступ",hSpace:"Гориз. отступ",border:"Граница"});

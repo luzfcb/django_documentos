@@ -1,0 +1,1 @@
+﻿CKEDITOR.plugins.setLang("base64image","eu",{alt:"Ordezko Testua",lockRatio:"Erlazioa Blokeatu",vSpace:"VSpace",hSpace:"HSpace",border:"Ertza"});

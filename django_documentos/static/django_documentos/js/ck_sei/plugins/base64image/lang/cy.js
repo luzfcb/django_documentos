@@ -1,0 +1,1 @@
+﻿CKEDITOR.plugins.setLang("base64image","cy",{alt:"Testun Amgen",lockRatio:"Cloi Cymhareb",vSpace:"BwlchF",hSpace:"BwlchLl",border:"Ymyl"});
