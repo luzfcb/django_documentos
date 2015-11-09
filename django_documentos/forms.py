@@ -85,6 +85,26 @@ class DocumentoFormUpdate(SaveHelperFormMixin, forms.ModelForm):
         # }
 
 
+class DocumentoFormUpdate2(SaveHelperFormMixin, forms.ModelForm):
+    # cabecalho = ckeditor_fields.RichTextField(blank=True)
+    # titulo = forms.CharField(max_length=500, widget=forms.HiddenInput())
+    cabecalho = forms.CharField(widget=CKEditorWidget(config_name='compartilhado'), label='')
+    conteudo = forms.CharField(widget=CKEditorWidget(config_name='compartilhado'), label='')
+    rodape = forms.CharField(widget=CKEditorWidget(config_name='compartilhado'), label='')
+
+    # rodape = ckeditor_fields.RichTextField(blank=True)
+    class Meta:
+        model = Documento
+        fields = ('titulo', 'cabecalho', 'conteudo', 'rodape')
+        # fields = '__all__'
+        # exclude = ['criado_por', 'modificado_por', 'esta_assinado']
+        # widgets = {
+        #     'conteudo': RedactorEditor()
+        # }
+
+
+
+
 class DocumentoRevertForm(RevertHelperFormMixin, forms.ModelForm):
     class Meta:
         model = Documento

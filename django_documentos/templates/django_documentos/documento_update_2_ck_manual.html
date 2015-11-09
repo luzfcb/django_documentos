@@ -1,61 +1,96 @@
 {% load staticfiles %}
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-
-
-    <script data-sample="1">
-        var editor1;
-        var html = '';
-
-        function createEditor() {
-            if (editor1)
-                return;
-
-            // Create a new editor instance inside the <div id="editor"> element,
-            // setting its value to html.
-            var config = {};
-            editor1 = CKEDITOR.appendTo('editor1', config, html);
-
-            // Update button states.
-            document.getElementById('remove').style.display = '';
-            document.getElementById('create').style.display = 'none';
+    <meta charset="utf-8">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Classic editors sharing toolbar and bottom bar</title>
+    <link type="text/css" href="{% static "django_documentos/bootstrap/bootstrap-3.3.5-dist/css/bootstrap.min.css" %}" rel="stylesheet">
+    <link type="text/css" href="{% static "django_documentos/bootstrap/bootstrap-3.3.5-dist/css/bootstrap-theme.min.css" %}" rel="stylesheet">
+    <style>
+        body {
+            background: rgb(204, 204, 204);
         }
 
-        function removeEditor() {
-            if (!editor1)
-                return;
+        .article {
+            background: white;
+            width: 21cm;
+        {#            height: 29.7cm;#} display: block;
+            margin: 0 auto 0.5cm;
+            box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
 
-            // Retrieve the editor content. In an Ajax application this data would be
-            // sent to the server or used in any other way.
-            html = editor1.getData();
-
-            // Update <div> with "Edited Content".
-            document.getElementById('editorcontent1').innerHTML = html;
-            // Show <div> with "Edited Content".
-            document.getElementById('content1').style.display = '';
-            // Update button states.
-            document.getElementById('remove').style.display = 'none';
-            document.getElementById('create').style.display = '';
-
-            // Destroy the editor.
-            editor1.destroy();
-            editor1 = null;
+            padding: 30px;
+        {#            font-size: 11pt;#}{#            font-family: Arial;#} text-justify: distribute;
+            line-height: 22pt;
         }
-    </script>
+
+        @media print {
+            body, article[size="A4"] {
+                margin: 0;
+                box-shadow: 0;
+                background: transparent;
+            }
+
+        }
+
+        .no-print {
+            display: block;
+        }
+
+        @media print {
+            .cke_pagebreak {
+                display: block;
+                page-break-before: always;
+            }
+        }
+
+        #bottom {
+            alignment:;
+        }
+    </style>
+    <script src="{% static "django_documentos/js/jquery/1.11.3/jquery.min.js" %}"></script>
+    <script src="{% static "django_documentos/bootstrap/bootstrap-3.3.5-dist/js/bootstrap.min.js" %}"></script>
+    <script src="http://cdn.ckeditor.com/4.5.2/standard-all/ckeditor.js"></script>
 </head>
+
 <body>
+<div id="top">
+    <!-- This div will handle all toolbars. -->
+</div>
+<div id="article">
+    <form>
+        {{ form }}
+    </form>
+</div>
+<div id="bottom" class="">
+    <!-- This div will handle all bottom bars. -->
+</div>
 
-<button onclick="createEditor()">
-    Editar
-
-</button>
-
-<div id="editor1" data-sample="1"></div>
-<script type="application/javascript" src="{% static "django_documentos/js/jquery/1.11.3/jquery.min.js" %}"></script>
-<script type="application/javascript" src="{% static "django_documentos/js/" %}"></script>
+{#<script>#}
+{#    CKEDITOR.replace('editor1', {#}
+{#        extraPlugins: 'sharedspace',#}
+{#        removePlugins: 'resize',#}
+{#        height: 410,#}
+{#        sharedSpaces: {#}
+{#            top: 'top',#}
+{#            bottom: 'bottom'#}
+{#        }#}
+{#    });#}
+{##}
+{#    CKEDITOR.replace('editor2', {#}
+{#        extraPlugins: 'sharedspace',#}
+{#        removePlugins: 'resize',#}
+{#        height: 410,#}
+{#        sharedSpaces: {#}
+{#            top: 'top',#}
+{#            bottom: 'bottom'#}
+{#        }#}
+{#    });#}
+{#</script>#}
+{% if form %}
+    {{ form.media }}
+{% endif %}
 
 </body>
+
 </html>

@@ -20,7 +20,7 @@ from django.views.generic.detail import SingleObjectMixin, BaseDetailView
 from phantom_pdf import render_to_pdf
 from simple_history.views import HistoryRecordListViewMixin, RevertFromHistoryRecordViewMixin
 
-from .forms import AssinarDocumento, DocumentoFormCreate, DocumentoRevertForm, DocumetoValidarForm
+from .forms import AssinarDocumento, DocumentoFormCreate, DocumentoRevertForm, DocumetoValidarForm, DocumentoFormUpdate2
 from .models import Documento
 from .samples_html import BIG_SAMPLE_HTML  # noqa
 from .utils import add_querystrings_to_url
@@ -325,7 +325,8 @@ class DocumentoUpdateView(DocumentoAssinadoRedirectMixin,
                           generic.UpdateView):
     template_name = 'django_documentos/documento_update_2_ck_manual.html'
     model = Documento
-    form_class = DocumentoFormCreate
+    #form_class = DocumentoFormCreate
+    form_class = DocumentoFormUpdate2
     # success_url = reverse_lazy('documentos:list')
     success_url = None
 

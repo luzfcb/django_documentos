@@ -21,3 +21,9 @@ http://tableless.com.br/dicas-de-css-para-impressao/
 http://codepen.io/Haxz/pen/qEZNRL
 
 http://codepen.io/YuvarajTana/pen/auiqx
+
+
+
+page print css:
+http://stackoverflow.com/questions/22531900/can-i-use-css-to-set-up-different-default-print-page-sizes-for-different-pages
+http://stackoverflow.com/questions/3341485/how-to-make-a-html-page-in-a4-paper-size-pages/14621368#14621368
