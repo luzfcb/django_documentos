@@ -88,9 +88,9 @@ class DocumentoFormUpdate(SaveHelperFormMixin, forms.ModelForm):
 class DocumentoFormUpdate2(SaveHelperFormMixin, forms.ModelForm):
     # cabecalho = ckeditor_fields.RichTextField(blank=True)
     # titulo = forms.CharField(max_length=500, widget=forms.HiddenInput())
-    cabecalho = forms.CharField(widget=CKEditorWidget(config_name='compartilhado'), label='')
+    cabecalho = forms.CharField(widget=CKEditorWidget(config_name='compartilhado'), label='', initial='Cabecalho')
     conteudo = forms.CharField(widget=CKEditorWidget(config_name='compartilhado'), label='')
-    rodape = forms.CharField(widget=CKEditorWidget(config_name='compartilhado'), label='')
+    rodape = forms.CharField(widget=CKEditorWidget(config_name='compartilhado'), label='', initial='Rodape')
 
     # rodape = ckeditor_fields.RichTextField(blank=True)
     class Meta:

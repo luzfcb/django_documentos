@@ -5,14 +5,30 @@
     <meta charset="utf-8">
     <meta name="robots" content="noindex, nofollow">
     <title>Classic editors sharing toolbar and bottom bar</title>
-    <link type="text/css" href="{% static "django_documentos/bootstrap/bootstrap-3.3.5-dist/css/bootstrap.min.css" %}" rel="stylesheet">
-    <link type="text/css" href="{% static "django_documentos/bootstrap/bootstrap-3.3.5-dist/css/bootstrap-theme.min.css" %}" rel="stylesheet">
+    {#    <link type="text/css" href="{% static "django_documentos/bootstrap/bootstrap-3.3.5-dist/css/bootstrap.min.css" %}"#}
+    {#          rel="stylesheet">#}
+    <link type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    {#    <link type="text/css"#}
+    {#          href="{% static "django_documentos/bootstrap/bootstrap-3.3.5-dist/css/bootstrap-theme.min.css" %}"#}
+    {#          rel="stylesheet">#}
+    <link type="text/css"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"
+          rel="stylesheet">
+
+    {#    <link type="text/css"#}
+    {#          href="{% static "django_documentos/bootstrap/bootstrap-3.3.5-dist/fonts/glyphicons-halflings-regular.eot" %}"#}
+    {#          rel="stylesheet">#}
+    <link type="text/css"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/fonts/glyphicons-halflings-regular.eot"
+          rel="stylesheet">
     <style>
-        body {
+        .body {
             background: rgb(204, 204, 204);
         }
 
-        .article {
+        article {
             background: white;
             width: 21cm;
         {#            height: 29.7cm;#} display: block;
@@ -44,27 +60,91 @@
             }
         }
 
-        #bottom {
-            alignment:;
+        .fixed-on-top:after {
+            position: fixed;
+            left: 0;
+            top: 0;
+        {#            height: 30px;#} width: 100%;
+            z-index: 999;
+
         }
+
+        .fixed-on-bottom {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+        {#            height: 30px;#} width: 100%;
+            z-index: 999;
+        }
+
+
     </style>
+    {#    <script src="{% static "django_documentos/js/jquery/1.11.3/jquery.min.js" %}"></script>#}
+    {#    <script src="{% static "django_documentos/bootstrap/bootstrap-3.3.5-dist/js/bootstrap.min.js" %}"></script>#}
+    {#    <script src="http://cdn.ckeditor.com/4.5.2/standard-all/ckeditor.js"></script>#}
+    {#    #}
     <script src="{% static "django_documentos/js/jquery/1.11.3/jquery.min.js" %}"></script>
-    <script src="{% static "django_documentos/bootstrap/bootstrap-3.3.5-dist/js/bootstrap.min.js" %}"></script>
-    <script src="http://cdn.ckeditor.com/4.5.2/standard-all/ckeditor.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+{#    <script src="http://cdn.ckeditor.com/4.5.2/full-all/ckeditor.js"></script>#}
+    <script src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
 </head>
 
-<body>
-<div id="top">
-    <!-- This div will handle all toolbars. -->
+<body class="body">
+<div class="navbar-fixed-top on">
+    <div class="btn-toolbar cke_top">
+        <div class="btn-group">
+            <button class="btn btn-default" data-original-title="Bold - Ctrl+B"><i class="glyphicon glyphicon-print"></i>
+            </button>
+            <button class="btn btn-default" data-original-title="Italic - Ctrl+I"><i
+                    class="glyphicon glyphicon-italic"></i>
+            </button>
+            <button class="btn btn-default" data-original-title="List"><i class="glyphicon glyphicon-list"></i>
+            </button>
+            <button class="btn btn-default" data-original-title="Img"><i class="glyphicon glyphicon-picture"></i>
+            </button>
+            <button class="btn btn-default" data-original-title="URL"><i class="glyphicon glyphicon-arrow-right"></i>
+            </button>
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-default" data-original-title="Align Right"><i
+                    class="glyphicon glyphicon-align-right"></i>
+            </button>
+            <button class="btn btn-default" data-original-title="Align Center"><i
+                    class="glyphicon glyphicon-align-center"></i>
+            </button>
+            <button class="btn btn-default" data-original-title="Align Left"><i
+                    class="glyphicon glyphicon-align-left"></i>
+            </button>
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-default" data-original-title="Preview"><i class="glyphicon glyphicon-eye-open"></i>
+            </button>
+            <button class="btn btn-default" data-original-title="Save"><i class="glyphicon glyphicon-ok"></i>
+            </button>
+            <button class="btn btn-default" data-original-title="Cancel"><i class="glyphicon glyphicon-trash"></i>
+            </button>
+        </div>
+    </div>
+    <div id="top">
+        <!-- This div will handle all toolbars. -->
+    </div>
 </div>
-<div id="article">
+
+
+<h2>depois menu superior</h2>
+
+<article class="">
     <form>
         {{ form }}
     </form>
-</div>
-<div id="bottom" class="">
+</article>
+<h2>antes menu inferior</h2>
+
+<div id="bottom" class="navbar-fixed-bottom">
     <!-- This div will handle all bottom bars. -->
 </div>
+
+<h2>depois menu inferior</h2>
 
 {#<script>#}
 {#    CKEDITOR.replace('editor1', {#}
