@@ -28,3 +28,9 @@ http://codepen.io/YuvarajTana/pen/auiqx
 page print css:
 http://stackoverflow.com/questions/22531900/can-i-use-css-to-set-up-different-default-print-page-sizes-for-different-pages
 http://stackoverflow.com/questions/3341485/how-to-make-a-html-page-in-a4-paper-size-pages/14621368#14621368
+
+
+Print:
+
+http://stackoverflow.com/questions/18843936/how-to-disable-the-ctrlp-using-javascript-or-jquery
+http://stackoverflow.com/questions/3339789/onbeforeprint-and-onafterprint-equivalent-for-non-ie-browsers/15662720#15662720

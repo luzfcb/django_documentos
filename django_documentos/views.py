@@ -324,6 +324,7 @@ class DocumentoUpdateView(DocumentoAssinadoRedirectMixin,
                           PopupMixin,
                           generic.UpdateView):
     template_name = 'django_documentos/documento_update_2_ck_manual.html'
+    # template_name = 'django_documentos/documento_update.html'
     model = Documento
     #form_class = DocumentoFormCreate
     form_class = DocumentoFormUpdate2

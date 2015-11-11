@@ -85,28 +85,18 @@ CAPTCHA_WORDS_DICTIONARY = '/usr/share/dict/brazilian'
 DJANGO_WYSIWYG_FLAVOR = 'ckeditor'
 
 CKEDITOR_UPLOAD_PATH = 'uploads/'
-# CKEDITOR_CONFIGS = {
-#     'default': {
-#         'toolbar': 'Custom',
-#         'toolbar_Custom': [
-#             ['Bold', 'Italic', 'Underline'],
-#             ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
-#             ['Link', 'Unlink'],
-#             ['RemoveFormat', 'Source'],
-#             ["Maximize"]
-#         ]
-#     }
-# }
 
 CKEDITOR_CONFIGS = {
     'default': {
         # 'fullPage': True,  # http://docs.ckeditor.com/#!/guide/dev_fullpage
         'skin': 'moono',
         # 'skin': 'office2013',
+        'toolbar': 'Basic',
         'toolbar_Basic': [
-            {'name': 'document', 'items': ['Source', '-', 'Save', '-', 'PasteFromWord']},
+            # {'name': 'document', 'items': ['Source', '-', 'Save', 'Preview', 'Print', '-', 'Templates']},
+            {'name': 'document', 'items': ['Save', ]},
             {'name': 'basicstyles',
-             'items': ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat']},
+             'items': ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat', '-', 'PasteFromWord']},
 
             {'name': 'paragraph',
              'items': ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'NumberedList', 'BulletedList',
@@ -114,147 +104,30 @@ CKEDITOR_CONFIGS = {
                        '-',
                        ]},
             {'name': 'insert',
-             'items': ['base64image', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak']},
+             'items': ['base64image', 'Table', 'HorizontalRule', 'SpecialChar', 'PageBreak']},
             # '/',
-            {'name': 'custom', 'items': ['CreateLockUnlock', 'Maximize', 'ShowBlocks']}
+            {
+                'name': 'custom',
+                'items': [
+                    # 'CreateLockUnlock',
+                    # 'Maximize',
+                    # 'ShowBlocks'
+                ]
+             }
         ],
-        # 'toolbar_Full': [
-        #     ['Styles', 'Format', 'Bold', 'Italic', 'Underline', 'Strike', 'SpellChecker', 'Undo', 'Redo'],
-        #     ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter',
-        #      'JustifyRight', 'JustifyBlock'],
-        #     ['Link', 'Unlink', 'Anchor'],
-        #     ['Flash', 'Table', 'HorizontalRule'],
-        #     ['TextColor', 'BGColor'],
-        #     ['Smiley', 'SpecialChar'], ['Source'],
-        #     ['widget', 'clipboard'],
-        #     [''],
-        # ],
-        # 'toolbar_Full': [
-        #     {'name': 'document', 'items': ['Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates']},
-        #     {'name': 'clipboard', 'items': ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo']},
-        #     {'name': 'editing', 'items': ['Find', 'Replace', '-', 'SelectAll']},
-        #     {'name': 'forms',
-        #      'items': ['Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton',
-        #                'HiddenField']},
-        #     '/',
-        #     {'name': 'basicstyles',
-        #      'items': ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat']},
-        #     {'name': 'paragraph',
-        #      'items': ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-',
-        #                'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl',
-        #                'Language']},
-        #     {'name': 'links', 'items': ['Link', 'Unlink', 'Anchor']},
-        #     {'name': 'insert',
-        #      'items': ['Image3', 'Flash', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe']},
-        #     '/',
-        #     {'name': 'styles', 'items': ['Styles', 'Format', 'Font', 'FontSize']},
-        #     {'name': 'colors', 'items': ['TextColor', 'BGColor']},
-        #     {'name': 'tools', 'items': ['Maximize', 'ShowBlocks']},
-        #     {'name': 'about', 'items': ['About']},
-        #     '/',
-        #     {'name': 'extraplugins', 'items': ['Image2', 'Mathjax', 'notification', ]},
-        # ],
-        'toolbar_Teste': [
-            {'name': 'document', 'items': ['Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates']},
-            {'name': 'paragraph',
-             'items': ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-',
-                       'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl',
-                       'Language']},
-            {'name': 'insert',
-             'items': ['Image3', 'Flash', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe']},
-            '/',
-            {'name': 'basicstyles',
-             'items': ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat']},
-            {'name': 'extraplugins', 'items': [
-                # 'Readonlysections',
-                # 'Simplebox',
-                # 'Simplebox2',
-                # 'Image2',
-                # 'Readonlysections2',
-                # 'Image',
-                '-',
-                'base64image',
-                'Fabio',
-                'Pagebreak',
-                'Placeholder',
-                'LockUnlock',
-                'Maximize',
-                'CreatePlaceholder',
-                'embedSemantic',
-                'Preview',
-                'Pagebreak',
-                'Abbr',
-                '-',
-                'CreateLockUnlock',
-
-                # 'Div',
-
-                # 'Cwjdsjcsconfineselection',
-
-            ]},
-        ],
-        'toolbar': 'Basic',
-        # 'floatingtools': 'Basic',
-        # 'floatingtools_Basic':
-        #    [
-        #        {'name': 'floatingtools', 'itens': ['Bold', 'Italic', '-', 'NumberedList', 'BulletedList', '-', 'Link']}
-        #    ],
-        # 'toolbarGroups': [{ 'name': 'document', 'groups': [ 'mode', 'document', 'doctools' ] }],
-        # 'height': 291,
-        # 'width': '100%',
-        # 'filebrowserWindowHeight': 725,
-        # 'filebrowserWindowWidth': 940,
-        # 'toolbarCanCollapse': True,
-        # 'mathJaxLib': '//cdn.mathjax.org/mathjax/2.2-latest/MathJax.js?config=TeX-AMS_HTML',
-        'base64image_disableUrlImages': True,
-        'resize_dir': 'both',
-        'tabSpaces': 4,
-        'disableAutoInline': True,
+        'extraPlugins': ','.join(['sharedspace', 'save', 'autolink', 'base64image',]),
+        'removePlugins': ','.join(['resize', ]),
+        # 'height': 410,
+        'width': '21.0cm',
         'sharedSpaces': {
-            # 'top': "document.getElementById('toolbar-editor')",
-            'top': "toolbarLocation",
+            'top': 'top',
+            'bottom': 'bottom'
         },
-        'toolbarLocation': 'bottom',
-        'extraPlugins': ','.join(
-            [
-                # 'cwjdsjcsconfineselection',
-                # 'fixed',
-                'pastefromword',
-
-                'lockunlock',
-                'lockunlock2',
-                'abbr',
-                'div',
-                # 'divarea',
-                'sharedspace',
-
-                # 'floating-tools',
-                # 'wysiwygarea', # http://docs.ckeditor.com/#!/guide/dev_fullpage
-                'autolink',
-                'autoembed',
-                # 'readonlysections',
-                # 'simplebox',
-                # 'simplebox2',
-                'embedsemantic',
-                'autogrow',  # automaticamente redimencionar janela de edicao
-                'placeholder',
-                'base64image',
-                'imageresize',
-                # 'devtools',
-                'codesnippet',
-                'widget',
-                'dialog',
-                'lineutils',
-                'clipboard',
-                'dialogui',
-                'elementspath'
-            ]),
-        # 'removePlugins': 'maximize,resize',
-        # , 'image2', 'mathjax', 'dialog', 'dialogui', 'lineutils', 'clipboard', 'notification', 'notificationaggregator']),
+        'contentsCss': 'html, iframe, body {overflow:hidden;outline: none;}'
+                       '',
+        'startupShowBorders': False
     }
 }
-
-# CKEDITOR_CONFIGS['default']['extraPlugins'] = ['clipboard', 'dialog', 'dialogui', 'lineutils', 'widget']
 
 
 CKEDITOR_IMAGE_BACKEND = 'Pillow'

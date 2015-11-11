@@ -4,7 +4,17 @@
 <head>
     <meta charset="utf-8">
     <meta name="robots" content="noindex, nofollow">
-    <title>Classic editors sharing toolbar and bottom bar</title>
+    <title>Editar</title>
+    <link type="text/css"
+            {#          href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/themes/blue/pace-theme-center-atom.css"#}
+            {#          href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/themes/blue/pace-theme-center-simple.css"#}
+            {#          href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/themes/blue/pace-theme-barber-shop.css"#}
+          href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/themes/blue/pace-theme-loading-bar.css"
+          rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"
+            data-pace-options='{ "ajax": false , "restartOnRequestAfter": false, "document": false}'></script>
+
+
     {#    <link type="text/css" href="{% static "django_documentos/bootstrap/bootstrap-3.3.5-dist/css/bootstrap.min.css" %}"#}
     {#          rel="stylesheet">#}
     <link type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
@@ -23,21 +33,56 @@
     <link type="text/css"
           href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/fonts/glyphicons-halflings-regular.eot"
           rel="stylesheet">
+
+
     <style>
+{#        body {#}
+{#            min-width: 860px; /* suppose you want minimun width of 1000px */#}
+{#            width: auto !important; /* Firefox will set width as auto */#}
+{#            width: 860px; /* As IE ignores !important it will set width as 1000px; */#}
+{#        }#}
+
+        .maindiv {
+            display: none;
+        }
+
         .body {
             background: rgb(204, 204, 204);
+        }
+
+        {#        .menu-superior:after {#}
+        {#            padding: 100px;#}
+        {#        }#}
+
+        .menu-inferior .menu-superior {
+
+        }
+
+        #conteudo {
+        {#            padding: 230px 0;#} display: block;
+
+        }
+
+        #conteudo textarea, iframe {
+            border: none;
+
         }
 
         article {
             background: white;
             width: 21cm;
-        {#            height: 29.7cm;#} display: block;
+            height: 29.7cm;
+            display: block;
             margin: 0 auto 0.5cm;
             box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
 
             padding: 30px;
-        {#            font-size: 11pt;#}{#            font-family: Arial;#} text-justify: distribute;
+            font-size: 11pt;
+        {#            font-family: Arial;#}
+            text-justify: distribute;
             line-height: 22pt;
+        {#            position: absolute;#}{#            padding: 0 0 0 0;#}{#            overflow: auto;#}
+            margin-bottom: 250px
         }
 
         @media print {
@@ -48,6 +93,10 @@
             }
 
         }
+
+{#        .cktop:after {#}
+{#            margin-bottom: 40px;#}
+{#        }#}
 
         .no-print {
             display: block;
@@ -60,116 +109,149 @@
             }
         }
 
-        .fixed-on-top:after {
-            position: fixed;
-            left: 0;
-            top: 0;
-        {#            height: 30px;#} width: 100%;
-            z-index: 999;
-
-        }
-
-        .fixed-on-bottom {
-            position: fixed;
-            left: 0;
-            bottom: 0;
-        {#            height: 30px;#} width: 100%;
-            z-index: 999;
-        }
-
 
     </style>
+
+
     {#    <script src="{% static "django_documentos/js/jquery/1.11.3/jquery.min.js" %}"></script>#}
     {#    <script src="{% static "django_documentos/bootstrap/bootstrap-3.3.5-dist/js/bootstrap.min.js" %}"></script>#}
     {#    <script src="http://cdn.ckeditor.com/4.5.2/standard-all/ckeditor.js"></script>#}
     {#    #}
-    <script src="{% static "django_documentos/js/jquery/1.11.3/jquery.min.js" %}"></script>
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-{#    <script src="http://cdn.ckeditor.com/4.5.2/full-all/ckeditor.js"></script>#}
+    {#    <script src="http://cdn.ckeditor.com/4.5.2/full-all/ckeditor.js"></script>#}
     <script src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
+
 </head>
 
 <body class="body">
-<div class="navbar-fixed-top on">
-    <div class="btn-toolbar cke_top">
-        <div class="btn-group">
-            <button class="btn btn-default" data-original-title="Bold - Ctrl+B"><i class="glyphicon glyphicon-print"></i>
-            </button>
-            <button class="btn btn-default" data-original-title="Italic - Ctrl+I"><i
-                    class="glyphicon glyphicon-italic"></i>
-            </button>
-            <button class="btn btn-default" data-original-title="List"><i class="glyphicon glyphicon-list"></i>
-            </button>
-            <button class="btn btn-default" data-original-title="Img"><i class="glyphicon glyphicon-picture"></i>
-            </button>
-            <button class="btn btn-default" data-original-title="URL"><i class="glyphicon glyphicon-arrow-right"></i>
-            </button>
+<div class="maindiv">
+    <header id="menu-superior" class="navbar-fixed-top on menu-superior">
+        <div class="btn-toolbar cke_top">
+            <div class="btn-group">
+                <button class="btn btn-default" data-original-title="Save - Ctrl+S"><i
+                        class="glyphicon glyphicon-floppy-disk"></i>Salvar
+                </button>
+                <button class="btn btn-default" data-original-title="Print - Ctrl+P"><i
+                        class="glyphicon glyphicon-print"></i>Imprimir
+                </button>
+            </div>
         </div>
-        <div class="btn-group">
-            <button class="btn btn-default" data-original-title="Align Right"><i
-                    class="glyphicon glyphicon-align-right"></i>
-            </button>
-            <button class="btn btn-default" data-original-title="Align Center"><i
-                    class="glyphicon glyphicon-align-center"></i>
-            </button>
-            <button class="btn btn-default" data-original-title="Align Left"><i
-                    class="glyphicon glyphicon-align-left"></i>
-            </button>
+        <div id="top" class="cktop">
+            <!-- Menu superior CKEditor -->
         </div>
-        <div class="btn-group">
-            <button class="btn btn-default" data-original-title="Preview"><i class="glyphicon glyphicon-eye-open"></i>
-            </button>
-            <button class="btn btn-default" data-original-title="Save"><i class="glyphicon glyphicon-ok"></i>
-            </button>
-            <button class="btn btn-default" data-original-title="Cancel"><i class="glyphicon glyphicon-trash"></i>
-            </button>
-        </div>
+    </header>
+
+
+    <div id="conteudo">
+        <article class="teste">
+
+            <!-- Conteudo -->
+            <form method="post">
+                {#            {{ form }}#}
+            <textarea name="editor1" id="editor1">
+
+            </textarea>
+            </form>
+        </article>
     </div>
-    <div id="top">
-        <!-- This div will handle all toolbars. -->
-    </div>
+    <footer id="menu-inferior" class="navbar-fixed-bottom menu-inferior">
+        <div id="bottom">
+            <!--  Menu inferior CKEditor  -->
+        </div>
+    </footer>
 </div>
+<script>
+
+    CKEDITOR.replace('editor1', {
+        extraPlugins: 'sharedspace,save,autolink',
+        removePlugins: 'resize',
+        'sharedSpaces': {
+            'top': 'top',
+            'bottom': 'bottom'
+        },
+        contentsCss: 'html, iframe, body {overflow:hidden;outline: none;}',
+        startupShowBorders: false,
+        toolbarGroups: [
+            {name: 'document', groups: ['mode', 'document', 'doctools']},
+            {name: 'clipboard', groups: ['clipboard', 'undo']},
+            {name: 'editing', groups: ['find', 'selection', 'spellchecker', 'editing']},
+            {name: 'forms', groups: ['forms']},
+            {#            '/',#}
+            {name: 'basicstyles', groups: ['basicstyles', 'cleanup']},
+            {name: 'paragraph', groups: ['list', 'indent', 'blocks', 'align', 'bidi', 'paragraph']},
+            {name: 'links', groups: ['links']},
+            {name: 'insert', groups: ['insert']},
+            '/',
+            {name: 'styles', groups: ['styles']},
+            {name: 'colors', groups: ['colors']},
+            {name: 'tools', groups: ['tools']},
+            {name: 'others', groups: ['others']},
+            {name: 'about', groups: ['about']}
+        ],
+        removeButtons: 'Source,Save,NewPage,Preview,Print,Templates,Form,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,CreateDiv,BidiLtr,BidiRtl,Language,Anchor,Unlink,Link,Flash,Smiley,SpecialChar,Iframe,About'
+    });
+
+    {#    CKEDITOR.replace('editor2', {#}
+    {#        extraPlugins: 'sharedspace',#}
+    {#        removePlugins: 'resize',#}
+    {#        height: 410,#}
+    {#        sharedSpaces: {#}
+    {#            top: 'top',#}
+    {#            bottom: 'bottom'#}
+    {#        }#}
+    {#    });#}
+</script>
+
+{#{% if form %}#}
+{#    {{ form.media }}#}
+{#{% endif %}#}
+<script>
+
+    function corrigir_padding_conteudo() {
+        var menusuperior = $('#menu-superior');
+        var conteudo = $('#conteudo');
+        var altura_menu_superior = parseInt(menusuperior.css('height').replace(/[^-\d\.]/g, ''));
+        var valor = "".concat(altura_menu_superior + 130).concat("px");
+        conteudo.css('padding-top', valor);
+    }
+{#    $(window).resize(function () {#}
+{#        corrigir_padding_conteudo();#}
+{#    });#}
+    window.addEventListener('resize', corrigir_padding_conteudo, false);
+
+</script>
 
 
-<h2>depois menu superior</h2>
+<script>
 
-<article class="">
-    <form>
-        {{ form }}
-    </form>
-</article>
-<h2>antes menu inferior</h2>
+    Pace.on('hide', function () {
 
-<div id="bottom" class="navbar-fixed-bottom">
-    <!-- This div will handle all bottom bars. -->
-</div>
-
-<h2>depois menu inferior</h2>
-
+        $(".maindiv").fadeIn("fast");
+        corrigir_padding_conteudo();
+    });
+    {#    $(window).load(function () {#}
+    {#        $("body").fadeIn("slow");#}
+    {#    });#}
+</script>
 {#<script>#}
-{#    CKEDITOR.replace('editor1', {#}
-{#        extraPlugins: 'sharedspace',#}
-{#        removePlugins: 'resize',#}
-{#        height: 410,#}
-{#        sharedSpaces: {#}
-{#            top: 'top',#}
-{#            bottom: 'bottom'#}
-{#        }#}
-{#    });#}
+{#    function resizeToMinimum() {#}
+{#        var minimum = [878, 600];#}
+{#        var current = [window.outerWidth, window.outerHeight];#}
+{#        var restricted = [];#}
+{#        var i = 2;#}
 {##}
-{#    CKEDITOR.replace('editor2', {#}
-{#        extraPlugins: 'sharedspace',#}
-{#        removePlugins: 'resize',#}
-{#        height: 410,#}
-{#        sharedSpaces: {#}
-{#            top: 'top',#}
-{#            bottom: 'bottom'#}
+{#        while (i-- > 0) {#}
+{#            restricted[i] = mimimum[i] > current[i] ? minimum[i] : current[i];#}
 {#        }#}
-{#    });#}
+{#        console.log("redimencionando x:" + current[0] + " - y:" + current[1]);#}
+{#        window.resizeTo(current[0], current[1]);#}
+{##}
+{#    }#}
+{##}
+{#    window.addEventListener('resize', resizeToMinimum, false)#}
 {#</script>#}
-{% if form %}
-    {{ form.media }}
-{% endif %}
+
 
 </body>
 
