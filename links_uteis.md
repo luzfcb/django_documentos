@@ -34,3 +34,9 @@ Print:
 
 http://stackoverflow.com/questions/18843936/how-to-disable-the-ctrlp-using-javascript-or-jquery
 http://stackoverflow.com/questions/3339789/onbeforeprint-and-onafterprint-equivalent-for-non-ie-browsers/15662720#15662720
+
+
+Ajax post:
+https://aliteralmind.wordpress.com/2015/02/05/ajax_rapidfire_manual_to_underscore/
+
+https://aliteralmind.wordpress.com/2014/09/21/jquery_django_tutorial/

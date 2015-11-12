@@ -548,3 +548,41 @@ class ImprimirView(DocumentoDetailView):
                 using=self.template_engine,
                 **response_kwargs
             )
+
+
+class AjaxUpdateTesteApagar(DocumentoAssinadoRedirectMixin,
+                          AuditavelViewMixin,
+                          #NextURLMixin,
+                          PopupMixin,
+                          generic.UpdateView):
+    template_name = 'django_documentos/documento_update_2_ck_manual.html'
+    # template_name = 'django_documentos/documento_update.html'
+    model = Documento
+    #form_class = DocumentoFormCreate
+    form_class = DocumentoFormUpdate2
+    # success_url = reverse_lazy('documentos:list')
+    success_url = None
+
+    def form_invalid(self, form):
+        response = super(AjaxUpdateTesteApagar, self).form_invalid(form)
+        if self.request.is_ajax():
+            return JsonResponse(form.errors, status=400)
+        else:
+            return response
+
+    def form_valid(self, form):
+        # We make sure to call the parent's form_valid() method because
+        # it might do some processing (in the case of CreateView, it will
+        # call form.save() for example).
+        response = super(AjaxUpdateTesteApagar, self).form_valid(form)
+        if self.request.is_ajax():
+            print('eh ajax')
+            data = {
+                'pk': self.object.pk,
+                'conteudo': self.object.conteudo
+            }
+            return JsonResponse(data)
+        else:
+            return response
+
+

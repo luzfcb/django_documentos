@@ -36,11 +36,11 @@
 
 
     <style>
-{#        body {#}
-{#            min-width: 860px; /* suppose you want minimun width of 1000px */#}
-{#            width: auto !important; /* Firefox will set width as auto */#}
-{#            width: 860px; /* As IE ignores !important it will set width as 1000px; */#}
-{#        }#}
+        {#        body {#}
+        {#            min-width: 860px; /* suppose you want minimun width of 1000px */#}
+        {#            width: auto !important; /* Firefox will set width as auto */#}
+        {#            width: 860px; /* As IE ignores !important it will set width as 1000px; */#}
+        {#        }#}
 
         .maindiv {
             display: none;
@@ -54,8 +54,29 @@
         {#            padding: 100px;#}
         {#        }#}
 
-        .menu-inferior .menu-superior {
+        .menu-inferior, .menu-superior {
 
+        }
+
+        .doc-cabecalho {
+
+        }
+
+        .doc-rodape {
+
+        }
+
+        .doc-container {
+            display: table;
+        }
+
+        .doc-content {
+            display: table-row;
+            height: 100%;
+        }
+
+        .doc-content-body {
+            display: table-cell;
         }
 
         #conteudo {
@@ -78,11 +99,13 @@
 
             padding: 30px;
             font-size: 11pt;
-        {#            font-family: Arial;#}
-            text-justify: distribute;
+        {#            font-family: Arial;#} text-justify: distribute;
             line-height: 22pt;
-        {#            position: absolute;#}{#            padding: 0 0 0 0;#}{#            overflow: auto;#}
-            margin-bottom: 250px
+        {#            position: absolute;#}{#            padding: 0 0 0 0;#}{#            overflow: auto;#} margin-bottom: 250px
+        }
+
+        article form {
+            height: 100%;
         }
 
         @media print {
@@ -94,9 +117,9 @@
 
         }
 
-{#        .cktop:after {#}
-{#            margin-bottom: 40px;#}
-{#        }#}
+        {#        .cktop:after {#}
+        {#            margin-bottom: 40px;#}
+        {#        }#}
 
         .no-print {
             display: block;
@@ -129,7 +152,7 @@
     <header id="menu-superior" class="navbar-fixed-top on menu-superior">
         <div class="btn-toolbar cke_top">
             <div class="btn-group">
-                <button class="btn btn-default" data-original-title="Save - Ctrl+S"><i
+                <button class="btn btn-default" data-original-title="Save - Ctrl+S" onclick="saveArt();"><i
                         class="glyphicon glyphicon-floppy-disk"></i>Salvar
                 </button>
                 <button class="btn btn-default" data-original-title="Print - Ctrl+P"><i
@@ -144,14 +167,132 @@
 
 
     <div id="conteudo">
-        <article class="teste">
+        <article class="doc-container">
 
             <!-- Conteudo -->
-            <form method="post">
+            <form method="post" id="formulario">
+                {% csrf_token %}
                 {#            {{ form }}#}
-            <textarea name="editor1" id="editor1">
+                {#                <header id="ta-cabecalho" class="header ta-cabecalho">#}
+                {#                    <textarea name="cabecalho" id="cabecalho1" data-djckeditor="true">#}
+                {#                            <p><strong>sdfsdfsdf</strong></p>#}
+                {##}
+                {#                            <p>&nbsp;</p>#}
+                {##}
+                {#                            <p>&nbsp;</p>#}
+                {##}
+                {#                            <p><strong>sdfsdfsdf</strong></p>#}
+                {##}
+                {#                            <p>&nbsp;</p>#}
+                {##}
+                {#                            <p><strong>asd</strong></p>#}
+                {##}
+                {#                            <p>&nbsp;</p>#}
+                {##}
+                {#                            <p>&nbsp;</p>#}
+                {##}
+                {#                            <p><strong>asd</strong></p>#}
+                {##}
+                {#                            <p>&nbsp;</p>#}
+                {##}
+                {#                            <p><strong>asd</strong></p>#}
+                {##}
+                {#                            <p><strong>asd</strong></p>#}
+                {##}
+                {#                            <p>&nbsp;</p>#}
+                {##}
+                {#                            <p><strong>asd</strong></p>#}
+                {##}
+                {#                            <p>&nbsp;</p>#}
+                {##}
+                {#                            <p>&nbsp;</p>#}
+                {##}
+                {#                    </textarea>#}
+                {#                </header>#}
 
-            </textarea>
+                <section id="ta-conteudo" class="doc-content">
+                    <div class="doc-content-body">
+                    <textarea name="conteudo" id="conteudo1" data-djckeditor="true">
+
+                            <p><strong>sdfsdfsdf</strong></p>
+
+                            <p>&nbsp;</p>
+
+                            <p>&nbsp;</p>
+
+                            <p><strong>sdfsdfsdf</strong></p>
+
+                            <p>&nbsp;</p>
+
+                            <p><strong>asd</strong></p>
+
+                            <p>&nbsp;</p>
+
+                            <p>&nbsp;</p>
+
+                            <p><strong>asd</strong></p>
+
+                            <p>&nbsp;</p>
+
+                            <p><strong>asd</strong></p>
+
+                            <p><strong>asd</strong></p>
+
+                            <p>&nbsp;</p>
+
+                            <p><strong>asd</strong></p>
+
+                            <p>&nbsp;</p>
+
+                            <p>&nbsp;</p>
+
+                    </textarea>
+                    </div>
+
+
+                </section>
+
+                <footer id="ta-rodape" class="footer ta-rodape">
+                    <textarea name="rodape" id="rodape1" data-djckeditor="true">
+
+
+                        <p><strong>sdfsdfsdf</strong></p>
+
+                        <p>&nbsp;</p>
+
+                        <p>&nbsp;</p>
+
+                        <p><strong>sdfsdfsdf</strong></p>
+
+                        <p>&nbsp;</p>
+
+                        <p><strong>asd</strong></p>
+
+                        <p>&nbsp;</p>
+
+                        <p>&nbsp;</p>
+
+                        <p><strong>asd</strong></p>
+
+                        <p>&nbsp;</p>
+
+                        <p><strong>asd</strong></p>
+
+                        <p><strong>asd</strong></p>
+
+                        <p>&nbsp;</p>
+
+                        <p><strong>asd</strong></p>
+
+                        <p>&nbsp;</p>
+
+                        <p>&nbsp;</p>
+
+
+                    </textarea>
+                </footer>
+
+
             </form>
         </article>
     </div>
@@ -159,17 +300,36 @@
         <div id="bottom">
             <!--  Menu inferior CKEditor  -->
         </div>
+        <div class="btn-toolbar cke_bottom" style="alignment: left;">
+            <button class="btn btn-default" id="areateste">
+            </button>
+        </div>
     </footer>
 </div>
 <script>
+    function get_ckenabledElementIds() {
+        return $('[data-djckeditor]').map(function (i) {
+            return this.id;
+        }).get();
+    }
 
-    CKEDITOR.replace('editor1', {
-        extraPlugins: 'sharedspace,save,autolink',
+    var ckenabledElementIds = get_ckenabledElementIds();
+
+
+    var ckeditor_config = {
+        extraPlugins: [
+            'sharedspace',
+            'save',
+            'autolink',
+            {#            'autogrow'#}
+        ].join(),
         removePlugins: 'resize',
         'sharedSpaces': {
             'top': 'top',
             'bottom': 'bottom'
         },
+        addCss: '.cke_reset { border: none; box-shadow: none; }',
+        {#        autoGrow_onStartup: true,#}
         contentsCss: 'html, iframe, body {overflow:hidden;outline: none;}',
         startupShowBorders: false,
         toolbarGroups: [
@@ -189,8 +349,52 @@
             {name: 'others', groups: ['others']},
             {name: 'about', groups: ['about']}
         ],
-        removeButtons: 'Source,Save,NewPage,Preview,Print,Templates,Form,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,CreateDiv,BidiLtr,BidiRtl,Language,Anchor,Unlink,Link,Flash,Smiley,SpecialChar,Iframe,About'
-    });
+        removeButtons: 'Save,NewPage,Preview,Print,Templates,Form,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,CreateDiv,BidiLtr,BidiRtl,Language,Anchor,Unlink,Link,Flash,Smiley,SpecialChar,Iframe,About'
+    };
+
+    function startCkEditor() {
+        return ckenabledElementIds.map(function (id_elemento) {
+            return {id_elemento: CKEDITOR.replace(id_elemento, ckeditor_config)};
+        });
+    }
+
+    var ckeditor_instances = startCkEditor();
+
+
+    function saveArt() {
+{#        ckeditor_instances.map(function(editor_instance){#}
+{#            editor_instance.updateElement();#}
+{#        });#}
+        for (instance in CKEDITOR.instances) {
+            CKEDITOR.instances[instance].updateElement();
+        }
+        var request = $.ajax({
+            url: "{% url 'documentos:update' object.pk %}{% if popup or next_page_url %}?{% endif %}{% if popup %}popup=1{% endif %}{% if next_page_url %}&{{ next_kwarg_name }}={{ next_page_url }}{% endif %}",
+            type: 'POST',
+            method: "POST",
+            data: $("#formulario").serialize()
+            {#            data: {id: menuId},#}
+            {#            dataType: "html"#}
+        });
+
+        request.done(function (msg) {
+            $("#areateste").html(msg);
+        });
+
+        request.fail(function (jqXHR, textStatus) {
+            alert("Request failed: " + textStatus);
+        });
+
+        return false;
+
+    }
+    {#    editor2.on('change', function (ev) {#}
+    {#        changesCount++;#}
+    {#        document.getElementById('content2').style.display = '';#}
+    {#        document.getElementById('changes').innerHTML = changesCount.toString();#}
+    {#        document.getElementById('editorcontent2').innerHTML = editor2.getData();#}
+    {#    });#}
+
 
     {#    CKEDITOR.replace('editor2', {#}
     {#        extraPlugins: 'sharedspace',#}
@@ -215,9 +419,9 @@
         var valor = "".concat(altura_menu_superior + 130).concat("px");
         conteudo.css('padding-top', valor);
     }
-{#    $(window).resize(function () {#}
-{#        corrigir_padding_conteudo();#}
-{#    });#}
+    {#    $(window).resize(function () {#}
+    {#        corrigir_padding_conteudo();#}
+    {#    });#}
     window.addEventListener('resize', corrigir_padding_conteudo, false);
 
 </script>
