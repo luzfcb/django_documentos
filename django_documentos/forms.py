@@ -85,14 +85,29 @@ class DocumentoFormUpdate(SaveHelperFormMixin, forms.ModelForm):
         # }
 
 
+class CkeditorWidgetNew(forms.Textarea):
+    def __init__(self, attrs=None):
+        # Use slightly better defaults than HTML's 20x2 box
+        default_attrs = {'data-djckeditor': 'true'}
+        if attrs:
+            default_attrs.update(attrs)
+        super(CkeditorWidgetNew, self).__init__(default_attrs)
+
+
 class DocumentoFormUpdate2(SaveHelperFormMixin, forms.ModelForm):
     # cabecalho = ckeditor_fields.RichTextField(blank=True)
     # titulo = forms.CharField(max_length=500, widget=forms.HiddenInput())
-    cabecalho = forms.CharField(widget=CKEditorWidget(config_name='compartilhado'), label='', initial='Cabecalho')
-    conteudo = forms.CharField(widget=CKEditorWidget(config_name='compartilhado'), label='')
-    rodape = forms.CharField(widget=CKEditorWidget(config_name='compartilhado'), label='', initial='Rodape')
+    # cabecalho = forms.CharField(widget=CKEditorWidget(config_name='compartilhado'), label='', initial='Cabecalho')
+    # conteudo = forms.CharField(widget=CKEditorWidget(config_name='compartilhado'), label='')
+    # rodape = forms.CharField(widget=CKEditorWidget(config_name='compartilhado'), label='', initial='Rodape')
 
-    # rodape = ckeditor_fields.RichTextField(blank=True)
+    cabecalho = forms.CharField(widget=forms.Textarea(attrs={'data-djckeditor': 'true'}), label='', initial='Cabecalho')
+    conteudo = forms.CharField(widget=CkeditorWidgetNew, label='')
+    rodape = forms.CharField(widget=forms.Textarea(attrs={'data-djckeditor': 'true'}), label='', initial='Rodape')
+
+
+
+
     class Meta:
         model = Documento
         fields = ('titulo', 'cabecalho', 'conteudo', 'rodape')

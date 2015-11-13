@@ -96,7 +96,8 @@ CKEDITOR_CONFIGS = {
             # {'name': 'document', 'items': ['Source', '-', 'Save', 'Preview', 'Print', '-', 'Templates']},
             {'name': 'document', 'items': ['Save', ]},
             {'name': 'basicstyles',
-             'items': ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat', '-', 'PasteFromWord']},
+             'items': ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat', '-',
+                       'PasteFromWord']},
 
             {'name': 'paragraph',
              'items': ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'NumberedList', 'BulletedList',
@@ -113,9 +114,50 @@ CKEDITOR_CONFIGS = {
                     # 'Maximize',
                     # 'ShowBlocks'
                 ]
-             }
+            }
         ],
-        'extraPlugins': ','.join(['sharedspace', 'save', 'autolink', 'base64image',]),
+        'extraPlugins': ','.join(['sharedspace', 'save', 'autolink', 'base64image', ]),
+        'removePlugins': ','.join(['resize', ]),
+        # 'height': 410,
+        'width': '21.0cm',
+        'sharedSpaces': {
+            'top': 'top',
+            'bottom': 'bottom'
+        },
+        'contentsCss': 'html, iframe, body {overflow:hidden;outline: none;}'
+                       '',
+        'startupShowBorders': False
+    },
+    'compartilhado': {
+        # 'fullPage': True,  # http://docs.ckeditor.com/#!/guide/dev_fullpage
+        'skin': 'moono',
+        # 'skin': 'office2013',
+        'toolbar': 'Basic',
+        'toolbar_Basic': [
+            # {'name': 'document', 'items': ['Source', '-', 'Save', 'Preview', 'Print', '-', 'Templates']},
+            {'name': 'document', 'items': ['Save', ]},
+            {'name': 'basicstyles',
+             'items': ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat', '-',
+                       'PasteFromWord']},
+
+            {'name': 'paragraph',
+             'items': ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'NumberedList', 'BulletedList',
+                       '-', 'Outdent', 'Indent', '-', 'Blockquote', '-',
+                       '-',
+                       ]},
+            {'name': 'insert',
+             'items': ['base64image', 'Table', 'HorizontalRule', 'SpecialChar', 'PageBreak']},
+            # '/',
+            {
+                'name': 'custom',
+                'items': [
+                    # 'CreateLockUnlock',
+                    # 'Maximize',
+                    # 'ShowBlocks'
+                ]
+            }
+        ],
+        'extraPlugins': ','.join(['sharedspace', 'save', 'autolink', 'base64image', ]),
         'removePlugins': ','.join(['resize', ]),
         # 'height': 410,
         'width': '21.0cm',
@@ -173,6 +215,7 @@ TEMPLATES = [
         ],
         'APP_DIRS': True,
         'OPTIONS': {
+            'debug': DEBUG,
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',

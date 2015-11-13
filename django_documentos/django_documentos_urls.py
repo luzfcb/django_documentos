@@ -9,7 +9,7 @@ from .views import (
     AssinarDocumentoView, CloseView, DocumentoCreateView, DocumentoDashboardView, DocumentoDetailView,
     DocumentoGeneralDashboardView, DocumentoHistoryView, DocumentoListView, DocumentoRevertView, DocumentoUpdateView,
     DocumentoValidacaoView, PDFViewer,
-    AssinarDocumentoView2, DocumentoDetailValidarView, ImprimirView)
+    AssinarDocumentoView2, DocumentoDetailValidarView, ImprimirView, AjaxUpdateTesteApagar)
 
 urlpatterns = [
     url(r'^$',
@@ -35,6 +35,10 @@ urlpatterns = [
     url(r'^update/(?P<pk>\d+)/$',
         DocumentoUpdateView.as_view(),
         name='update'
+        ),
+    url(r'^update2/(?P<pk>\d+)/$',
+        AjaxUpdateTesteApagar.as_view(),
+        name='update2'
         ),
     url(r'^history/(?P<pk>\d+)/$',
         DocumentoHistoryView.as_view(),

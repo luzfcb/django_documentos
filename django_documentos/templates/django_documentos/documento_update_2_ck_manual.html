@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load spurl %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -173,123 +174,18 @@
             <form method="post" id="formulario">
                 {% csrf_token %}
                 {#            {{ form }}#}
-                {#                <header id="ta-cabecalho" class="header ta-cabecalho">#}
-                {#                    <textarea name="cabecalho" id="cabecalho1" data-djckeditor="true">#}
-                {#                            <p><strong>sdfsdfsdf</strong></p>#}
-                {##}
-                {#                            <p>&nbsp;</p>#}
-                {##}
-                {#                            <p>&nbsp;</p>#}
-                {##}
-                {#                            <p><strong>sdfsdfsdf</strong></p>#}
-                {##}
-                {#                            <p>&nbsp;</p>#}
-                {##}
-                {#                            <p><strong>asd</strong></p>#}
-                {##}
-                {#                            <p>&nbsp;</p>#}
-                {##}
-                {#                            <p>&nbsp;</p>#}
-                {##}
-                {#                            <p><strong>asd</strong></p>#}
-                {##}
-                {#                            <p>&nbsp;</p>#}
-                {##}
-                {#                            <p><strong>asd</strong></p>#}
-                {##}
-                {#                            <p><strong>asd</strong></p>#}
-                {##}
-                {#                            <p>&nbsp;</p>#}
-                {##}
-                {#                            <p><strong>asd</strong></p>#}
-                {##}
-                {#                            <p>&nbsp;</p>#}
-                {##}
-                {#                            <p>&nbsp;</p>#}
-                {##}
-                {#                    </textarea>#}
-                {#                </header>#}
+                <header id="ta-cabecalho" class="header ta-cabecalho">
+                    {{ form.cabecalho }}
+                </header>
 
                 <section id="ta-conteudo" class="doc-content">
                     <div class="doc-content-body">
-                    <textarea name="conteudo" id="conteudo1" data-djckeditor="true">
-
-                            <p><strong>sdfsdfsdf</strong></p>
-
-                            <p>&nbsp;</p>
-
-                            <p>&nbsp;</p>
-
-                            <p><strong>sdfsdfsdf</strong></p>
-
-                            <p>&nbsp;</p>
-
-                            <p><strong>asd</strong></p>
-
-                            <p>&nbsp;</p>
-
-                            <p>&nbsp;</p>
-
-                            <p><strong>asd</strong></p>
-
-                            <p>&nbsp;</p>
-
-                            <p><strong>asd</strong></p>
-
-                            <p><strong>asd</strong></p>
-
-                            <p>&nbsp;</p>
-
-                            <p><strong>asd</strong></p>
-
-                            <p>&nbsp;</p>
-
-                            <p>&nbsp;</p>
-
-                    </textarea>
+                        {{ form.conteudo }}
                     </div>
-
-
                 </section>
 
                 <footer id="ta-rodape" class="footer ta-rodape">
-                    <textarea name="rodape" id="rodape1" data-djckeditor="true">
-
-
-                        <p><strong>sdfsdfsdf</strong></p>
-
-                        <p>&nbsp;</p>
-
-                        <p>&nbsp;</p>
-
-                        <p><strong>sdfsdfsdf</strong></p>
-
-                        <p>&nbsp;</p>
-
-                        <p><strong>asd</strong></p>
-
-                        <p>&nbsp;</p>
-
-                        <p>&nbsp;</p>
-
-                        <p><strong>asd</strong></p>
-
-                        <p>&nbsp;</p>
-
-                        <p><strong>asd</strong></p>
-
-                        <p><strong>asd</strong></p>
-
-                        <p>&nbsp;</p>
-
-                        <p><strong>asd</strong></p>
-
-                        <p>&nbsp;</p>
-
-                        <p>&nbsp;</p>
-
-
-                    </textarea>
+                    {{ form.rodape }}
                 </footer>
 
 
@@ -360,16 +256,23 @@
 
     var ckeditor_instances = startCkEditor();
 
+    $('#post-form').on('submit', function (event) {
+        event.preventDefault();
+        console.log("form submitted!")  // sanity check
+        create_post();
+    });
 
-    function saveArt() {
-{#        ckeditor_instances.map(function(editor_instance){#}
-{#            editor_instance.updateElement();#}
-{#        });#}
+
+    function create_post() {
+        {#        ckeditor_instances.map(function(editor_instance){#}
+        {#            editor_instance.updateElement();#}
+        {#        });#}
         for (instance in CKEDITOR.instances) {
             CKEDITOR.instances[instance].updateElement();
         }
+
         var request = $.ajax({
-            url: "{% url 'documentos:update' object.pk %}{% if popup or next_page_url %}?{% endif %}{% if popup %}popup=1{% endif %}{% if next_page_url %}&{{ next_kwarg_name }}={{ next_page_url }}{% endif %}",
+            url: '/update2/8/?popup=1',
             type: 'POST',
             method: "POST",
             data: $("#formulario").serialize()
@@ -388,23 +291,100 @@
         return false;
 
     }
-    {#    editor2.on('change', function (ev) {#}
-    {#        changesCount++;#}
-    {#        document.getElementById('content2').style.display = '';#}
-    {#        document.getElementById('changes').innerHTML = changesCount.toString();#}
-    {#        document.getElementById('editorcontent2').innerHTML = editor2.getData();#}
-    {#    });#}
+</script>
 
 
-    {#    CKEDITOR.replace('editor2', {#}
-    {#        extraPlugins: 'sharedspace',#}
-    {#        removePlugins: 'resize',#}
-    {#        height: 410,#}
-    {#        sharedSpaces: {#}
-    {#            top: 'top',#}
-    {#            bottom: 'bottom'#}
-    {#        }#}
-    {#    });#}
+<script>
+    $(function () {
+
+
+        // Submit post on submit
+        $('#formulario-form').on('submit', function (event) {
+            event.preventDefault();
+            console.log("form submitted!");  // sanity check
+            create_post();
+        });
+
+        // AJAX for posting
+        function create_post() {
+            console.log("create post is working!"); // sanity check
+            $.ajax({
+                url: "/update2/8/?popup=1",//"create_post/", // the endpoint
+                type: "POST", // http method
+                data: {the_post: $("#formulario").serialize()}, // data sent with the post request
+                // handle a successful response
+                success: function (json) {
+                    $('#formulario-text').val(''); // remove the value from the input
+                    console.log(json); // log the returned json to the console
+                    $("#talk").prepend("<li><strong>" + json.pk + "</strong> - <em> " + json.conteudo + "</em> - <span> " + json.created +
+                            "</span> - <a id='delete-post-" + json.pk + "'>delete me</a></li>");
+                    console.log("success"); // another sanity check
+                },
+                // handle a non-successful response
+                error: function (xhr, errmsg, err) {
+                    $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
+                            " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                    console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                }
+            });
+        }
+
+
+        // This function gets cookie with a given name
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        var csrftoken = getCookie('csrftoken');
+
+        /*
+         The functions below will create a header with csrftoken
+         */
+
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+        function sameOrigin(url) {
+            // test that a given url is a same-origin URL
+            // url could be relative or scheme relative or absolute
+            var host = document.location.host; // host + port
+            var protocol = document.location.protocol;
+            var sr_origin = '//' + host;
+            var origin = protocol + sr_origin;
+            // Allow absolute or scheme relative URLs to same origin
+            return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+                    (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+                        // or any other URL that isn't scheme relative or absolute i.e relative.
+                    !(/^(\/\/|http:|https:).*/.test(url));
+        }
+
+        $.ajaxSetup({
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+                    // Send the token to same-origin, relative URLs only.
+                    // Send the token only if the method warrants CSRF protection
+                    // Using the CSRFToken value acquired earlier
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+
+    });
+
 </script>
 
 {#{% if form %}#}

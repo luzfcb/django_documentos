@@ -554,7 +554,7 @@ class AjaxUpdateTesteApagar(DocumentoAssinadoRedirectMixin,
                           AuditavelViewMixin,
                           #NextURLMixin,
                           PopupMixin,
-                          generic.UpdateView):
+                          generic.FormView):
     template_name = 'django_documentos/documento_update_2_ck_manual.html'
     # template_name = 'django_documentos/documento_update.html'
     model = Documento
@@ -562,11 +562,22 @@ class AjaxUpdateTesteApagar(DocumentoAssinadoRedirectMixin,
     form_class = DocumentoFormUpdate2
     # success_url = reverse_lazy('documentos:list')
     success_url = None
+    # hack feio
+    object = Documento.objects.get(id=8)
+
+    def post(self, request, *args, **kwargs):
+        a = locals()
+        return super(AjaxUpdateTesteApagar, self).post(request, *args, **kwargs)
 
     def form_invalid(self, form):
         response = super(AjaxUpdateTesteApagar, self).form_invalid(form)
         if self.request.is_ajax():
-            return JsonResponse(form.errors, status=400)
+            data = {
+                'pk': self.object.pk,
+                'conteudo': self.object.conteudo,
+                'erros': form.errors
+            }
+            return JsonResponse(data, status=400)
         else:
             return response
 
