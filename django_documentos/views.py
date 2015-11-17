@@ -3,6 +3,7 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 import json
 
+import status
 from captcha.helpers import captcha_image_url
 from captcha.models import CaptchaStore
 from django.contrib import messages
@@ -550,50 +551,43 @@ class ImprimirView(DocumentoDetailView):
             )
 
 
-class AjaxUpdateTesteApagar(DocumentoAssinadoRedirectMixin,
+class AjaxFormPostMixin(object):
+    document_json_fields = ('pk',)
+
+    def form_valid(self, form):
+        response = super(AjaxFormPostMixin, self).form_valid(form)
+        if self.request.is_ajax():
+            obj = self.get_object()
+            data = {}
+            for field in self.document_json_fields:
+                data[field] = getattr(obj, field)
+            data['success_url'] = self.get_success_url()
+            return JsonResponse(data=data)
+        return response
+
+    def form_invalid(self, form):
+        response = super(AjaxFormPostMixin, self).form_invalid(form)
+        if self.request.is_ajax():
+            data = form.errors
+            return JsonResponse(data=data, status=status.HTTP_400_BAD_REQUEST)
+        return response
+
+
+class AjaxUpdateTesteApagar(AjaxFormPostMixin, DocumentoAssinadoRedirectMixin,
                           AuditavelViewMixin,
-                          #NextURLMixin,
+                          NextURLMixin,
                           PopupMixin,
-                          generic.FormView):
+                          generic.UpdateView):
+    document_json_fields = ('titulo', 'document_number', 'document_version_number', 'identificador_versao')
     template_name = 'django_documentos/documento_update_2_ck_manual.html'
     # template_name = 'django_documentos/documento_update.html'
     model = Documento
     #form_class = DocumentoFormCreate
     form_class = DocumentoFormUpdate2
-    # success_url = reverse_lazy('documentos:list')
-    success_url = None
-    # hack feio
-    object = Documento.objects.get(id=8)
-
-    def post(self, request, *args, **kwargs):
-        a = locals()
-        return super(AjaxUpdateTesteApagar, self).post(request, *args, **kwargs)
-
-    def form_invalid(self, form):
-        response = super(AjaxUpdateTesteApagar, self).form_invalid(form)
-        if self.request.is_ajax():
-            data = {
-                'pk': self.object.pk,
-                'conteudo': self.object.conteudo,
-                'erros': form.errors
-            }
-            return JsonResponse(data, status=400)
-        else:
-            return response
+    success_url = reverse_lazy('documentos:list')
 
     def form_valid(self, form):
-        # We make sure to call the parent's form_valid() method because
-        # it might do some processing (in the case of CreateView, it will
-        # call form.save() for example).
-        response = super(AjaxUpdateTesteApagar, self).form_valid(form)
-        if self.request.is_ajax():
-            print('eh ajax')
-            data = {
-                'pk': self.object.pk,
-                'conteudo': self.object.conteudo
-            }
-            return JsonResponse(data)
-        else:
-            return response
+        return super(AjaxUpdateTesteApagar, self).form_valid(form)
 
+    #success_url = None
 
