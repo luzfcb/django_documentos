@@ -561,6 +561,7 @@ class AjaxFormPostMixin(object):
             data = {}
             for field in self.document_json_fields:
                 data[field] = getattr(obj, field)
+            data['errors'] = form.errors
             data['success_url'] = self.get_success_url()
             return JsonResponse(data=data)
         return response
@@ -568,7 +569,12 @@ class AjaxFormPostMixin(object):
     def form_invalid(self, form):
         response = super(AjaxFormPostMixin, self).form_invalid(form)
         if self.request.is_ajax():
-            data = form.errors
+            obj = self.get_object()
+            data = {}
+            for field in self.document_json_fields:
+                data[field] = getattr(obj, field)
+            data['errors'] = form.errors
+            data['success_url'] = self.get_success_url()
             return JsonResponse(data=data, status=status.HTTP_400_BAD_REQUEST)
         return response
 

@@ -188,10 +188,6 @@
                   action="
 
 
-
-
-
-
                           {% url 'documentos:update2' object.pk %}{% if popup or next_page_url %}?{% endif %}{% if popup %}popup=1{% endif %}{% if next_page_url %}&{{ next_kwarg_name }}={{ next_page_url }}{% endif %}">
 
                 {% csrf_token %}
@@ -225,6 +221,7 @@
         </div>
     </footer>
 </div>
+
 <script>
     function get_ckenabledElementIds() {
         return $('[data-djckeditor]').map(function (i) {
@@ -268,16 +265,19 @@
             {name: 'others', groups: ['others']},
             {name: 'about', groups: ['about']}
         ],
-        removeButtons: 'Save,NewPage,Preview,Print,Templates,Form,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,CreateDiv,BidiLtr,BidiRtl,Language,Anchor,Unlink,Link,Flash,Smiley,SpecialChar,Iframe,About'
+        removeButtons: 'Source,Save,NewPage,Preview,Print,Templates,Form,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,CreateDiv,BidiLtr,BidiRtl,Language,Anchor,Unlink,Link,Flash,Smiley,SpecialChar,Iframe,About'
     };
 
     function startCkEditor() {
-        return ckenabledElementIds.map(function (id_elemento) {
-            return {id_elemento: CKEDITOR.replace(id_elemento, ckeditor_config)};
+        {#        var dict = {};#}
+        ckenabledElementIds.map(function (id_elemento) {
+            CKEDITOR.replace(id_elemento, ckeditor_config);
+            {#            dict[id_elemento] = CKEDITOR.replace(id_elemento, ckeditor_config);#}
         });
+        {#        return dict;#}
     }
 
-    var ckeditor_instances = startCkEditor();
+    startCkEditor();
 
 
     function beforeUnload(evt) {
@@ -292,24 +292,16 @@
         }
     }
 
-    if (window.addEventListener) {
-        window.addEventListener('beforeunload', beforeUnload, false);
-    } else {
-        window.attachEvent('onbeforeunload', beforeUnload);
-    }
-
-    for (var instance in CKEDITOR.instances) {
-
-        CKEDITOR.instances[instance].on('change', function () {
-            CKEDITOR.instances[instance].updateElement();
-            $("#salvar").prop('disabled', true);
-        });
-
-    }
-</script>
+    {% if not debug %}
+        if (window.addEventListener) {
+            window.addEventListener('beforeunload', beforeUnload, false);
+        } else {
+            window.attachEvent('onbeforeunload', beforeUnload);
+        }
+    {% endif %}
 
 
-<script>
+
     //http://brack3t.com/ajax-and-django-views.html
     //https://github.com/wavded/humane-js
     //https://github.com/alertifyjs/alertify.js
@@ -317,6 +309,48 @@
     $(document).ready(function () {
         var requestRunning = false;
 
+        var conteudo_modificado = {};
+
+        var $botao_salvar = $("#salvar");
+        var $formulario = $("#formulario");
+
+
+        function ativarDesativarSalvar() {
+            var ativar = false;
+            for (var key in conteudo_modificado) {
+                ativar = conteudo_modificado[key];
+                if (ativar) {
+                    break;
+                }
+            }
+            if (ativar) {
+                $botao_salvar.prop('disabled', false);
+            }
+            else {
+                $botao_salvar.prop('disabled', true);
+            }
+            return ativar;
+
+        }
+
+        for (var instance in CKEDITOR.instances) {
+            var id_elemento = "" + instance;
+            conteudo_modificado[id_elemento] = false;
+            CKEDITOR.instances[id_elemento].on('change', function () {
+
+                if (CKEDITOR.instances[this.name].checkDirty()) {
+                    conteudo_modificado[this.name] = true;
+
+                } else {
+                    conteudo_modificado[this.name] = false;
+
+
+                }
+                ativarDesativarSalvar();
+
+            });
+
+        }
         function django_message(msg, level) {
             console.log("Level: ", level, 'MSG: ', msg)
         }
@@ -336,10 +370,11 @@
         }
 
         //seu codigo lindo aqui
-        $("#formulario").submit(function (event) {
+        $formulario.submit(function (event) {
             // Stop form from submitting normally
             event.preventDefault();
-            console.log("passou aqui");
+
+
             if (requestRunning) { // don't do anything if an AJAX request is pending
                 return;
             }
@@ -361,7 +396,6 @@
 
             // Put the results in a div
             posting.fail(function (jqXHR, textStatus, errorThrown) {
-                console.log("fail jqXHR:", jqXHR);
                 {#                                        console.log("fail textStatus:", textStatus);#}
                 {#                                        console.log("fail errorThrown:", errorThrown);#}
                 {#                                        var content = textStatus;#}
@@ -370,8 +404,9 @@
 
                 var errors = jqXHR.responseJSON;
                 {#                    var errors = $.parseJSON(jqXHR.responseText);#}
-                console.log('errors: ', errors);
-                humane.log("Erro ao salvar", {
+                console.log(errors);
+                var msg = "Erro ao salvar documento" + errors.document_number + "\n";
+                humane.log(msg, {
                     timeout: 2500,
                     clickToClose: true,
                     addnCls: 'humane-error'
@@ -393,6 +428,11 @@
                 console.log("done jqXHR:", jqXHR);
                 var content = $(data);
                 console.log($(data));
+                for (var instance in CKEDITOR.instances) {
+                    CKEDITOR.instances[instance].resetUndo();
+                    conteudo_modificado[instance] = false;
+                }
+                ativarDesativarSalvar();
                 var mensagem = "Documento N° " + data.document_number + " salvo com sucesso!";
                 humane.log(mensagem, {
                     timeout: 2500,
@@ -405,7 +445,19 @@
                 console.log("always");
                 requestRunning = false;
             });
+        }).bind('ajax:complete', function () {
+
+            // tasks to do
+            console.log("ajax completo");
+
+
         });
+        $botao_salvar.click(function () {
+
+            $("#formulario").submit();
+
+        });
+
 
     });
 
@@ -466,17 +518,7 @@
         }
     });
 
-    $("#salvar").click(function () {
 
-        $("#formulario").submit();
-
-    });
-    $("#formulario").bind('ajax:complete', function () {
-
-        // tasks to do
-
-
-    });
 </script>
 
 
@@ -487,11 +529,12 @@
         var altura_menu_superior = parseInt(menusuperior.css('height').replace(/[^-\d\.]/g, ''));
         var valor = "".concat(altura_menu_superior + 130).concat("px");
         conteudo.css('padding-top', valor);
+        console.log('corrigindo');
     }
     {#    $(window).resize(function () {#}
     {#        corrigir_padding_conteudo();#}
     {#    });#}
-    window.addEventListener('resize', corrigir_padding_conteudo, false);
+    window.addEventListener('resize.corrigir_padding_conteudo', corrigir_padding_conteudo, false);
 
     Pace.on('hide', function () {
 
