@@ -278,7 +278,22 @@ class Documento(models.Model):
 
     @property
     def identificador_versao(self):
+        if not self.pk:
+            return None
         return identificador.document(self.pk, self.versao_numero)
+
+    @property
+    def document_number(self):
+        if not self.pk:
+            return None
+        return identificador.document_number(self.pk)
+
+    @property
+    def document_version_number(self):
+        if not self.pk:
+            return None
+        return identificador.document_version_number(self.versao_numero)
+
 
     def __str__(self):
         return '{}-{}-{}'.format(self.pk, self.versao_numero, getattr(self, 'esta_assinado', ''))

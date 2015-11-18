@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load i18n %}
 {% load spurl %}
 <!DOCTYPE html>
 <html>
@@ -16,6 +17,18 @@
             data-pace-options='{ "ajax": false , "restartOnRequestAfter": false, "document": false}'></script>
 
 
+    <link type="text/css"
+            {#          href="https://cdnjs.cloudflare.com/ajax/libs/humane-js/3.2.2/themes/flatty.min.css"#}
+          href="https://cdnjs.cloudflare.com/ajax/libs/humane-js/3.2.2/themes/jackedup.min.css"
+          rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/humane-js/3.2.2/humane.min.js"></script>
+    <style>
+        {#        .humane,#}
+        {#        .humane-jackedup {#}
+        {#            background-color: #d0ffcf;#}
+        {#        }#}
+
+    </style>
     {#    <link type="text/css" href="{% static "django_documentos/bootstrap/bootstrap-3.3.5-dist/css/bootstrap.min.css" %}"#}
     {#          rel="stylesheet">#}
     <link type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
@@ -153,7 +166,7 @@
     <header id="menu-superior" class="navbar-fixed-top on menu-superior">
         <div class="btn-toolbar cke_top">
             <div class="btn-group">
-                <button class="btn btn-default" data-original-title="Save - Ctrl+S" onclick="saveArt();"><i
+                <button class="btn btn-default" data-original-title="Save - Ctrl+S" id="salvar" disabled="disabled"><i
                         class="glyphicon glyphicon-floppy-disk"></i>Salvar
                 </button>
                 <button class="btn btn-default" data-original-title="Print - Ctrl+P"><i
@@ -171,7 +184,16 @@
         <article class="doc-container">
 
             <!-- Conteudo -->
-            <form method="post" id="formulario">
+            <form method="post" id="formulario"
+                  action="
+
+
+
+
+
+
+                          {% url 'documentos:update2' object.pk %}{% if popup or next_page_url %}?{% endif %}{% if popup %}popup=1{% endif %}{% if next_page_url %}&{{ next_kwarg_name }}={{ next_page_url }}{% endif %}">
+
                 {% csrf_token %}
                 {#            {{ form }}#}
                 <header id="ta-cabecalho" class="header ta-cabecalho">
@@ -196,9 +218,10 @@
         <div id="bottom">
             <!--  Menu inferior CKEditor  -->
         </div>
-        <div class="btn-toolbar cke_bottom" style="alignment: left;">
+        <div class="btn-toolbar cke_bottom">
             <button class="btn btn-default" id="areateste">
             </button>
+            <div class="pull-right" id="status-bar">Documento: {{ object.identificador_versao }}</div>
         </div>
     </footer>
 </div>
@@ -224,7 +247,7 @@
             'top': 'top',
             'bottom': 'bottom'
         },
-        addCss: '.cke_reset { border: none; box-shadow: none; }',
+        addCss: '.fabio .cke_reset { border: none; box-shadow: none; }',
         {#        autoGrow_onStartup: true,#}
         contentsCss: 'html, iframe, body {overflow:hidden;outline: none;}',
         startupShowBorders: false,
@@ -256,142 +279,208 @@
 
     var ckeditor_instances = startCkEditor();
 
-    $('#post-form').on('submit', function (event) {
-        event.preventDefault();
-        console.log("form submitted!")  // sanity check
-        create_post();
-    });
 
-
-    function create_post() {
-        {#        ckeditor_instances.map(function(editor_instance){#}
-        {#            editor_instance.updateElement();#}
-        {#        });#}
-        for (instance in CKEDITOR.instances) {
-            CKEDITOR.instances[instance].updateElement();
+    function beforeUnload(evt) {
+        var item_nao_salvo = false;
+        for (var instance in CKEDITOR.instances) {
+            if (CKEDITOR.instances[instance].checkDirty()) {
+                item_nao_salvo = true;
+            }
         }
+        if (item_nao_salvo) {
+            return evt.returnValue = "{% trans "O documento possui modificações e ainda não foi salvo" %}";
+        }
+    }
 
-        var request = $.ajax({
-            url: '/update2/8/?popup=1',
-            type: 'POST',
-            method: "POST",
-            data: $("#formulario").serialize()
-            {#            data: {id: menuId},#}
-            {#            dataType: "html"#}
+    if (window.addEventListener) {
+        window.addEventListener('beforeunload', beforeUnload, false);
+    } else {
+        window.attachEvent('onbeforeunload', beforeUnload);
+    }
+
+    for (var instance in CKEDITOR.instances) {
+
+        CKEDITOR.instances[instance].on('change', function () {
+            CKEDITOR.instances[instance].updateElement();
+            $("#salvar").prop('disabled', true);
         });
-
-        request.done(function (msg) {
-            $("#areateste").html(msg);
-        });
-
-        request.fail(function (jqXHR, textStatus) {
-            alert("Request failed: " + textStatus);
-        });
-
-        return false;
 
     }
 </script>
 
 
 <script>
-    $(function () {
+    //http://brack3t.com/ajax-and-django-views.html
+    //https://github.com/wavded/humane-js
+    //https://github.com/alertifyjs/alertify.js
+    //versao 2
+    $(document).ready(function () {
+        var requestRunning = false;
 
+        function django_message(msg, level) {
+            console.log("Level: ", level, 'MSG: ', msg)
+        }
 
-        // Submit post on submit
-        $('#formulario-form').on('submit', function (event) {
+        function apply_form_field_error(fieldname, error) {
+            var input = $("#id_" + fieldname),
+                    container = $("#div_id_" + fieldname),
+                    error_msg = $("<span />").addClass("help-inline ajax-error").text(error[0]);
+
+            container.addClass("error");
+            error_msg.insertAfter(input);
+        }
+
+        function clear_form_field_errors(form) {
+            $(".ajax-error", $(form)).remove();
+            $(".error", $(form)).removeClass("error");
+        }
+
+        //seu codigo lindo aqui
+        $("#formulario").submit(function (event) {
+            // Stop form from submitting normally
             event.preventDefault();
-            console.log("form submitted!");  // sanity check
-            create_post();
-        });
+            console.log("passou aqui");
+            if (requestRunning) { // don't do anything if an AJAX request is pending
+                return;
+            }
 
-        // AJAX for posting
-        function create_post() {
-            console.log("create post is working!"); // sanity check
-            $.ajax({
-                url: "/update2/8/?popup=1",//"create_post/", // the endpoint
-                type: "POST", // http method
-                data: {the_post: $("#formulario").serialize()}, // data sent with the post request
-                // handle a successful response
-                success: function (json) {
-                    $('#formulario-text').val(''); // remove the value from the input
-                    console.log(json); // log the returned json to the console
-                    $("#talk").prepend("<li><strong>" + json.pk + "</strong> - <em> " + json.conteudo + "</em> - <span> " + json.created +
-                            "</span> - <a id='delete-post-" + json.pk + "'>delete me</a></li>");
-                    console.log("success"); // another sanity check
-                },
-                // handle a non-successful response
-                error: function (xhr, errmsg, err) {
-                    $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
-                            " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
-                    console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
-                }
+            for (var instance in CKEDITOR.instances) {
+                CKEDITOR.instances[instance].updateElement();
+            }
+            // Get some values from elements on the page:
+            var $form = $(this);
+            var conteudo = $form.serializeArray();
+            var url = $form.attr("action");
+
+            clear_form_field_errors($form);
+            requestRunning = true;
+            // Send the data using post
+            // parametros url, data, callback, type
+            // sendo que callback é sucess
+            var posting = $.post(url, conteudo, 'JSON');
+
+            // Put the results in a div
+            posting.fail(function (jqXHR, textStatus, errorThrown) {
+                console.log("fail jqXHR:", jqXHR);
+                {#                                        console.log("fail textStatus:", textStatus);#}
+                {#                                        console.log("fail errorThrown:", errorThrown);#}
+                {#                                        var content = textStatus;#}
+                {#                                        $("#results").empty().append(content);#}
+
+
+                var errors = jqXHR.responseJSON;
+                {#                    var errors = $.parseJSON(jqXHR.responseText);#}
+                console.log('errors: ', errors);
+                humane.log("Erro ao salvar", {
+                    timeout: 2500,
+                    clickToClose: true,
+                    addnCls: 'humane-error'
+                });
+                {#                $.each(errors, function (index, value) {#}
+                {#                    if (index === "__all__") {#}
+                {#                        django_message(value[0], "error");#}
+                {#                    } else {#}
+                {#                        apply_form_field_error(index, value);#}
+                {#                    }#}
+                {#                });#}
+
+
             });
-        }
-
-
-        // This function gets cookie with a given name
-        function getCookie(name) {
-            var cookieValue = null;
-            if (document.cookie && document.cookie != '') {
-                var cookies = document.cookie.split(';');
-                for (var i = 0; i < cookies.length; i++) {
-                    var cookie = jQuery.trim(cookies[i]);
-                    // Does this cookie string begin with the name we want?
-                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
-
-        var csrftoken = getCookie('csrftoken');
-
-        /*
-         The functions below will create a header with csrftoken
-         */
-
-        function csrfSafeMethod(method) {
-            // these HTTP methods do not require CSRF protection
-            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-        }
-
-        function sameOrigin(url) {
-            // test that a given url is a same-origin URL
-            // url could be relative or scheme relative or absolute
-            var host = document.location.host; // host + port
-            var protocol = document.location.protocol;
-            var sr_origin = '//' + host;
-            var origin = protocol + sr_origin;
-            // Allow absolute or scheme relative URLs to same origin
-            return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
-                    (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
-                        // or any other URL that isn't scheme relative or absolute i.e relative.
-                    !(/^(\/\/|http:|https:).*/.test(url));
-        }
-
-        $.ajaxSetup({
-            beforeSend: function (xhr, settings) {
-                if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
-                    // Send the token to same-origin, relative URLs only.
-                    // Send the token only if the method warrants CSRF protection
-                    // Using the CSRFToken value acquired earlier
-                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                }
-            }
+            // Put the results in a div
+            posting.done(function (data, textStatus, jqXHR) {
+                console.log("done data:", data);
+                console.log("done textStatus:", textStatus);
+                console.log("done jqXHR:", jqXHR);
+                var content = $(data);
+                console.log($(data));
+                var mensagem = "Documento N° " + data.document_number + " salvo com sucesso!";
+                humane.log(mensagem, {
+                    timeout: 2500,
+                    clickToClose: true,
+                    addnCls: 'humane-sucess'
+                });
+                $("#status-bar").empty().append('Documento: ' + data.identificador_versao);
+            });
+            posting.always(function (data, textStatus, errorThrown) {
+                console.log("always");
+                requestRunning = false;
+            });
         });
 
     });
 
+
+    // This function gets cookie with a given name
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    var csrftoken = getCookie('csrftoken');
+
+    /*
+     The functions below will create a header with csrftoken
+     */
+
+    function csrfSafeMethod(method) {
+        console.log('csrfSafeMethod');
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    function sameOrigin(url) {
+        console.log('sameOrigin');
+        // test that a given url is a same-origin URL
+        // url could be relative or scheme relative or absolute
+        var host = document.location.host; // host + port
+        var protocol = document.location.protocol;
+        var sr_origin = '//' + host;
+        var origin = protocol + sr_origin;
+        // Allow absolute or scheme relative URLs to same origin
+        return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+                (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+                    // or any other URL that isn't scheme relative or absolute i.e relative.
+                !(/^(\/\/|http:|https:).*/.test(url));
+    }
+
+    $.ajaxSetup({
+        beforeSend: function (xhr, settings) {
+            console.log('beforeSend');
+            if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+                // Send the token to same-origin, relative URLs only.
+                // Send the token only if the method warrants CSRF protection
+                // Using the CSRFToken value acquired earlier
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+
+    $("#salvar").click(function () {
+
+        $("#formulario").submit();
+
+    });
+    $("#formulario").bind('ajax:complete', function () {
+
+        // tasks to do
+
+
+    });
 </script>
 
-{#{% if form %}#}
-{#    {{ form.media }}#}
-{#{% endif %}#}
-<script>
 
+<script>
     function corrigir_padding_conteudo() {
         var menusuperior = $('#menu-superior');
         var conteudo = $('#conteudo');
@@ -404,19 +493,11 @@
     {#    });#}
     window.addEventListener('resize', corrigir_padding_conteudo, false);
 
-</script>
-
-
-<script>
-
     Pace.on('hide', function () {
 
         $(".maindiv").fadeIn("fast");
         corrigir_padding_conteudo();
     });
-    {#    $(window).load(function () {#}
-    {#        $("body").fadeIn("slow");#}
-    {#    });#}
 </script>
 {#<script>#}
 {#    function resizeToMinimum() {#}

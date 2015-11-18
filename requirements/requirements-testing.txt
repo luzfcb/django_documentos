@@ -10,10 +10,11 @@ django_coverage_plugin
 django-test-plus
 codecov
 Pillow
+python-status
 django-bootstrap3
 django-bootstrap-pagination
 django-spurl
-django-extensions
+django-extensions>=1.5.9
 django-parsley
 pygraphviz
 django-extra-views

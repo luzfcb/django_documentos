@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function
-
 import os
 import sys
-
 from django.utils import six
 
 __author__ = 'luzfcb'
@@ -40,13 +38,19 @@ def identifier(n, v):
     return 'v'.join((n, v))
 
 
+def document_number(n):
+    return sequence(n, DOCUMENT_MAX_DIGITS)
+
+
+def document_version_number(v):
+    return sequence(v, DOCUMENT_VERSION_MAX_DIGITS)
+
+
 def document(n, v):
-    return identifier(sequence(n, DOCUMENT_MAX_DIGITS), sequence(v, DOCUMENT_VERSION_MAX_DIGITS))
-
-
-
+    return identifier(document_number(n), document_version_number(v))
 
 
 if __name__ == "__main__":
     import pytest
+
     pytest.main(args=['-vv', os.path.join(__file__)], )
