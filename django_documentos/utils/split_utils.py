@@ -1,4 +1,5 @@
 import collections
+
 try:
     from django.utils import six
 except ImportError:

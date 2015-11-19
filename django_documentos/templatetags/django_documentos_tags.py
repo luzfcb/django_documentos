@@ -3,9 +3,9 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 from django import template
 from django.forms.models import modelform_factory
-from django.template.defaulttags import URLNode, url
 
 from simple_history.forms import new_readonly_form_class
+
 from ..utils import identificador
 
 register = template.Library()
@@ -37,27 +37,25 @@ def identificador_versao(model_instance):
         return identificador.document(model_instance.pk, model_instance.versao_numero)
 
 
-"""
-Usage: {{ url|absolute_uri:request }}
-
-sample 1:
-
-{% url 'my-view' as my_view %}
-{{ my_view:absolute_uri:request }}
-
-<a href="{{ my_view|absolute_uri:request }}"></a>
-
-or
-
-{{ my_view|absolute_uri:request|urlize }}
-
-sample 2:
-
-{{ '/foo/bar/'|absolute_uri:request as zz }}
-"""
-
-
-
 @register.filter
 def absolute_uri(url, request):
+
+    """
+    Usage: {{ url|absolute_uri:request }}
+
+    sample 1:
+
+    {% url 'my-view' as my_view %}
+    {{ my_view:absolute_uri:request }}
+
+    <a href="{{ my_view|absolute_uri:request }}"></a>
+
+    or
+
+    {{ my_view|absolute_uri:request|urlize }}
+
+    sample 2:
+
+    {{ '/foo/bar/'|absolute_uri:request as zz }}
+    """
     return request.build_absolute_uri(url)

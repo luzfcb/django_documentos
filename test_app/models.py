@@ -17,4 +17,3 @@ class ProcessoDocumento(models.Model):
     documento = models.ForeignKey('django_documentos.Documento')
     processo = models.ForeignKey('Processo')
     data = models.DateTimeField(auto_now_add=True)
-

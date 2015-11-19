@@ -31,7 +31,6 @@ from __future__ import with_statement
 
 import argparse
 import collections
-import contextlib
 import errno
 import gzip
 import io
@@ -41,6 +40,7 @@ import os
 import re
 import shutil
 import sys
+
 import tinycss
 
 try:
@@ -53,7 +53,7 @@ try:
 except ImportError:
     import urllib.parse as urlparse
 
-VERSION=(0,1,0)
+VERSION = (0, 1, 0)
 
 # ADT for font positional command-line arguments
 FontArgument = collections.namedtuple("FontArgument", ["family", "variants"])
@@ -67,26 +67,26 @@ default_user_agent = \
 
 # Mapping from font format to file extension
 fontfmt_extensions = {
-    "embedded-opentype":    "eot",
-    "opentype":             "ttf",
-    "svg":                  "svg",
-    "truetype":             "ttf",
-    "woff":                 "woff",
+    "embedded-opentype": "eot",
+    "opentype": "ttf",
+    "svg": "svg",
+    "truetype": "ttf",
+    "woff": "woff",
 }
 
 # Mapping from font format to User-Agent string required to get the format
 fontfmt_user_agent = {
     # EOT is served to IE 8-
     # IE 8 on Windows 7
-    "embedded-opentype":  "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0)",
+    "embedded-opentype": "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0)",
 
     # SVG is served to Safari Mobile 3-4
     # Safari 3 on iPhone
-    "svg":  "Mozilla/5.0 (iPhone; U; CPU like Mac OS X) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543 Safari/419.3",
+    "svg": "Mozilla/5.0 (iPhone; U; CPU like Mac OS X) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543 Safari/419.3",
 
     # TTF is served to Android 4, Opera 11.01-, Safari Mobile 5+, non-Mobile Safari
     # Safari 6 on iPad
-    "truetype":  "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US) AppleWebKit/531.21.8 (KHTML, like Gecko) Version/4.0.4 Safari/531.21.10",
+    "truetype": "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US) AppleWebKit/531.21.8 (KHTML, like Gecko) Version/4.0.4 Safari/531.21.10",
 
     # WOFF is served to Chrome, Firefox, Opera 11.10+
     # Firefox 15 on Ubuntu
@@ -97,15 +97,20 @@ fontfmt_user_agent = {
 # FIXME:  This is probably UA-dependent.  Switch to non-separate where possible
 fontfmt_serialize = frozenset(["embedded-opentype", "svg"])
 
+logger = None
+
+
 def setup_logging():
     """Initialize the global logger variable to a root logger for the console"""
-    global logger
+    # global logger
 
     formatter = logging.Formatter("%(levelname)s: %(message)s")
     handler = logging.StreamHandler()
     handler.setFormatter(formatter)
     logger = logging.getLogger()
     logger.addHandler(handler)
+
+
 setup_logging()
 
 
@@ -127,17 +132,15 @@ class ConnectionPool(object):
         if conn:
             conn.close()
 
-
     def close_all(self):
         conns = itertools.chain(
-                self._http_connections.values(),
-                self._https_connections.values()
-            )
+            self._http_connections.values(),
+            self._https_connections.values()
+        )
         for conn in conns:
             conn.close()
         self._http_connections.clear()
         self._https_connections.clear()
-
 
     def get(self, proto, host):
         if proto == "http":
@@ -150,6 +153,7 @@ class ConnectionPool(object):
             return self._https_connections[host]
         else:
             raise ValueError("Unsupported protocol")
+
 
 # Shared global connection pool
 connection_pool = ConnectionPool()
@@ -172,15 +176,15 @@ class CSSFontFace3Parser(tinycss.css21.CSS21Parser):
         if rule.at_keyword == "@font-face":
             if rule.head:
                 raise tinycss.css21.ParseError(rule.head[0],
-                        "Unexpected token {0} in {1} rule header".format(
-                                rule.head[0].type, rule.at_keyword))
+                                               "Unexpected token {0} in {1} rule header".format(
+                                                   rule.head[0].type, rule.at_keyword))
             declarations, body_errors = self.parse_declaration_list(rule.body)
             errors.extend(body_errors)
             return FontFaceRule(rule.at_keyword, declarations,
-                    rule.line, rule.column)
+                                rule.line, rule.column)
 
         return super(CSSFontFace3Parser, self).parse_at_rule(rule,
-                previous_rules, errors, context)
+                                                             previous_rules, errors, context)
 
 
 # FIXME:  Should return HTTPResponse wrapper which handles decoding
@@ -189,7 +193,7 @@ def decode_response(response):
 
     encoding = response.getheader("Content-Encoding")
     if encoding == "gzip":
-        if sys.version_info < (3,2):
+        if sys.version_info < (3, 2):
             gzipdata = io.BytesIO(response.read())
             responsedata = gzip.GzipFile(fileobj=gzipdata)
         else:
@@ -266,7 +270,7 @@ def choose_font_name(names):
 
     if len(remaining) > 1:
         # Return the longest
-        choice = reduce(lambda m,n: m if len(m) > len(n) else n, remaining)
+        choice = reduce(lambda m, n: m if len(m) > len(n) else n, remaining)
     else:
         choice = remaining[0]
 
@@ -293,8 +297,8 @@ def extract_font_names(srctokens):
 def extract_font_urls(fontfmt, srctokens):
     """Returns any URLs matching a given format in a given list of CSS tokens"""
 
-    url = None      # Last URL token parsed (cleared by non-S token)
-    urls = []       # All URLs parsed
+    url = None  # Last URL token parsed (cleared by non-S token)
+    urls = []  # All URLs parsed
 
     for token in srctokens:
         if token.type == "URI":
@@ -363,7 +367,7 @@ def extract_font_downloads(fontfmt, rule):
         elif ext != fontfmt_ext:
             logger.warn("URL extension '{0}' does not match format extension '{1}'".format(ext, fontfmt_ext))
 
-        downloads = [ DownloadInfo(url=url,filename=name+"."+ext) ]
+        downloads = [DownloadInfo(url=url, filename=name + "." + ext)]
     else:
         logger.warn("Ignoring @font-face without src")
         downloads = []
@@ -374,7 +378,7 @@ def extract_font_downloads(fontfmt, rule):
 def fetch_fonts_from_css(fontfmt, stylesheet):
     """Downloads any fonts for the given format in the given CSS stylesheet"""
 
-    downloads=[]
+    downloads = []
     haveff = False
     for rule in stylesheet.rules:
         if rule.at_keyword == "@font-face":
@@ -475,7 +479,7 @@ def fetch_fonts(fontfmts, subsets, fonts):
                 for font in fonts:
                     # Note:  Include empty variant on first pass, if empty
                     if len(font.variants) > i or (i == 0 and len(font.variants) == 0):
-                        fonts1v.append(font._replace(variants=font.variants[i:i+1]))
+                        fonts1v.append(font._replace(variants=font.variants[i:i + 1]))
                 if not fonts1v:
                     # All variants of all fonts have been fetched
                     break
@@ -496,7 +500,7 @@ def parse_font_arg(arg):
         if "," in variants:
             variants = variants.split(",")
         else:
-            variants = [ variants ]
+            variants = [variants]
 
     else:
         family = arg
@@ -508,17 +512,18 @@ def parse_font_arg(arg):
 def main(*argv):
     parser = argparse.ArgumentParser(description="Download Google Web Fonts")
     parser.add_argument(
-            '-f', '--format', action="append", help="Format to download (may appear multiple times)", choices=sorted(fontfmt_user_agent.keys()))
+        '-f', '--format', action="append", help="Format to download (may appear multiple times)",
+        choices=sorted(fontfmt_user_agent.keys()))
     parser.add_argument(
-            '-q', '--quiet', action="count", help="Decrease verbosity (make quieter)")
+        '-q', '--quiet', action="count", help="Decrease verbosity (make quieter)")
     parser.add_argument(
-            '-s', '--subset', action="append", help="Subset to download (may appear multiple times)")
+        '-s', '--subset', action="append", help="Subset to download (may appear multiple times)")
     parser.add_argument(
-            '-v', '--verbose', action="count", help="Increase verbosity")
+        '-v', '--verbose', action="count", help="Increase verbosity")
     parser.add_argument(
-            '-V', '--version', action="version", version="%(prog)s " + ".".join(str(x) for x in VERSION))
+        '-V', '--version', action="version", version="%(prog)s " + ".".join(str(x) for x in VERSION))
     parser.add_argument(
-            'font', nargs="+", help="Font to download (in same format as CSS URL)", type=parse_font_arg)
+        'font', nargs="+", help="Font to download (in same format as CSS URL)", type=parse_font_arg)
     args = parser.parse_args(args=argv[1:])
 
     # By default, download all formats

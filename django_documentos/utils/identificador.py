@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function
+
 import os
 import sys
-from django.utils import six
 
 __author__ = 'luzfcb'
 

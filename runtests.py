@@ -33,7 +33,9 @@ def isort_main(args):
     ret = subprocess.call(['isort'] + args)
 
     if ret:
-        print('isort failed: Some modules have incorrectly ordered imports. Fix by running `isort --recursive .`')
+        print('\nisort failed: Some modules have incorrectly ordered imports')
+        print('To show errors, run: `isort --recursive . --check-only`')
+        print('To automatic try fix the errors, run: `isort --recursive .`')
     else:
         print('isort passed')
 

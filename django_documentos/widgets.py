@@ -1,14 +1,13 @@
+import collections
+import re
 from pprint import pprint
+
 from django import forms
-from django.core import validators
-from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.forms import widgets
 from django.utils.translation import ugettext
-from .utils.split_utils import gsplit
-import collections
 
-import re
+from .utils.split_utils import gsplit
 
 ascii_e_numeros_re = re.compile(r'^[a-zA-Z0-9]+\Z')
 
@@ -42,7 +41,7 @@ class SplitWidget(widgets.MultiWidget):
             })
             attrbs.append(at)
 
-        _widgets = [widgets.TextInput(attrs=at) for at in attrbs]
+        _widgets = [widgets.TextInput(attrs=atb) for atb in attrbs]
         super(SplitWidget, self).__init__(widgets=_widgets, attrs=attrs)
         # print(self.__class__.__name__)
         # pprint(dir(self), depth=2)
@@ -84,7 +83,6 @@ class SplitedHashField2(forms.MultiValueField):
                                   fields_max_length=fields_max_length)
         super(SplitedHashField2, self).__init__(fields, *args, **kwargs)
         print('')
-
 
         # if self.max_length is not None:
         #     self.validators.append(validators.MinLengthValidator(int(self.max_length)))
@@ -128,7 +126,7 @@ class SplitedHashField2(forms.MultiValueField):
 class SplitWidget2(widgets.MultiWidget):
     def __init__(self, attrs=None, split_guide=None, merge_last=True, value=None):
         assert isinstance(split_guide, collections.Iterable) and all(
-            isinstance(x, int) and x > 0 for x in split_guide), 'Expected a Tuple of positive integers greater than zero'
+            isinstance(x, int) and x > 0 for x in split_guide), 'Expected a Tuple of positive integers greater than zero'  # noqa
         self.split_guide = split_guide
         self.merge_last = merge_last
         self.split_len = len(self.split_guide)
@@ -148,7 +146,7 @@ class SplitWidget2(widgets.MultiWidget):
             })
             attrbs.append(at)
 
-        _widgets = [widgets.TextInput(attrs=at) for at in attrbs]
+        _widgets = [widgets.TextInput(attrs=atb) for atb in attrbs]
         super(SplitWidget2, self).__init__(widgets=_widgets, attrs=attrs)
         # print(self.__class__.__name__)
         # pprint(dir(self), depth=2)
@@ -217,5 +215,3 @@ class SplitedHashField3(forms.MultiValueField):
 
     def compress(self, data_list):
         return ''.join(data_list)
-
-

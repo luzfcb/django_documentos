@@ -6,10 +6,10 @@ from django.conf.urls import url
 from .settings import DJANGO_DOCUMENTOS_ENABLE_GENERAL_DASHBOARD
 from .temporatio_apagar import PDFRenderView, PDFRenderView2
 from .views import (
-    AssinarDocumentoView, CloseView, DocumentoCreateView, DocumentoDashboardView, DocumentoDetailView,
-    DocumentoGeneralDashboardView, DocumentoHistoryView, DocumentoListView, DocumentoRevertView, DocumentoUpdateView,
-    DocumentoValidacaoView, PDFViewer,
-    AssinarDocumentoView2, DocumentoDetailValidarView, ImprimirView, AjaxUpdateTesteApagar)
+    AjaxUpdateTesteApagar, AssinarDocumentoView, CloseView, DocumentoCreateView, DocumentoDashboardView,
+    DocumentoDetailValidarView, DocumentoDetailView, DocumentoGeneralDashboardView, DocumentoHistoryView,
+    DocumentoListView, DocumentoRevertView, DocumentoUpdateView, DocumentoValidacaoView, ImprimirView, PDFViewer,
+)
 
 urlpatterns = [
     url(r'^$',

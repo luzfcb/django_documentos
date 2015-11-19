@@ -4,7 +4,6 @@ from django.contrib import admin
 from .models import Processo, ProcessoDocumento
 
 
-
 class ProcessoInline(admin.StackedInline):
     model = Processo.documentos.through
     min_num = 0

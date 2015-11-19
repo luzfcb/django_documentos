@@ -1,25 +1,19 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function, unicode_literals
 
-from django.conf import settings
 from django.contrib.auth.hashers import SHA1PasswordHasher
 from django.db import models
 from django.db.models import Max
 from django.utils import timezone
-from django.utils.crypto import get_random_string
 from django.utils.six import python_2_unicode_compatible
-from model_utils import tracker, FieldTracker
 
 from ckeditor import fields as ckeditor_fields
+# from redactor.fields import RedactorField
+from django_documentos.utils import identificador
 from simple_history.models import HistoricalRecords
 from simple_history.views import MissingHistoryRecordsField
 
-# from redactor.fields import RedactorField
-import six
-from django_documentos.utils import identificador
-from django_documentos.utils.module_loading import get_real_user_model_class
-
-USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
+from .settings import USER_MODEL
 
 
 # class BaseModeloVersionado(models.Model):
@@ -81,7 +75,7 @@ USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
 #             if hasattr(self._meta, 'simple_history_manager_attribute'):
 #                 history_manager = getattr(self, self._meta.simple_history_manager_attribute)
 #                 max_db_value = history_manager.aggregate(Max('versao_numero')).values()[0]
-#                 self.versao_numero = max_db_value + 1 if max_db_value >= self.versao_numero else self.versao_numero + 1
+#                 self.versao_numero = max_db_value + 1 if max_db_value >= self.versao_numero else self.versao_numero + 1  # noqa
 #             else:
 #                 raise MissingHistoryRecordsField(
 #                     "The model %(cls)s does not have a HistoryRecords field. Define a HistoryRecords()"
@@ -185,6 +179,7 @@ class DocumentoManager(models.Manager):
     def assinados(self):
         return super(DocumentoManager, self).get_queryset().filter(esta_assinado=True)
 
+
 @python_2_unicode_compatible
 class Documento(models.Model):
     titulo = models.CharField(blank=True, max_length=500, editable=True)
@@ -234,6 +229,7 @@ class Documento(models.Model):
 
     versoes = HistoricalRecords()
     objects = DocumentoManager()
+
     # tracker = FieldTracker()
 
     @property
@@ -294,7 +290,6 @@ class Documento(models.Model):
             return None
         return identificador.document_version_number(self.versao_numero)
 
-
     def __str__(self):
         return '{}-{}-{}'.format(self.pk, self.versao_numero, getattr(self, 'esta_assinado', ''))
 
@@ -309,12 +304,12 @@ class Documento(models.Model):
             # self.assinatura_salto = get_random_string(length=8, allowed_chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
 
             para_hash = '{username}-{conteudo}-{versao}-{assinado_em}'.format(  # username=self.assinado_por.username,
-                                                                       username=self.criado_por.username,
-                                                                       conteudo=self.conteudo,
-                                                                       versao=self.versao_numero,
-                                                                       assinado_em=self.assinado_em.strftime("%Y-%m-%d %H:%M:%S.%f")
-                                                                       # assinado_em=self.assinado_em
-                                                                       )
+                username=self.criado_por.username,
+                conteudo=self.conteudo,
+                versao=self.versao_numero,
+                assinado_em=self.assinado_em.strftime("%Y-%m-%d %H:%M:%S.%f")
+                # assinado_em=self.assinado_em
+            )
             password_hasher = SHA1PasswordHasher()
             self.assinatura_hash = password_hasher.encode(para_hash, 'djdocumentos')
             # self.assinatura_hash = password_hasher.encode(para_hash, self.assinatura_salto)

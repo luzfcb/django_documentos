@@ -18,7 +18,6 @@ class UserAutocomplete(autocomplete_light.AutocompleteModelBase):
     order_by = ['first_name', 'last_name']
     # choice_template = 'django_documentos/user_choice_autocomplete.html'
 
-
     limit_choices = 10
     attrs = {
         'data-autcomplete-minimum-characters': 0,
@@ -36,7 +35,7 @@ class UserAutocomplete(autocomplete_light.AutocompleteModelBase):
         """
         Return the textual representation of the choice by default.
         """
-        # return force_text("{}-{}".format(choice.pk, choice.get_full_name().title()))return force_text("{}-{}".format(choice.pk, choice.get_full_name().title()))
+        # return force_text("{}-{}".format(choice.pk, choice.get_full_name().title()))
         return force_text(choice.get_full_name().title())
 
     # def choice_label(self, choice):

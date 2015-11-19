@@ -1,19 +1,17 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function, unicode_literals
-import autocomplete_light
 
+import autocomplete_light
 from captcha.fields import CaptchaField
 from django import forms
-# from redactor.widgets import RedactorEditor
+from django.contrib.auth.hashers import check_password
+from django.utils.translation import ugettext_lazy as _
 
 from ckeditor.widgets import CKEditorWidget
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import HTML, Submit
-from django.contrib.auth.hashers import check_password
-from django.utils.translation import ugettext_lazy as _
-from django_documentos.utils.module_loading import get_real_user_model_class
-from django_documentos.widgets import SplitWidget, SplitedHashField2, SplitedHashField3
-from . import settings
+from django_documentos.widgets import SplitedHashField3
+
 from .models import Documento
 
 
@@ -105,9 +103,6 @@ class DocumentoFormUpdate2(SaveHelperFormMixin, forms.ModelForm):
     conteudo = forms.CharField(widget=CkeditorWidgetNew, label='')
     rodape = forms.CharField(widget=forms.Textarea(attrs={'data-djckeditor': 'true'}), label='', initial='Rodape')
 
-
-
-
     class Meta:
         model = Documento
         fields = ('titulo', 'cabecalho', 'conteudo', 'rodape')
@@ -116,8 +111,6 @@ class DocumentoFormUpdate2(SaveHelperFormMixin, forms.ModelForm):
         # widgets = {
         #     'conteudo': RedactorEditor()
         # }
-
-
 
 
 class DocumentoRevertForm(RevertHelperFormMixin, forms.ModelForm):
@@ -170,10 +163,10 @@ class DocumetoValidarForm(ValidarHelperFormMixin, forms.Form):
         assinatura_hash = "sha1$djdocumentos${}".format(assinatura_hash.lower())
         try:
             self.documento = Documento.objects.get(assinatura_hash=assinatura_hash)
-        except Exception as e:
-                raise forms.ValidationError(
-                    "O documento não é valido"
-                )
+        except Exception:
+            raise forms.ValidationError(
+                "O documento não é valido"
+            )
         return assinatura_hash
 
     class Meta:
@@ -210,7 +203,8 @@ class AssinarDocumentoHelperFormMixin(object):
 
 
 class AssinarDocumento(AssinarDocumentoHelperFormMixin, forms.ModelForm):
-    assinado_por = autocomplete_light.ModelChoiceField('UserAutocomplete', label='Usuario Assinante', to_field_name='pk')
+    assinado_por = autocomplete_light.ModelChoiceField('UserAutocomplete', label='Usuario Assinante',
+                                                       to_field_name='pk')
     # assinado_por = forms.ModelChoiceField(get_real_user_model_class().objects.all().order_by('username'))
 
     password = forms.CharField(label="Sua senha",

@@ -12,16 +12,17 @@ from django.core import signing
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.db.models import Q
-from django.http import HttpResponse, JsonResponse, HttpResponseForbidden
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, resolve_url
-# from django.utils.http import is_safe_url
 from django.utils import six
 from django.views import generic
-from django.views.generic.detail import SingleObjectMixin, BaseDetailView
 from phantom_pdf import render_to_pdf
+
 from simple_history.views import HistoryRecordListViewMixin, RevertFromHistoryRecordViewMixin
 
-from .forms import AssinarDocumento, DocumentoFormCreate, DocumentoRevertForm, DocumetoValidarForm, DocumentoFormUpdate2
+from .forms import (
+    AssinarDocumento, DocumentoFormCreate, DocumentoFormUpdate2, DocumentoRevertForm, DocumetoValidarForm,
+)
 from .models import Documento
 from .samples_html import BIG_SAMPLE_HTML  # noqa
 from .utils import add_querystrings_to_url
@@ -164,6 +165,7 @@ class DocumentoListView(generic.ListView):
 
         return qs
 
+
 class AuditavelViewMixin(object):
     def form_valid(self, form):
         if hasattr(self.request, 'user') and not isinstance(self.request.user, AnonymousUser):
@@ -192,7 +194,6 @@ class PopupMixin(object):
 
 
 class CopyDocumentContentMixin(object):
-
     def get_initial(self):
         initial = super(CopyDocumentContentMixin, self).get_initial()
         documento_instance = self.get_documento_instance()
@@ -225,6 +226,7 @@ class DocumentoCreateView(AjaxableResponseMixin, CopyDocumentContentMixin, NextU
     form_class = DocumentoFormCreate
     success_url = reverse_lazy('documentos:list')
     is_popup = False
+
     # inlines = [DocumentoConteudoInline, ]
 
     def __init__(self, *args, **kwargs):
@@ -278,8 +280,8 @@ class CloseView(NextURLMixin, generic.TemplateView):
     def get_context_data(self, **kwargs):
         context = super(CloseView, self).get_context_data(**kwargs)
         context.update({
-                'close': self.request.GET.get('close')
-            }
+            'close': self.request.GET.get('close')
+        }
         )
 
         return context
@@ -321,13 +323,13 @@ class DocumentoAssinadoRedirectMixin(object):
 
 class DocumentoUpdateView(DocumentoAssinadoRedirectMixin,
                           AuditavelViewMixin,
-                          #NextURLMixin,
+                          # NextURLMixin,
                           PopupMixin,
                           generic.UpdateView):
     template_name = 'django_documentos/documento_update_2_ck_manual.html'
     # template_name = 'django_documentos/documento_update.html'
     model = Documento
-    #form_class = DocumentoFormCreate
+    # form_class = DocumentoFormCreate
     form_class = DocumentoFormUpdate2
     # success_url = reverse_lazy('documentos:list')
     success_url = None
@@ -387,8 +389,6 @@ class DocumentoUpdateView(DocumentoAssinadoRedirectMixin,
             return response
 
 
-
-
 class DocumentoHistoryView(HistoryRecordListViewMixin, NextURLMixin, PopupMixin, generic.DetailView):
     template_name = 'django_documentos/documento_detail_with_versions.html'
     model = Documento
@@ -399,6 +399,7 @@ class DocumentoRevertView(RevertFromHistoryRecordViewMixin, NextURLMixin, Audita
     template_name = 'django_documentos/documento_revert.html'
     model = Documento
     form_class = DocumentoRevertForm
+
     # inlines = [DocumentoConteudoInline, ]
 
     def get_success_url(self):
@@ -468,6 +469,7 @@ class DocumentoValidacaoView(generic.FormView):
 class DocumentoDetailValidarView(DocumentoDetailView):
     template_name = 'django_documentos/documento_validacao_detail.html'
 
+
 class PDFViewer(generic.TemplateView):
     template_name = 'django_documentos/pdf_viewer.html'
 
@@ -501,8 +503,10 @@ class AssinarDocumentoView(DocumentoAssinadoRedirectMixin, AuditavelViewMixin, g
         ret = super(AssinarDocumentoView, self).form_valid(form)
         assinado_por = form.cleaned_data.get('assinado_por', None)
 
-        msg = 'Documento n°{} assinado com sucesso por {}'.format(self.object.identificador_versao,
-                                                                  assinado_por.get_full_name().title())
+        msg = 'Documento n°{} assinado com sucesso por {}'.format(
+            self.object.identificador_versao,
+            assinado_por.get_full_name().title()
+        )
         messages.add_message(self.request, messages.INFO, msg)
         return ret
 
@@ -579,21 +583,21 @@ class AjaxFormPostMixin(object):
         return response
 
 
-class AjaxUpdateTesteApagar(AjaxFormPostMixin, DocumentoAssinadoRedirectMixin,
-                          AuditavelViewMixin,
-                          NextURLMixin,
-                          PopupMixin,
-                          generic.UpdateView):
+class AjaxUpdateTesteApagar(AjaxFormPostMixin,
+                            DocumentoAssinadoRedirectMixin,
+                            AuditavelViewMixin,
+                            NextURLMixin,
+                            PopupMixin,
+                            generic.UpdateView):
     document_json_fields = ('titulo', 'document_number', 'document_version_number', 'identificador_versao')
     template_name = 'django_documentos/documento_update_2_ck_manual.html'
     # template_name = 'django_documentos/documento_update.html'
     model = Documento
-    #form_class = DocumentoFormCreate
+    # form_class = DocumentoFormCreate
     form_class = DocumentoFormUpdate2
     success_url = reverse_lazy('documentos:list')
 
     def form_valid(self, form):
         return super(AjaxUpdateTesteApagar, self).form_valid(form)
 
-    #success_url = None
-
+        # success_url = None
