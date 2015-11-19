@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <link type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/themes/blue/pace-theme-loading-bar.css"
+          rel="stylesheet">
+
+
+    <style>
+        .body {
+            background: rgb(204, 204, 204);
+        }
+
+        .maindiv {
+            /*
+            the content is hidden by default,
+            and will be shown only after
+            completed page load and
+            finalized ckeditor startup
+            */
+            display: none;
+        }
+
+        .content-section {
+            margin-bottom: 100px;
+        }
+
+        article {
+            background: white;
+            width: 21cm;
+            height: 29.7cm;
+            display: block;
+            margin: 0 auto 0.5cm;
+            box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
+            padding: 30px;
+            font-size: 11pt;
+            line-height: 22pt;
+        }
+
+        article form {
+            height: 100%;
+        }
+
+        @media print {
+            body, article[size="A4"] {
+                margin: 0;
+                box-shadow: 0;
+                background: transparent;
+            }
+
+            .cke_pagebreak {
+                display: block;
+                page-break-before: always;
+            }
+
+            .content-section {
+                margin-bottom: 0;
+                padding-top: 0;
+            }
+
+            .no-print {
+                display: none;
+            }
+
+        }
+
+
+    </style>
+</head>
+<body class="body">
+
+<div class="maindiv">
+    <div id="top-bar" class="navbar-fixed-top no-print">
+        <div id="top-ck-toolbar">
+            <!-- ckeditor top toolbar is rendered here -->
+        </div>
+    </div>
+
+    <div id="content-section" class="content-section">
+        <article>
+
+            <form id="myform" method="post">
+                <textarea id="mytextarea1" data-ckenable="true"></textarea>
+                <textarea id="mytextarea2" data-ckenable="true"></textarea>
+                <textarea id="mytextarea3" data-ckenable="true"></textarea>
+            </form>
+
+        </article>
+    </div>
+
+    <div id="bottom-bar" class="navbar-fixed-bottom no-print">
+        <div id="bottom-ck-toolbar">
+            <!-- ckeditor bottom toolbar is rendered here -->
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"></script>
+
+<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="http://cdn.ckeditor.com/4.5.2/full-all/ckeditor.js"></script>
+
+<script>
+
+    //get the id's of elements that contains "data-ckenable" attribute
+    function get_ckenable_element_ids() {
+        return $("[data-ckenable]").map(function () {
+            return this.id;
+        }).get();
+    }
+
+    var ckenable_element_ids_list = get_ckenable_element_ids();
+
+    var ckeditor_config = {
+        extraPlugins: [
+            "sharedspace",
+
+        ].join(),
+        sharedSpaces: {
+            top: "top-ck-toolbar",
+            bottom: "bottom-ck-toolbar"
+        }
+    };
+
+    //start ckeditor
+    ckenable_element_ids_list.map(function (id_element) {
+        CKEDITOR.replace(id_element, ckeditor_config);
+    });
+
+
+    function fix_content_padding() {
+        var top_menu = $('#top-ck-toolbar');
+        var content_div = $('#content-section');
+        var current_top_menu_height = parseInt(top_menu.css('height').replace(/[^-\d\.]/g, ''));
+        var new_padding_value_to_content = "".concat(current_top_menu_height + 130).concat("px");
+        content_div.css('padding-top', new_padding_value_to_content);
+    }
+
+    window.addEventListener('resize.fix_content_padding', fix_content_padding, false);
+
+    var paceOptions = {
+        "ajax": false,
+        "restartOnRequestAfter": false,
+        "document": false
+    };
+
+    window.paceOptions = paceOptions;
+    Pace.on('hide', function () {
+
+        $(".maindiv").fadeIn("fast");
+        fix_content_padding();
+    });
+
+</script>
+</body>
+</html>
