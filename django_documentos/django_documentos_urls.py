@@ -2,6 +2,7 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 from django.conf.urls import url
+from django.views.generic import TemplateView
 
 from .settings import DJANGO_DOCUMENTOS_ENABLE_GENERAL_DASHBOARD
 from .temporatio_apagar import PDFRenderView, PDFRenderView2
@@ -12,10 +13,14 @@ from .views import (
 )
 
 urlpatterns = [
-    url(r'^$',
-        DocumentoDashboardView.as_view(),
+        url(r'^$',
+        TemplateView.as_view(template_name="django_documentos/ckeditor_sharedspaces_fakePaperPage.html"),
         name='dashboard'
         ),
+    # url(r'^$',
+    #     DocumentoDashboardView.as_view(),
+    #     name='dashboard'
+    #     ),
     url(r'^list/$',
         DocumentoListView.as_view(),
         name='list'

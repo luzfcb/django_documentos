@@ -104,6 +104,7 @@
 
 <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 <script src="http://cdn.ckeditor.com/4.5.2/full-all/ckeditor.js"></script>
+<script src="http://cdn.ckeditor.com/4.5.2/full-all/adapters/jquery.js"></script>
 
 <script>
 
@@ -130,6 +131,8 @@
     //start ckeditor
     ckenable_element_ids_list.map(function (id_element) {
         CKEDITOR.replace(id_element, ckeditor_config);
+        var msg = "".concat(id_element).concat(" iniciado");
+        console.log(msg);
     });
 
 
@@ -154,8 +157,17 @@
 
         $(".maindiv").fadeIn("fast");
         fix_content_padding();
+        console.log("Pace finalizado");
+
     });
 
+
+</script>
+<script>
+    $(document).ready(function(){
+        console.log("passou aqui");
+        $("#cke_mytextarea1").css("border","1px solid TRANSPARENT !IMPORTANT").css("box-shadow","0 0 0px TRANSPARENT");
+    });
 </script>
 </body>
 </html>
