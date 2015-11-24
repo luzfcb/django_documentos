@@ -40,3 +40,9 @@ Ajax post:
 https://aliteralmind.wordpress.com/2015/02/05/ajax_rapidfire_manual_to_underscore/
 
 https://aliteralmind.wordpress.com/2014/09/21/jquery_django_tutorial/
+
+
+CKEditor:
+
+evento apos inicar ckeditor
+http://stackoverflow.com/a/18464877/2975300

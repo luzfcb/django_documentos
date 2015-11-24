@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+<div id="top-ck-toolbar">
+    <!-- ckeditor top toolbar is rendered here -->
+</div>
+<div id="bottom-ck-toolbar" style="position: fixed;bottom: 0;width: 100%;">
+    <!-- ckeditor bottom toolbar is rendered here -->
+</div>
+
+<div id="content-ck">
+    <textarea id="mytextarea"></textarea>
+    <!-- ckeditor editable area is rendered below -->
+</div>
+
+<script src="http://cdn.ckeditor.com/4.5.5/full-all/ckeditor.js"></script>
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script>
+    var ckeditor_config = {
+        extraPlugins: [
+            "sharedspace",
+
+        ].join(),
+        sharedSpaces: {
+            top: "top-ck-toolbar",
+            bottom: "bottom-ck-toolbar"
+        },
+        on: { // execute after ckeditor full load
+            instanceReady: function (evt) {
+                //by default, ckeditor create a div with the id is named "cke_" + ID_OF_TEXT_AREA
+
+                var elements_with_same_id = $('[id="cke_mytextarea"]');
+
+                $(elements_with_same_id[0]).css({border: '3px solid rgb(183, 19, 19)' });
+                $(elements_with_same_id[1]).css({border: '3px solid rgb(43, 183, 19)' });
+                $(elements_with_same_id[2]).css({border: '3px solid rgb(19, 38, 183)' });
+
+            }
+        }
+    };
+
+
+    //start ckeditor
+    CKEDITOR.replace("mytextarea", ckeditor_config);
+
+
+</script>
+</body>
+</html>

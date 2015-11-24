@@ -41,8 +41,7 @@
             display: block;
             margin: 0 auto 0.5cm;
             box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
-            padding: 30px;
-            font-size: 11pt;
+        {#            padding: 30px;#} font-size: 11pt;
             line-height: 22pt;
         }
 
@@ -73,6 +72,24 @@
 
         }
 
+        .mynewcssclass {
+            border: 1px solid rgb(183, 19, 19) !important;
+            box-shadow: 0px 0px 3px rgba(228, 43, 43, 0.2) !important;
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+{#        .mynewcssclass div.cke_inner {#}
+{#            border: 10px solid rgb(3, 32, 183) !important;#}
+{#            box-shadow: 0px 0px 3px rgba(3, 66, 228, 0.2) !important;#}
+{#            width: 100% !important;#}
+{#            height: 100% !important;#}
+{#        }#}
+
+{#        html, iframe, body {#}
+{#            overflow: hidden;#}
+{#            outline: none;#}
+{#        }#}
 
     </style>
 </head>
@@ -89,8 +106,12 @@
         <article>
 
             <form id="myform" method="post">
-                <textarea id="mytextarea1" data-ckenable="true"></textarea>
-                <textarea id="mytextarea2" data-ckenable="true"></textarea>
+                {#                <textarea id="mytextarea1" data-ckenable="true"></textarea>#}
+                <textarea id="mytextarea2" data-ckenable="true">
+                    <p>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p><p>
+                    a</p><p>a</p><p>a</p><p>a</p><p>a</p><p>a</p><p>a</p><p>a</p><p>a</p><p>a</p><p>a</p><p>a</p><p>a</p><p>a</p>
+                    <p>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p>
+                </textarea>
 {#                <textarea id="mytextarea3" data-ckenable="true"></textarea>#}
             </form>
 
@@ -107,10 +128,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"></script>
 
 <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
-<script src="http://cdn.ckeditor.com/4.5.2/full-all/ckeditor.js"></script>
-<script src="http://cdn.ckeditor.com/4.5.2/full-all/adapters/jquery.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/5.2.5/bootstrap-slider.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/zoomooz/1.1.6/jquery.zoomooz.min.js"></script>
+<script src="http://cdn.ckeditor.com/4.5.5/full-all/ckeditor.js"></script>
+{#<script src="http://cdn.ckeditor.com/4.5.5/full-all/adapters/jquery.js"></script>#}
+{#<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/5.2.5/bootstrap-slider.min.js"></script>#}
+{#<script src="https://cdnjs.cloudflare.com/ajax/libs/zoomooz/1.1.6/jquery.zoomooz.min.js"></script>#}
 
 <script>
 
@@ -126,12 +147,19 @@
     var ckeditor_config = {
         extraPlugins: [
             "sharedspace",
+            "autogrow",
 
         ].join(),
         sharedSpaces: {
             top: "top-ck-toolbar",
             bottom: "bottom-ck-toolbar"
-        }
+        },
+        startupShowBorders: false,
+        {#        contentsCss: 'html, iframe, body {overflow:hidden;outline: none;}'#}
+        {#        contentsCss: 'body {overflow:hidden;outline: none;}'#}
+{#        contentsCss: 'body {overflow:hidden;}',#}
+        {#        width: '100%'#}
+        autoGrow_onStartup: true
     };
 
     //start ckeditor
@@ -139,6 +167,13 @@
         CKEDITOR.replace(id_element, ckeditor_config);
         var msg = "".concat(id_element).concat(" iniciado");
         console.log(msg);
+    });
+
+    CKEDITOR.on('instanceReady', function (evt) {
+        var ckeditor_first_div_id = "cke_" + evt.editor.name;
+        var selector_str = "#content-section " + "#" + ckeditor_first_div_id;
+        console.log('$("' + selector_str + '")');
+        $(selector_str).addClass("mynewcssclass");
     });
 
 
@@ -164,47 +199,46 @@
         $(".maindiv").fadeIn("fast");
         fix_content_padding();
         console.log("Pace finalizado");
-
     });
 
 
 </script>
 <script>
-    $(document).ready(function () {
-        console.log("passou aqui");
-        $("#cke_mytextarea1").css("border", "1px solid TRANSPARENT !IMPORTANT").css("box-shadow", "0 0 0px TRANSPARENT");
-
-        $.fn.scale = function (x) {
-            if (!$(this).filter(':visible').length && x != 1)return $(this);
-            if (!$(this).parent().hasClass('scaleContainer')) {
-                $(this).wrap($('<div class="scaleContainer">').css('position', 'relative'));
-                $(this).data({
-                    'originalWidth': $(this).width(),
-                    'originalHeight': $(this).height()
-                });
-            }
-            $(this).css({
-                'transform': 'scale(' + x + ')',
-                '-ms-transform': 'scale(' + x + ')',
-                '-moz-transform': 'scale(' + x + ')',
-                '-webkit-transform': 'scale(' + x + ')',
-                'transform-origin': 'right bottom',
-                '-ms-transform-origin': 'right bottom',
-                '-moz-transform-origin': 'right bottom',
-                '-webkit-transform-origin': 'right bottom',
-                'position': 'absolute',
-                'bottom': '0',
-                'right': '0',
-            });
-            if (x == 1)
-                $(this).unwrap().css('position', 'static'); else
-                $(this).parent()
-                        .width($(this).data('originalWidth') * x)
-                        .height($(this).data('originalHeight') * x);
-            return $(this);
-        };
-
-    });
+    {#    $(document).ready(function () {#}
+    {#        console.log("passou aqui");#}
+    {#        $("#cke_mytextarea1").css("border", "1px solid TRANSPARENT !IMPORTANT").css("box-shadow", "0 0 0px TRANSPARENT");#}
+    {##}
+    {#        $.fn.scale = function (x) {#}
+    {#            if (!$(this).filter(':visible').length && x != 1)return $(this);#}
+    {#            if (!$(this).parent().hasClass('scaleContainer')) {#}
+    {#                $(this).wrap($('<div class="scaleContainer">').css('position', 'relative'));#}
+    {#                $(this).data({#}
+    {#                    'originalWidth': $(this).width(),#}
+    {#                    'originalHeight': $(this).height()#}
+    {#                });#}
+    {#            }#}
+    {#            $(this).css({#}
+    {#                'transform': 'scale(' + x + ')',#}
+    {#                '-ms-transform': 'scale(' + x + ')',#}
+    {#                '-moz-transform': 'scale(' + x + ')',#}
+    {#                '-webkit-transform': 'scale(' + x + ')',#}
+    {#                'transform-origin': 'right bottom',#}
+    {#                '-ms-transform-origin': 'right bottom',#}
+    {#                '-moz-transform-origin': 'right bottom',#}
+    {#                '-webkit-transform-origin': 'right bottom',#}
+    {#                'position': 'absolute',#}
+    {#                'bottom': '0',#}
+    {#                'right': '0',#}
+    {#            });#}
+    {#            if (x == 1)#}
+    {#                $(this).unwrap().css('position', 'static'); else#}
+    {#                $(this).parent()#}
+    {#                        .width($(this).data('originalWidth') * x)#}
+    {#                        .height($(this).data('originalHeight') * x);#}
+    {#            return $(this);#}
+    {#        };#}
+    {##}
+    {#    });#}
 </script>
 </body>
 </html>

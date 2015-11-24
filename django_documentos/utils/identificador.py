@@ -51,6 +51,7 @@ def document(n, v):
 
 
 if __name__ == "__main__":
-    import pytest
-
-    pytest.main(args=['-vv', os.path.join(__file__)], )
+    # import pytest
+    #
+    # pytest.main(args=['-vv', os.path.join(__file__)], )
+    print(document(-10, 22))
