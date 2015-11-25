@@ -1,0 +1,7 @@
+﻿/*
+ Copyright (c) 2003-2014, CKSource - Frederico Knabben. All rights reserved.
+ For licensing, see LICENSE.md or http://ckeditor.com/license
+*/
+(function(){function h(b,e,d){var i=[],g=[],a;for(a=0;a<b.styleSheets.length;a++){var c=b.styleSheets[a];if(!(c.ownerNode||c.owningElement).getAttribute("data-cke-temp")&&!(c.href&&"chrome://"==c.href.substr(0,9)))try{for(var f=c.cssRules||c.rules,c=0;c<f.length;c++)g.push(f[c].selectorText)}catch(h){}}a=g.join(" ");a=a.replace(/(,|>|\+|~)/g," ");a=a.replace(/\[[^\]]*/g,"");a=a.replace(/#[^\s]*/g,"");a=a.replace(/\:{1,2}[^\s]*/g,"");a=a.replace(/\s+/g," ");a=a.split(" ");b=[];for(g=0;g<a.length;g++)f=
+a[g],d.test(f)&&!e.test(f)&&-1==CKEDITOR.tools.indexOf(b,f)&&b.push(f);for(a=0;a<b.length;a++)d=b[a].split("."),e=d[0].toLowerCase(),d=d[1],i.push({name:d,element:e,attributes:{"class":d}});return i}CKEDITOR.plugins.add("stylesheetparser",{init:function(b){b.filter.disable();var e;b.once("stylesSet",function(d){d.cancel();b.once("contentDom",function(){b.getStylesSet(function(){e=h(b.document.$,b.config.stylesheetParser_skipSelectors||/(^body\.|^\.)/i,b.config.stylesheetParser_validSelectors||/\w+\.\w+/);
+b.getStylesSet=function(b){if(e)return b(e)};b.fire("stylesSet",{styles:e})})})},null,null,1)}})})();
