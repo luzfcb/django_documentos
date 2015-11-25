@@ -14,7 +14,7 @@ from .views import (
 
 urlpatterns = [
         url(r'^$',
-        TemplateView.as_view(template_name="django_documentos/sharedspace_bug.html"),
+        TemplateView.as_view(template_name="django_documentos/ckeditor_sharedspaces_fakePaperPage.html"),
         name='dashboard'
         ),
     # url(r'^$',

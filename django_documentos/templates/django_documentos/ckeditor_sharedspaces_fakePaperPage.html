@@ -1,3 +1,4 @@
+{% load staticfiles %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -72,6 +73,14 @@
 
         }
 
+        .cke_editor_cabecalho textarea {
+            white-space: pre-wrap !important;
+        }
+
+        .cke_editor_cabecalho textarea.cke_source {
+            white-space: pre-wrap !important;
+        }
+
         .mynewcssclass {
             border: 1px solid rgb(183, 19, 19) !important;
             box-shadow: 0px 0px 3px rgba(228, 43, 43, 0.2) !important;
@@ -79,17 +88,17 @@
             height: 100% !important;
         }
 
-{#        .mynewcssclass div.cke_inner {#}
-{#            border: 10px solid rgb(3, 32, 183) !important;#}
-{#            box-shadow: 0px 0px 3px rgba(3, 66, 228, 0.2) !important;#}
-{#            width: 100% !important;#}
-{#            height: 100% !important;#}
-{#        }#}
+        {#        .mynewcssclass div.cke_inner {#}
+        {#            border: 10px solid rgb(3, 32, 183) !important;#}
+        {#            box-shadow: 0px 0px 3px rgba(3, 66, 228, 0.2) !important;#}
+        {#            width: 100% !important;#}
+        {#            height: 100% !important;#}
+        {#        }#}
 
-{#        html, iframe, body {#}
-{#            overflow: hidden;#}
-{#            outline: none;#}
-{#        }#}
+        {#        html, iframe, body {#}
+        {#            overflow: hidden;#}
+        {#            outline: none;#}
+        {#        }#}
 
     </style>
 </head>
@@ -106,13 +115,17 @@
         <article>
 
             <form id="myform" method="post">
-                {#                <textarea id="mytextarea1" data-ckenable="true"></textarea>#}
-                <textarea id="mytextarea2" data-ckenable="true">
-                    <p>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p><p>
-                    a</p><p>a</p><p>a</p><p>a</p><p>a</p><p>a</p><p>a</p><p>a</p><p>a</p><p>a</p><p>a</p><p>a</p><p>a</p><p>a</p>
-                    <p>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p>
+{#                <textarea id="cabecalho" data-ckenable="true"></textarea>#}
+{#                <textarea id="tipo_doc" data-ckenable="true"></textarea>#}
+                <textarea id="conteudo" data-ckenable="true">
+                    <p>
+                        aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p><p>
+                    a</p><p>a</p><p>a</p><p>a</p><p>a</p><p>a</p><p>a</p><p>a</p><p>a</p><p>a</p><p>a</p><p>a</p><p>
+                    a</p><p>a</p>
+                    <p>
+                        aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p>
                 </textarea>
-{#                <textarea id="mytextarea3" data-ckenable="true"></textarea>#}
+{#                <textarea id="rodape" data-ckenable="true"></textarea>#}
             </form>
 
         </article>
@@ -128,8 +141,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"></script>
 
 <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
-<script src="http://cdn.ckeditor.com/4.5.5/full-all/ckeditor.js"></script>
+<script src="{% static "django_documentos/ckeditor/4.5.5/ckeditor-source/ckeditor.js" %}"></script>
+{#<script src="http://cdn.ckeditor.com/4.5.5/full-all/ckeditor.js"></script>#}
+
+<script src="{% static "django_documentos/ckeditor/4.5.5/ckeditor-source/adapters/jquery.js" %}"></script>
 {#<script src="http://cdn.ckeditor.com/4.5.5/full-all/adapters/jquery.js"></script>#}
+
 {#<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/5.2.5/bootstrap-slider.min.js"></script>#}
 {#<script src="https://cdnjs.cloudflare.com/ajax/libs/zoomooz/1.1.6/jquery.zoomooz.min.js"></script>#}
 
@@ -148,6 +165,12 @@
         extraPlugins: [
             "sharedspace",
             "autogrow",
+            "zoom", //
+            "richcombo", // required by zoom
+            "floatpanel",// required by zoom
+            "panel", // required by zoom
+            "listblock", // required by zoom
+            "button", // required by zoom
 
         ].join(),
         sharedSpaces: {
@@ -157,9 +180,23 @@
         startupShowBorders: false,
         {#        contentsCss: 'html, iframe, body {overflow:hidden;outline: none;}'#}
         {#        contentsCss: 'body {overflow:hidden;outline: none;}'#}
-{#        contentsCss: 'body {overflow:hidden;}',#}
-        {#        width: '100%'#}
-        autoGrow_onStartup: true
+        {#        contentsCss: 'body {overflow:hidden;}',#}
+        width: '21cm',
+        {#        readOnly: true,#}
+        autoGrow_onStartup: true,
+        toolbarGroups: [
+            {"name": "basicstyles", "groups": ["basicstyles"]},
+{#            {"name": "links", "groups": ["links"]},#}
+{#            {"name": "paragraph", "groups": ["list", "blocks"]},#}
+{#            {"name": "document", "groups": ["mode"]},#}
+{#            {"name": "insert", "groups": ["insert"]},#}
+{#            {"name": "styles", "groups": ["styles"]},#}
+{#            {"name": "about", "groups": ["about"]},#}
+            {"name": "zoom", "groups": ["Zoom"]}
+        ],
+        // Remove the redundant buttons from toolbar groups defined above.
+{#        removeButtons: 'Underline,Strike,Subscript,Superscript,Anchor,Styles,Specialchar',#}
+        removePlugins: 'resize,maximize,backup'
     };
 
     //start ckeditor
@@ -173,7 +210,8 @@
         var ckeditor_first_div_id = "cke_" + evt.editor.name;
         var selector_str = "#content-section " + "#" + ckeditor_first_div_id;
         console.log('$("' + selector_str + '")');
-        $(selector_str).addClass("mynewcssclass");
+        {#        $(selector_str).addClass("mynewcssclass");#}
+        evt.editor.execCommand('autogrow');
     });
 
 
