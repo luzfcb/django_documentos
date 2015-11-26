@@ -6,6 +6,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="robots" content="noindex, nofollow">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Editar</title>
     <link type="text/css"
             {#          href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/themes/blue/pace-theme-center-atom.css"#}
@@ -50,27 +53,7 @@
 
 
     <style>
-        {#        body {#}
-        {#            min-width: 860px; /* suppose you want minimun width of 1000px */#}
-        {#            width: auto !important; /* Firefox will set width as auto */#}
-        {#            width: 860px; /* As IE ignores !important it will set width as 1000px; */#}
-        {#        }#}
 
-        .maindiv {
-            display: none;
-        }
-
-        .body {
-            background: rgb(204, 204, 204);
-        }
-
-        {#        .menu-superior:after {#}
-        {#            padding: 100px;#}
-        {#        }#}
-
-        .menu-inferior, .menu-superior {
-
-        }
 
         .doc-cabecalho {
 
@@ -93,59 +76,61 @@
             display: table-cell;
         }
 
-        #conteudo {
-        {#            padding: 230px 0;#} display: block;
-
+        .body {
+            background: rgb(204, 204, 204);
         }
 
-        #conteudo textarea, iframe {
-            border: none;
-
+        .maindiv {
+            /*
+            the content is hidden by default,
+            and will be shown only after
+            completed page load and
+            finalized ckeditor startup
+            */
+            display: none;
         }
 
-        article {
+        .content-section {
+            margin-bottom: 100px;
+        }
+
+        .article {
             background: white;
             width: 21cm;
             height: 29.7cm;
             display: block;
             margin: 0 auto 0.5cm;
             box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
-
-            padding: 30px;
-            font-size: 11pt;
-        {#            font-family: Arial;#} text-justify: distribute;
+        {#            padding: 30px;#} font-size: 11pt;
             line-height: 22pt;
-        {#            position: absolute;#}{#            padding: 0 0 0 0;#}{#            overflow: auto;#} margin-bottom: 250px
         }
 
-        article form {
-            height: 100%;
-        }
+{#        .article form {#}
+{#            height: 100%;#}
+{#        }#}
 
         @media print {
-            body, article[size="A4"] {
+            body, .article[size="A4"] {
                 margin: 0;
                 box-shadow: 0;
                 background: transparent;
             }
 
-        }
-
-        {#        .cktop:after {#}
-        {#            margin-bottom: 40px;#}
-        {#        }#}
-
-        .no-print {
-            display: block;
-        }
-
-        @media print {
             .cke_pagebreak {
                 display: block;
                 page-break-before: always;
             }
-        }
 
+            .content-section {
+                margin-bottom: 0;
+                padding-top: 0;
+            }
+
+            .no-print {
+                display: none;
+            }
+
+        }
 
     </style>
 
@@ -181,11 +166,12 @@
 
 
     <div id="conteudo">
-        <article class="doc-container">
+        <article class="article doc-container">
 
             <!-- Conteudo -->
             <form method="post" id="formulario"
                   action="
+
 
 
                           {% url 'documentos:update2' object.pk %}{% if popup or next_page_url %}?{% endif %}{% if popup %}popup=1{% endif %}{% if next_page_url %}&{{ next_kwarg_name }}={{ next_page_url }}{% endif %}">

@@ -46,3 +46,6 @@ CKEditor:
 
 evento apos inicar ckeditor
 http://stackoverflow.com/a/18464877/2975300
+
+
+http://stackoverflow.com/questions/27691955/altering-ckeditor-html-content-after-instanceready-and-paste
