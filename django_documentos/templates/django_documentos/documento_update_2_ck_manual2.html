@@ -17,7 +17,7 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/themes/blue/pace-theme-loading-bar.css"
           rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"
-            data-pace-options='{ "ajax": false , "restartOnRequestAfter": false, "document": false}'></script>
+            data-pace-options='{ "ajax": true , "restartOnRequestAfter": false, "document": false}'></script>
 
 
     <link type="text/css"
@@ -34,7 +34,10 @@
     </style>
     {#    <link type="text/css" href="{% static "django_documentos/bootstrap/bootstrap-3.3.5-dist/css/bootstrap.min.css" %}"#}
     {#          rel="stylesheet">#}
-    <link type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
+
+{#    <link type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"#}
+{#          rel="stylesheet">#}
+    <link type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css"
           rel="stylesheet">
 
     {#    <link type="text/css"#}
@@ -51,89 +54,90 @@
           href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/fonts/glyphicons-halflings-regular.eot"
           rel="stylesheet">
 
-
+    <link type="text/css"
+          href="{% static "django_documentos/css/django_documentos.css" %}"
+          rel="stylesheet">
     <style>
-
-
-        .doc-cabecalho {
-
-        }
-
-        .doc-rodape {
-
-        }
-
-        .doc-container {
-            display: table;
-        }
-
-        .doc-content {
-            display: table-row;
-            height: 100%;
-        }
-
-        .doc-content-body {
-            display: table-cell;
-        }
-
-        .body {
-            background: rgb(204, 204, 204);
-        }
-
-        .maindiv {
-            /*
-            the content is hidden by default,
-            and will be shown only after
-            completed page load and
-            finalized ckeditor startup
-            */
-            display: none;
-        }
-
-        .content-section {
-            margin-bottom: 100px;
-        }
-
-
-{#        .article {#}
-{#            background: white;#}
-{#            width: 21cm;#}
-{#            height: 29.7cm;#}
-{#            display: block;#}
-{#            margin: 0 auto 0.5cm;#}
-{#            box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);#}
-{#            padding: 30px;#}
-{#            font-size: 11pt;#}
-{#            line-height: 22pt;#}
-{#        }#}
-
+        {##}
+        {##}
+        {#        .doc-cabecalho {#}
+        {##}
+        {#        }#}
+        {##}
+        {#        .doc-rodape {#}
+        {##}
+        {#        }#}
+        {##}
+        {#        .doc-container {#}
+        {#            display: table;#}
+        {#        }#}
+        {##}
+        {#        .doc-content {#}
+        {#            display: table-row;#}
+        {#            height: 100%;#}
+        {#        }#}
+        {##}
+        {#        .doc-content-body {#}
+        {#            display: table-cell;#}
+        {#        }#}
+        {##}
+        {#        .body {#}
+        {#            background: rgb(204, 204, 204);#}
+        {#        }#}
+        {##}
+        {#        .maindiv {#}
+        {#            /*#}
+        {#            the content is hidden by default,#}
+        {#            and will be shown only after#}
+        {#            completed page load and#}
+        {#            finalized ckeditor startup#}
+        {#            */#}
+        {#            display: none;#}
+        {#        }#}
+        {##}
+        {#        .content-section {#}
+        {#            margin-bottom: 100px;#}
+        {#        }#}
+        {##}
+        {#            .article {#}
+        {#                background: white;#}
+        {#                width: 21cm;#}
+        {#                height: 29.7cm;#}
+        {#                display: block;#}
+        {#                margin: 0 auto 0.5cm;#}
+        {#                box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);#}
+        {#                padding: 30px;#}
+        {#                font-size: 11pt;#}
+        {#                line-height: 22pt;#}
+        {#            }#}
+        {##}
         {#        .article form {#}
         {#            height: 100%;#}
         {#        }#}
-
-        @media print {
-            body, .article[size="A4"] {
-                margin: 0;
-                box-shadow: 0;
-                background: transparent;
-            }
-
-            .cke_pagebreak {
-                display: block;
-                page-break-before: always;
-            }
-
-            .content-section {
-                margin-bottom: 0;
-                padding-top: 0;
-            }
-
-            .no-print {
-                display: none;
-            }
-
-        }
-
+        {##}
+        {#        @media print {#}
+        {#            body, .article[size="A4"] {#}
+        {#                margin: 0;#}
+        {#                box-shadow: 0;#}
+        {#                background: transparent;#}
+        {#            }#}
+        {##}
+        {#            .cke_pagebreak {#}
+        {#                display: block;#}
+        {#                page-break-before: always;#}
+        {#            }#}
+        {##}
+        {#            .content-section {#}
+        {#                margin-bottom: 0;#}
+        {#                padding-top: 0;#}
+        {#            }#}
+        {##}
+        {#            .no-print {#}
+        {#                display: none;#}
+        {#            }#}
+        {##}
+        {#        }#}
+        {##}
     </style>
 
 
@@ -150,68 +154,84 @@
 
 <body class="body">
 <div class="maindiv">
-    <header id="menu-superior" class="navbar-fixed-top on menu-superior">
-        <div class="btn-toolbar cke_top">
-            <div class="btn-group">
-                <button class="btn btn-default" data-original-title="Save - Ctrl+S" id="salvar" disabled="disabled"><i
-                        class="glyphicon glyphicon-floppy-disk"></i>Salvar
-                </button>
-                <button class="btn btn-default" data-original-title="Print - Ctrl+P"><i
-                        class="glyphicon glyphicon-print"></i>Imprimir
-                </button>
-            </div>
-        </div>
-        <div id="top" class="cktop">
-            <!-- Menu superior CKEditor -->
-        </div>
-    </header>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div id="menu-superior" class="row navbar-fixed-top">
+                    <div class="col-md-12">
+                        <div class="btn-group">
 
+                            <button class="btn btn-default" type="button" id="salvar">
+                                <em class="glyphicon glyphicon-floppy-disk"></em> Salvar
+                            </button>
+                            <button class="btn btn-default" type="button">
+                                <em class="glyphicon glyphicon-align-center"></em> Imprimir
+                            </button>
+                            <button class="btn btn-default" type="button">
+                                <em class="glyphicon glyphicon-align-right"></em> Right
+                            </button>
+                            <button class="btn btn-default" type="button">
+                                <em class="glyphicon glyphicon-align-justify"></em> Justify
+                            </button>
+                        </div>
+                        <div id="top" class="cktop">
+                            <!-- Menu superior CKEditor -->
+                        </div>
+                    </div>
+                </div>
+                <div id="conteudo" class="row conteudo">
+                    <div class="center-block a4-pagina">
+                        <div class="col-md-12">
+                            <form role="form" method="post" id="formulario"
+                                  action="
 
+                                          {% url 'documentos:update2' object.pk %}{% if popup or next_page_url %}?{% endif %}{% if popup %}popup=1{% endif %}{% if next_page_url %}&{{ next_kwarg_name }}={{ next_page_url }}{% endif %}">
 
-    <div id="conteudo" class="conteudo">
-        <article class="article doc-container">
-
-
-            <!-- Conteudo -->
-            <form method="post" id="formulario"
-                  action="
-                          {% url 'documentos:update2' object.pk %}{% if popup or next_page_url %}?{% endif %}{% if popup %}popup=1{% endif %}{% if next_page_url %}&{{ next_kwarg_name }}={{ next_page_url }}{% endif %}">
-
-                {% csrf_token %}
-                {#            {{ form }}#}
-                <div>
-                    <header id="ta-cabecalho" class="header ta-cabecalho">
-                        {{ form.cabecalho }}
-                    </header>
-                    <section id="ta-titulo" class="header ta-titulo">
-                        {{ form.titulo }}
-                    </section>
+                                <div class="form-group ">
+                                    {{ form.cabecalho }}
+                                </div>
+                                <div class="form-group">
+                                    {{ form.titulo }}
+                                </div>
+                                <div class="form-group">
+                                    {{ form.conteudo }}
+                                </div>
+                                <div class="form-group">
+                                    {{ form.rodape }}
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
 
-                <section id="ta-conteudo" class="doc-content">
-                    <div class="doc-content-body">
-                        {{ form.conteudo }}
+                <div class="row navbar-fixed-bottom">
+                    <div class="col-md-12">
+                        <div id="bottom">
+                            <!--  Menu inferior CKEditor  -->
+                        </div>
+                        <div class="btn-group">
+
+                            <button class="btn btn-default" type="button">
+                                <em class="glyphicon glyphicon-align-left"></em> Left
+                            </button>
+                            <button class="btn btn-default" type="button">
+                                <em class="glyphicon glyphicon-align-center"></em> Center
+                            </button>
+                            <button class="btn btn-default" type="button">
+                                <em class="glyphicon glyphicon-align-right"></em> Right
+                            </button>
+                            <button class="btn btn-default" type="button">
+                                <em class="glyphicon glyphicon-align-justify"></em> Justify
+                            </button>
+                            <div class="pull-right" id="status-bar">Documento: {{ object.identificador_versao }}</div>
+                        </div>
                     </div>
-                </section>
-
-                <footer id="ta-rodape" class="footer ta-rodape">
-                    {{ form.rodape }}
-                </footer>
-
-
-            </form>
-        </article>
+                </div>
+            </div>
+        </div>
     </div>
-    <footer id="menu-inferior" class="navbar-fixed-bottom menu-inferior">
-        <div id="bottom">
-            <!--  Menu inferior CKEditor  -->
-        </div>
-        <div class="btn-toolbar cke_bottom">
-            <button class="btn btn-default" id="areateste">
-            </button>
-            <div class="pull-right" id="status-bar">Documento: {{ object.identificador_versao }}</div>
-        </div>
-    </footer>
+
+
 </div>
 
 <script>
@@ -229,18 +249,18 @@
             'sharedspace',
             'save',
             'autolink',
-            {#            'autogrow'#}
+            'autogrow'
         ].join(),
         removePlugins: 'resize',
         'sharedSpaces': {
             'top': 'top',
             'bottom': 'bottom'
         },
-        addCss: '.fabio .cke_reset { border: none; box-shadow: none; }',
+        {#        addCss: '.fabio .cke_reset { border: none; box-shadow: none; }',#}
         {#        autoGrow_onStartup: true,#}
-{#        contentsCss: 'html, iframe, body {overflow:hidden;outline: none;}',#}
-        contentsCss: '[contenteditable="false"] {background-color: rgba(0, 0, 0, 0.15) !important;}',
-        width: '100%',
+        {#        contentsCss: 'html, iframe, body {overflow:hidden;outline: none;}',#}
+        contentsCss: '{% static "django_documentos/css/ckeditor_custom_styles.css" %}',
+        {#        width: '100%',#}
         startupShowBorders: false,
         toolbarGroups: [
             {name: 'document', groups: ['mode', 'document', 'doctools']},
@@ -273,7 +293,55 @@
 
     startCkEditor();
 
+    function teste(evt) {
+        var editor = evt.editor,
+                range = editor.createRange();
+        editor.focus();
 
+        range.moveToElementEditEnd(editor.editable());
+        range.select();
+        range.scrollIntoView();
+
+    }
+
+    function teste2(ev){
+        ev.editor.focus();
+
+        var s = ev.editor.getSelection(); // getting selection
+        var selected_ranges = s.getRanges(); // getting ranges
+        var node = selected_ranges[0].startContainer; // selecting the starting node
+        var parents = node.getParents(true);
+
+        node = parents[parents.length - 2].getFirst();
+
+        while (true) {
+            var x = node.getNext();
+            if (x == null) {
+                break;
+            }
+            node = x;
+        }
+
+        s.selectElement(node);
+        selected_ranges = s.getRanges();
+        selected_ranges[0].collapse(false);  //  false collapses the range to the end of the selected node, true before the node.
+        s.selectRanges(selected_ranges);  // putting the current selection there
+    }
+
+
+    CKEDITOR.on('instanceReady', function (evt) {
+        var ckeditor_first_div_id = "cke_" + evt.editor.name;
+        var selector_str = "#content-section " + "#" + ckeditor_first_div_id;
+        {#        console.log('$("' + selector_str + '")');#}
+        {#        $(selector_str).addClass("mynewcssclass");#}
+        if (evt.editor.name === "id_conteudo") {
+{#            teste(evt);#}
+            teste2(evt);
+            console.log('id_conteudo')
+        }
+        evt.editor.execCommand('autogrow');
+
+    });
     function beforeUnload(evt) {
         var item_nao_salvo = false;
         for (var instance in CKEDITOR.instances) {
@@ -521,8 +589,8 @@
         var menusuperior = $('#menu-superior');
         var conteudo = $('#conteudo');
         var altura_menu_superior = parseInt(menusuperior.css('height').replace(/[^-\d\.]/g, ''));
-{#        var adicional_altura = 130;#}
-        var adicional_altura = 0;
+        var adicional_altura = 130;
+        {#        var adicional_altura = 0;#}
         var valor = "".concat(altura_menu_superior + adicional_altura).concat("px");
         conteudo.css('padding-top', valor);
         console.log('corrigindo');

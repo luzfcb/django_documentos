@@ -100,6 +100,7 @@ class DocumentoFormUpdate2(SaveHelperFormMixin, forms.ModelForm):
     # rodape = forms.CharField(widget=CKEditorWidget(config_name='compartilhado'), label='', initial='Rodape')
 
     cabecalho = forms.CharField(widget=forms.Textarea(attrs={'data-djckeditor': 'true'}), label='', initial='Cabecalho')
+    titulo = forms.CharField(widget=forms.Textarea(attrs={'data-djckeditor': 'true'}), label='', initial='MEMORANDO')
     conteudo = forms.CharField(widget=CkeditorWidgetNew, label='')
     rodape = forms.CharField(widget=forms.Textarea(attrs={'data-djckeditor': 'true'}), label='', initial='Rodape')
 

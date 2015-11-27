@@ -36,6 +36,10 @@ http://stackoverflow.com/questions/18843936/how-to-disable-the-ctrlp-using-javas
 http://stackoverflow.com/questions/3339789/onbeforeprint-and-onafterprint-equivalent-for-non-ie-browsers/15662720#15662720
 
 
+Sobreescrever Bootstrap
+
+http://stackoverflow.com/questions/20721248/best-way-to-override-bootstrap-css
+
 Ajax post:
 https://aliteralmind.wordpress.com/2015/02/05/ajax_rapidfire_manual_to_underscore/
 
@@ -49,3 +53,9 @@ http://stackoverflow.com/a/18464877/2975300
 
 
 http://stackoverflow.com/questions/27691955/altering-ckeditor-html-content-after-instanceready-and-paste
+
+http://stackoverflow.com/questions/15313933/how-to-place-the-caret-at-the-end-in-ckeditor-4
+
+http://stackoverflow.com/questions/30220508/ckeditor-with-noneditable-islands/30222394#30222394
+
+http://stackoverflow.com/questions/18830715/howto-trigger-source-button-in-ckeditor-by-another-button-which-is-outside-the/18831214#18831214

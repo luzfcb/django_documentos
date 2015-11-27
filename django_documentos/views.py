@@ -590,7 +590,7 @@ class AjaxUpdateTesteApagar(AjaxFormPostMixin,
                             PopupMixin,
                             generic.UpdateView):
     document_json_fields = ('titulo', 'document_number', 'document_version_number', 'identificador_versao')
-    template_name = 'django_documentos/documento_update_2_ck_manual.html'
+    template_name = 'django_documentos/documento_update_2_ck_manual2.html'
     # template_name = 'django_documentos/documento_update.html'
     model = Documento
     # form_class = DocumentoFormCreate

@@ -13,14 +13,14 @@ from .views import (
 )
 
 urlpatterns = [
-        url(r'^$',
-        TemplateView.as_view(template_name="django_documentos/ckeditor_sharedspaces_fakePaperPage.html"),
+        # url(r'^$',
+        # TemplateView.as_view(template_name="django_documentos/ckeditor_sharedspaces_fakePaperPage.html"),
+        # name='dashboard'
+        # ),
+    url(r'^$',
+        DocumentoDashboardView.as_view(),
         name='dashboard'
         ),
-    # url(r'^$',
-    #     DocumentoDashboardView.as_view(),
-    #     name='dashboard'
-    #     ),
     url(r'^list/$',
         DocumentoListView.as_view(),
         name='list'
