@@ -1,18 +1,16 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function, unicode_literals
-
 import autocomplete_light
 from captcha.fields import CaptchaField
 from django import forms
 from django.contrib.auth.hashers import check_password
 from django.utils.translation import ugettext_lazy as _
-
 from ckeditor.widgets import CKEditorWidget
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import HTML, Submit
 from django_documentos.widgets import SplitedHashField3
-
 from .models import Documento
+from .samples_html import CABECALHO, TITULO, RODAPE
 
 
 class SaveHelper(FormHelper):
@@ -99,10 +97,10 @@ class DocumentoFormUpdate2(SaveHelperFormMixin, forms.ModelForm):
     # conteudo = forms.CharField(widget=CKEditorWidget(config_name='compartilhado'), label='')
     # rodape = forms.CharField(widget=CKEditorWidget(config_name='compartilhado'), label='', initial='Rodape')
 
-    cabecalho = forms.CharField(widget=forms.Textarea(attrs={'data-djckeditor': 'true'}), label='', initial='Cabecalho')
-    titulo = forms.CharField(widget=forms.Textarea(attrs={'data-djckeditor': 'true'}), label='', initial='MEMORANDO')
+    cabecalho = forms.CharField(widget=forms.Textarea(attrs={'data-djckeditor': 'true'}), label='', initial=CABECALHO)
+    titulo = forms.CharField(widget=forms.Textarea(attrs={'data-djckeditor': 'true'}), label='', initial=TITULO)
     conteudo = forms.CharField(widget=CkeditorWidgetNew, label='')
-    rodape = forms.CharField(widget=forms.Textarea(attrs={'data-djckeditor': 'true'}), label='', initial='Rodape')
+    rodape = forms.CharField(widget=forms.Textarea(attrs={'data-djckeditor': 'true'}), label='', initial=RODAPE)
 
     class Meta:
         model = Documento
