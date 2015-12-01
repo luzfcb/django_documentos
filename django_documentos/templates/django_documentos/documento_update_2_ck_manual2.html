@@ -35,8 +35,8 @@
     {#    <link type="text/css" href="{% static "django_documentos/bootstrap/bootstrap-3.3.5-dist/css/bootstrap.min.css" %}"#}
     {#          rel="stylesheet">#}
 
-{#    <link type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"#}
-{#          rel="stylesheet">#}
+    {#    <link type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"#}
+    {#          rel="stylesheet">#}
     <link type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css"
           rel="stylesheet">
 
@@ -147,8 +147,9 @@
     {#    #}
     <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-    {#    <script src="http://cdn.ckeditor.com/4.5.2/full-all/ckeditor.js"></script>#}
-    <script src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
+{#    <script src="http://cdn.ckeditor.com/4.5.2/full-all/ckeditor.js"></script>#}
+    {#    <script src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>#}
+    <script src="{% static "django_documentos/ckeditor/4.5.5/ckeditor-full-min/ckeditor.js" %}"></script>
 
 </head>
 
@@ -247,12 +248,19 @@
     var ckeditor_config = {
         extraPlugins: [
             'sharedspace',
-            'save',
+{#            'save',#}
             'autolink',
-            'autogrow'
+            'autogrow',
+            "base64image",
+            "dialog", // required by base64image
+            "dialogui", // required by base64image
+            "maiuscula",
+            "extenso"
+
         ].join(),
-        removePlugins: 'resize',
-        'sharedSpaces': {
+        removePlugins: 'resize,maximize',
+        removeButtons: 'resize,Maximize',
+        sharedSpaces: {
             'top': 'top',
             'bottom': 'bottom'
         },
@@ -262,24 +270,28 @@
         contentsCss: '{% static "django_documentos/css/ckeditor_custom_styles.css" %}',
         {#        width: '100%',#}
         startupShowBorders: false,
-        toolbarGroups: [
-            {name: 'document', groups: ['mode', 'document', 'doctools']},
-            {name: 'clipboard', groups: ['clipboard', 'undo']},
-            {name: 'editing', groups: ['find', 'selection', 'spellchecker', 'editing']},
-            {name: 'forms', groups: ['forms']},
-            {#            '/',#}
-            {name: 'basicstyles', groups: ['basicstyles', 'cleanup']},
-            {name: 'paragraph', groups: ['list', 'indent', 'blocks', 'align', 'bidi', 'paragraph']},
-            {name: 'links', groups: ['links']},
-            {name: 'insert', groups: ['insert']},
+        autoGrow_onStartup: true,
+        toolbar: 'Basic',
+        toolbar_Basic: [
+            {name: 'clipboard', items: ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo']},
+            {name: 'editing', items: ['Scayt']},
+            {name: 'links', items: ['Link', 'Unlink', 'Anchor']},
+            {name: 'insert', items: ['base64image', 'Table', 'HorizontalRule', 'SpecialChar']},
+            {name: 'extra', items: ['Extenso', "Maiuscula", "Minuscula"]},
+            {name: 'document', items: ['Source']},
             '/',
-            {name: 'styles', groups: ['styles']},
-            {name: 'colors', groups: ['colors']},
-            {name: 'tools', groups: ['tools']},
-            {name: 'others', groups: ['others']},
-            {name: 'about', groups: ['about']}
+            {
+                name: 'basicstyles',
+                items: ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat']
+            },
+            {name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote']},
+            {name: 'styles', items: ['Styles', 'Format']},
+            {name: 'about', items: ['About']}
+
         ],
-        removeButtons: 'Source,Save,NewPage,Preview,Print,Templates,Form,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,CreateDiv,BidiLtr,BidiRtl,Language,Anchor,Unlink,Link,Flash,Smiley,SpecialChar,Iframe,About'
+        base64image_disableUrlImages: true
+
+
     };
 
     function startCkEditor() {
@@ -293,52 +305,12 @@
 
     startCkEditor();
 
-    function teste(evt) {
-        var editor = evt.editor,
-                range = editor.createRange();
-        editor.focus();
-
-        range.moveToElementEditEnd(editor.editable());
-        range.select();
-        range.scrollIntoView();
-
-    }
-
-    function teste2(ev){
-        ev.editor.focus();
-
-        var s = ev.editor.getSelection(); // getting selection
-        var selected_ranges = s.getRanges(); // getting ranges
-        var node = selected_ranges[0].startContainer; // selecting the starting node
-        var parents = node.getParents(true);
-
-        node = parents[parents.length - 2].getFirst();
-
-        while (true) {
-            var x = node.getNext();
-            if (x == null) {
-                break;
-            }
-            node = x;
-        }
-
-        s.selectElement(node);
-        selected_ranges = s.getRanges();
-        selected_ranges[0].collapse(false);  //  false collapses the range to the end of the selected node, true before the node.
-        s.selectRanges(selected_ranges);  // putting the current selection there
-    }
-
 
     CKEDITOR.on('instanceReady', function (evt) {
         var ckeditor_first_div_id = "cke_" + evt.editor.name;
         var selector_str = "#content-section " + "#" + ckeditor_first_div_id;
         {#        console.log('$("' + selector_str + '")');#}
         {#        $(selector_str).addClass("mynewcssclass");#}
-        if (evt.editor.name === "id_conteudo") {
-{#            teste(evt);#}
-            teste2(evt);
-            console.log('id_conteudo')
-        }
         evt.editor.execCommand('autogrow');
 
     });

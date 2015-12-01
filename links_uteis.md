@@ -59,3 +59,7 @@ http://stackoverflow.com/questions/15313933/how-to-place-the-caret-at-the-end-in
 http://stackoverflow.com/questions/30220508/ckeditor-with-noneditable-islands/30222394#30222394
 
 http://stackoverflow.com/questions/18830715/howto-trigger-source-button-in-ckeditor-by-another-button-which-is-outside-the/18831214#18831214
+
+
+Javascript capfirst:
+http://stackoverflow.com/questions/1026069/capitalize-the-first-letter-of-string-in-javascript

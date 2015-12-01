@@ -10,7 +10,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import HTML, Submit
 from django_documentos.widgets import SplitedHashField3
 from .models import Documento
-from .samples_html import CABECALHO, TITULO, RODAPE
+from .samples_html import CABECALHO, TITULO, RODAPE, BIG_SAMPLE_HTML
 
 
 class SaveHelper(FormHelper):
@@ -99,7 +99,7 @@ class DocumentoFormUpdate2(SaveHelperFormMixin, forms.ModelForm):
 
     cabecalho = forms.CharField(widget=forms.Textarea(attrs={'data-djckeditor': 'true'}), label='', initial=CABECALHO)
     titulo = forms.CharField(widget=forms.Textarea(attrs={'data-djckeditor': 'true'}), label='', initial=TITULO)
-    conteudo = forms.CharField(widget=CkeditorWidgetNew, label='')
+    conteudo = forms.CharField(widget=CkeditorWidgetNew, label='', initial=BIG_SAMPLE_HTML)
     rodape = forms.CharField(widget=forms.Textarea(attrs={'data-djckeditor': 'true'}), label='', initial=RODAPE)
 
     class Meta:
