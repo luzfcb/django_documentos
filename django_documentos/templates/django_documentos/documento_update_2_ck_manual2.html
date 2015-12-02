@@ -258,7 +258,7 @@
             "extenso"
 
         ].join(),
-        removePlugins: 'resize,maximize',
+        removePlugins: 'resize,maximize,magicline',
         removeButtons: 'resize,Maximize',
         sharedSpaces: {
             'top': 'top',
@@ -270,7 +270,9 @@
         contentsCss: '{% static "django_documentos/css/ckeditor_custom_styles.css" %}',
         {#        width: '100%',#}
         startupShowBorders: false,
-        autoGrow_onStartup: true,
+{#        autoGrow_onStartup: true,#}
+        autoGrow_minHeight: 0,
+        autoGrow_bottomSpace: 0,
         toolbar: 'Basic',
         toolbar_Basic: [
             {name: 'clipboard', items: ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo']},
@@ -311,7 +313,10 @@
         var selector_str = "#content-section " + "#" + ckeditor_first_div_id;
         {#        console.log('$("' + selector_str + '")');#}
         {#        $(selector_str).addClass("mynewcssclass");#}
-        evt.editor.execCommand('autogrow');
+        if(evt.editor.name === "id_conteudo"){
+            alert("Treco chato")
+        }
+{#        evt.editor.execCommand('autogrow');#}
 
     });
     function beforeUnload(evt) {
