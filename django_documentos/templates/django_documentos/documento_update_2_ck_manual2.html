@@ -147,7 +147,7 @@
     {#    #}
     <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-{#    <script src="http://cdn.ckeditor.com/4.5.2/full-all/ckeditor.js"></script>#}
+    {#    <script src="http://cdn.ckeditor.com/4.5.2/full-all/ckeditor.js"></script>#}
     {#    <script src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>#}
     <script src="{% static "django_documentos/ckeditor/4.5.5/ckeditor-full-min/ckeditor.js" %}"></script>
 
@@ -184,9 +184,7 @@
                     <div class="center-block a4-pagina">
                         <div class="col-md-12">
                             <form role="form" method="post" id="formulario"
-                                  action="
-
-                                          {% url 'documentos:update2' object.pk %}{% if popup or next_page_url %}?{% endif %}{% if popup %}popup=1{% endif %}{% if next_page_url %}&{{ next_kwarg_name }}={{ next_page_url }}{% endif %}">
+                                  action="{% url 'documentos:update2' object.pk %}{% if popup or next_page_url %}?{% endif %}{% if popup %}popup=1{% endif %}{% if next_page_url %}&{{ next_kwarg_name }}={{ next_page_url }}{% endif %}">
 
                                 <div class="form-group ">
                                     {{ form.cabecalho }}
@@ -237,7 +235,7 @@
 
 <script>
     function get_ckenabledElementIds() {
-        return $('[data-djckeditor]').map(function (i) {
+        return $('[data-djckeditor]').map(function () {
             return this.id;
         }).get();
     }
@@ -248,7 +246,7 @@
     var ckeditor_config = {
         extraPlugins: [
             'sharedspace',
-{#            'save',#}
+            {#            'save',#}
             'autolink',
             'autogrow',
             "base64image",
@@ -264,13 +262,9 @@
             'top': 'top',
             'bottom': 'bottom'
         },
-        {#        addCss: '.fabio .cke_reset { border: none; box-shadow: none; }',#}
-        {#        autoGrow_onStartup: true,#}
-        {#        contentsCss: 'html, iframe, body {overflow:hidden;outline: none;}',#}
         contentsCss: '{% static "django_documentos/css/ckeditor_custom_styles.css" %}',
-        {#        width: '100%',#}
         startupShowBorders: false,
-{#        autoGrow_onStartup: true,#}
+        autoGrow_onStartup: true,
         autoGrow_minHeight: 0,
         autoGrow_bottomSpace: 0,
         toolbar: 'Basic',
@@ -291,7 +285,7 @@
             {name: 'about', items: ['About']}
 
         ],
-        base64image_disableUrlImages: true
+        base64image_disableUrlImages: true,
 
 
     };
@@ -311,19 +305,22 @@
     CKEDITOR.on('instanceReady', function (evt) {
         var ckeditor_first_div_id = "cke_" + evt.editor.name;
         var selector_str = "#content-section " + "#" + ckeditor_first_div_id;
-        {#        console.log('$("' + selector_str + '")');#}
-        {#        $(selector_str).addClass("mynewcssclass");#}
-        if(evt.editor.name === "id_conteudo"){
-            alert("Treco chato")
+{#        console.log('$("' + selector_str + '")');#}
+        $(selector_str).addClass("mynewcssclass");
+        if (evt.editor.name === "id_conteudo") {
+{#            alert("Treco chato")#}
         }
-{#        evt.editor.execCommand('autogrow');#}
+        evt.editor.fire( 'click' );
+        evt.editor.execCommand('autogrow');
 
     });
     function beforeUnload(evt) {
         var item_nao_salvo = false;
         for (var instance in CKEDITOR.instances) {
-            if (CKEDITOR.instances[instance].checkDirty()) {
-                item_nao_salvo = true;
+            if (CKEDITOR.instances.hasOwnProperty(instance)) {
+                if (CKEDITOR.instances[instance].checkDirty()) {
+                    item_nao_salvo = true;
+                }
             }
         }
         if (item_nao_salvo) {
@@ -376,15 +373,7 @@
             var id_elemento = "" + instance;
             conteudo_modificado[id_elemento] = false;
             CKEDITOR.instances[id_elemento].on('change', function () {
-
-                if (CKEDITOR.instances[this.name].checkDirty()) {
-                    conteudo_modificado[this.name] = true;
-
-                } else {
-                    conteudo_modificado[this.name] = false;
-
-
-                }
+                conteudo_modificado[this.name] = !!CKEDITOR.instances[this.name].checkDirty();
                 ativarDesativarSalvar();
 
             });
@@ -419,7 +408,9 @@
             }
 
             for (var instance in CKEDITOR.instances) {
-                CKEDITOR.instances[instance].updateElement();
+                if (CKEDITOR.instances.hasOwnProperty(instance)) {
+                    CKEDITOR.instances[instance].updateElement();
+                }
             }
             // Get some values from elements on the page:
             var $form = $(this);
@@ -468,8 +459,10 @@
                 var content = $(data);
                 console.log($(data));
                 for (var instance in CKEDITOR.instances) {
-                    CKEDITOR.instances[instance].resetUndo();
-                    conteudo_modificado[instance] = false;
+                    if (CKEDITOR.instances.hasOwnProperty(instance)) {
+                        CKEDITOR.instances[instance].resetUndo();
+                        conteudo_modificado[instance] = false;
+                    }
                 }
                 ativarDesativarSalvar();
                 var mensagem = "Documento N° " + data.document_number + " salvo com sucesso!";
@@ -581,6 +574,13 @@
 
         $(".maindiv").fadeIn("fast");
         corrigir_padding_conteudo();
+        for (var instance in CKEDITOR.instances) {
+            if(CKEDITOR.instances.hasOwnProperty(instance)){
+                //instance.editor.fire( 'click' );
+                CKEDITOR.instances[instance].execCommand('autogrow');
+            }
+
+        }
     });
 </script>
 {#<script>#}
