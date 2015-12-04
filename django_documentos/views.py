@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function, unicode_literals
-
 import json
-
 import status
 from captcha.helpers import captcha_image_url
 from captcha.models import CaptchaStore
@@ -17,13 +15,11 @@ from django.shortcuts import redirect, resolve_url
 from django.utils import six
 from django.views import generic
 from phantom_pdf import render_to_pdf
-
 from simple_history.views import HistoryRecordListViewMixin, RevertFromHistoryRecordViewMixin
-
 from .forms import (
     AssinarDocumento, DocumentoFormCreate, DocumentoFormUpdate2, DocumentoRevertForm, DocumetoValidarForm,
 )
-from .models import Documento
+from .models import Documento, DocumentoLock
 from .samples_html import BIG_SAMPLE_HTML  # noqa
 from .utils import add_querystrings_to_url
 
@@ -583,7 +579,31 @@ class AjaxFormPostMixin(object):
         return response
 
 
+class DocumentoLockMixin(object):
+    def get(self, request, *args, **kwargs):
+        ret = super(DocumentoLockMixin, self).get(request, *args, **kwargs)
+        if self.object and self.object.esta_ativo:
+            documento_lock = DocumentoLock.objects.filter(documento=self.self.object)
+            if documento_lock:
+                detail_url = reverse('documentos:detail', kwargs={'pk': self.object.pk})
+                messages.add_message(request, messages.INFO,
+                                     '{}'.format(
+                                         self.__class__.__name__))
+                return redirect(detail_url, permanent=False)
+            else:
+                documento_lock = DocumentoLock.objects.create(documento=self.self.object, bloqueado_por=request.user,
+                                                              session_key=request.session.session_key,
+                                                              expire_date=request.session.expire_date)
+        return ret
+
+    def form_valid(self, form):
+        ret = super(AjaxUpdateTesteApagar, self).form_valid(form)
+        documento_lock = DocumentoLock.objects.get(documento=self.self.object).delete()
+        return ret
+
+
 class AjaxUpdateTesteApagar(AjaxFormPostMixin,
+                            DocumentoLockMixin,
                             DocumentoAssinadoRedirectMixin,
                             AuditavelViewMixin,
                             NextURLMixin,

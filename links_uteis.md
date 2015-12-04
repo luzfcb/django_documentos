@@ -63,3 +63,8 @@ http://stackoverflow.com/questions/18830715/howto-trigger-source-button-in-ckedi
 
 Javascript capfirst:
 http://stackoverflow.com/questions/1026069/capitalize-the-first-letter-of-string-in-javascript
+
+
+Django sessão
+
+http://stackoverflow.com/questions/3024153/how-to-expire-session-due-to-inactivity-in-django

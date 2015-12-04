@@ -1,18 +1,15 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function, unicode_literals
-
 from django.contrib.auth.hashers import SHA1PasswordHasher
 from django.db import models
 from django.db.models import Max
 from django.utils import timezone
 from django.utils.six import python_2_unicode_compatible
-
 from ckeditor import fields as ckeditor_fields
 # from redactor.fields import RedactorField
 from django_documentos.utils import identificador
 from simple_history.models import HistoricalRecords
 from simple_history.views import MissingHistoryRecordsField
-
 from .settings import USER_MODEL
 
 
@@ -342,3 +339,18 @@ class Documento(models.Model):
             ("pode_reverter_para_uma_versao_anterior_documento", "Pode Reverter documento para uma versão anterior"),
             ("pode_imprimir", "Pode Imprimir documento"),
         )
+
+
+class DocumentoLock(models.Model):
+    bloqueado_por = models.ForeignKey(to=USER_MODEL,
+                                      related_name="%(app_label)s_%(class)s_bloqueado_por", null=True,
+                                      blank=True, on_delete=models.SET_NULL, editable=False)
+
+    session_key = models.CharField('session key', max_length=40, null=True,
+                                   blank=True, editable=False)
+
+    expire_date = models.DateTimeField('expire date')
+
+    documento = models.ForeignKey(to=Documento,
+                                  related_name="%(app_label)s_%(class)s_document", null=True,
+                                  blank=True, on_delete=models.SET_NULL, editable=False, db_index=True)
