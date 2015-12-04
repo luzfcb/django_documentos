@@ -68,3 +68,8 @@ http://stackoverflow.com/questions/1026069/capitalize-the-first-letter-of-string
 Django sessão
 
 http://stackoverflow.com/questions/3024153/how-to-expire-session-due-to-inactivity-in-django
+
+o Django configura a sessão por padrão para continuar ativa por 2 semanas
+
+https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-SESSION_COOKIE_AGE
+https://docs.djangoproject.com/en/dev/ref/settings/#session-save-every-request
