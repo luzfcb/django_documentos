@@ -73,3 +73,5 @@ o Django configura a sessão por padrão para continuar ativa por 2 semanas
 
 https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-SESSION_COOKIE_AGE
 https://docs.djangoproject.com/en/dev/ref/settings/#session-save-every-request
+
+https://bitbucket.org/ferranp/django-last-seen/src/

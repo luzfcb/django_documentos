@@ -284,8 +284,8 @@ class CloseView(NextURLMixin, generic.TemplateView):
 
 
 class DocumentoDetailView(NextURLMixin, PopupMixin, generic.DetailView):
-    # template_name = 'django_documentos/documento_detail.html'
-    template_name = 'django_documentos/documento_validacao_detail.html'
+    template_name = 'django_documentos/documento_detail.html'
+    # template_name = 'django_documentos/documento_validacao_detail.html'
     model = Documento
 
     def get_context_data(self, **kwargs):
@@ -583,22 +583,29 @@ class DocumentoLockMixin(object):
     def get(self, request, *args, **kwargs):
         ret = super(DocumentoLockMixin, self).get(request, *args, **kwargs)
         if self.object and self.object.esta_ativo:
-            documento_lock = DocumentoLock.objects.filter(documento=self.self.object)
-            if documento_lock:
+            try:
+                documento_lock = DocumentoLock.objects.get(documento=self.object)
+            except DocumentoLock.DoesNotExist:
+                documento_lock = None
+
+            if documento_lock and not documento_lock.bloqueado_por.pk == request.user.pk:
                 detail_url = reverse('documentos:detail', kwargs={'pk': self.object.pk})
                 messages.add_message(request, messages.INFO,
                                      '{}'.format(
                                          self.__class__.__name__))
                 return redirect(detail_url, permanent=False)
             else:
-                documento_lock = DocumentoLock.objects.create(documento=self.self.object, bloqueado_por=request.user,
-                                                              session_key=request.session.session_key,
-                                                              expire_date=request.session.expire_date)
+                from django.contrib.sessions.models import Session
+                session = Session.objects.get(session_key=request.session.session_key)
+                documento_lock = DocumentoLock.objects.create(documento=self.object,
+                                                              bloqueado_por=request.user,
+                                                              session_key=session.session_key,
+                                                              expire_date=session.expire_date)
         return ret
 
     def form_valid(self, form):
-        ret = super(AjaxUpdateTesteApagar, self).form_valid(form)
-        documento_lock = DocumentoLock.objects.get(documento=self.self.object).delete()
+        ret = super(DocumentoLockMixin, self).form_valid(form)
+        # documento_lock = DocumentoLock.objects.get(documento=self.object).delete()
         return ret
 
 
