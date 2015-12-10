@@ -75,3 +75,13 @@ https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-SESSION_COOKIE_A
 https://docs.djangoproject.com/en/dev/ref/settings/#session-save-every-request
 
 https://bitbucket.org/ferranp/django-last-seen/src/
+
+
+Evitar edição simuntanea:
+
+https://github.com/theatlantic/django-locking
+
+https://github.com/saxix/django-concurrency
+
+https://github.com/gavinwahl/django-optimistic-lock
+
