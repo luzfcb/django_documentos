@@ -184,7 +184,8 @@
                     <div class="center-block a4-pagina">
                         <div class="col-md-12">
                             <form role="form" method="post" id="formulario"
-                                  action="{% url 'documentos:update2' object.pk %}{% if popup or next_page_url %}?{% endif %}{% if popup %}popup=1{% endif %}{% if next_page_url %}&{{ next_kwarg_name }}={{ next_page_url }}{% endif %}">
+                                  action="
+                                          {% url 'documentos:update2' object.pk %}{% if popup or next_page_url %}?{% endif %}{% if popup %}popup=1{% endif %}{% if next_page_url %}&{{ next_kwarg_name }}={{ next_page_url }}{% endif %}">
 
                                 <div class="form-group ">
                                     {{ form.cabecalho }}
@@ -198,6 +199,7 @@
                                 <div class="form-group">
                                     {{ form.rodape }}
                                 </div>
+                                <input type="submit" value="">
                             </form>
                         </div>
                     </div>
@@ -305,12 +307,12 @@
     CKEDITOR.on('instanceReady', function (evt) {
         var ckeditor_first_div_id = "cke_" + evt.editor.name;
         var selector_str = "#content-section " + "#" + ckeditor_first_div_id;
-{#        console.log('$("' + selector_str + '")');#}
+        {#        console.log('$("' + selector_str + '")');#}
         $(selector_str).addClass("mynewcssclass");
         if (evt.editor.name === "id_conteudo") {
-{#            alert("Treco chato")#}
+            {#            alert("Treco chato")#}
         }
-        evt.editor.fire( 'click' );
+        evt.editor.fire('click');
         evt.editor.execCommand('autogrow');
 
     });
@@ -326,6 +328,16 @@
         if (item_nao_salvo) {
             return evt.returnValue = "{% trans "O documento possui modificações e ainda não foi salvo" %}";
         }
+
+        var newForm = $('<form>', {
+            'action': $('#formulario').attr('action'),
+            'id': 'unlock'
+        }).append($('<input>', {
+            'name': 'desbloquear',
+            'value': 'agora',
+            'type': 'hidden'
+        }));
+        newForm.submit();
     }
 
     {% if not debug %}
@@ -575,7 +587,7 @@
         $(".maindiv").fadeIn("fast");
         corrigir_padding_conteudo();
         for (var instance in CKEDITOR.instances) {
-            if(CKEDITOR.instances.hasOwnProperty(instance)){
+            if (CKEDITOR.instances.hasOwnProperty(instance)) {
                 //instance.editor.fire( 'click' );
                 CKEDITOR.instances[instance].execCommand('autogrow');
             }

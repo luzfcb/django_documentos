@@ -342,6 +342,7 @@ class Documento(models.Model):
 
 
 class DocumentoLock(models.Model):
+    bloqueado_em = models.DateTimeField(default=timezone.now, blank=True, editable=False)
     bloqueado_por = models.ForeignKey(to=USER_MODEL,
                                       related_name="%(app_label)s_%(class)s_bloqueado_por", null=True,
                                       blank=True, on_delete=models.SET_NULL, editable=False)

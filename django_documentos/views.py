@@ -585,27 +585,19 @@ class DocumentoLockMixin(object):
         if self.object and self.object.esta_ativo:
             try:
                 documento_lock = DocumentoLock.objects.get(documento=self.object)
+                if documento_lock and not documento_lock.bloqueado_por.pk == request.user.pk:
+                    detail_url = reverse('documentos:detail', kwargs={'pk': self.object.pk})
+                    messages.add_message(request, messages.INFO,
+                                         'Documento está sendo editado por {} - Disponivel somente para visualização'.format(
+                                             self.__class__.__name__))
+                    return redirect(detail_url, permanent=False)
             except DocumentoLock.DoesNotExist:
-                documento_lock = None
-
-            if documento_lock and not documento_lock.bloqueado_por.pk == request.user.pk:
-                detail_url = reverse('documentos:detail', kwargs={'pk': self.object.pk})
-                messages.add_message(request, messages.INFO,
-                                     '{}'.format(
-                                         self.__class__.__name__))
-                return redirect(detail_url, permanent=False)
-            else:
                 from django.contrib.sessions.models import Session
                 session = Session.objects.get(session_key=request.session.session_key)
                 documento_lock = DocumentoLock.objects.create(documento=self.object,
                                                               bloqueado_por=request.user,
                                                               session_key=session.session_key,
                                                               expire_date=session.expire_date)
-        return ret
-
-    def form_valid(self, form):
-        ret = super(DocumentoLockMixin, self).form_valid(form)
-        # documento_lock = DocumentoLock.objects.get(documento=self.object).delete()
         return ret
 
 
