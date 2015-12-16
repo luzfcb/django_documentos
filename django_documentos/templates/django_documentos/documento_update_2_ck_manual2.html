@@ -185,6 +185,12 @@
                         <div class="col-md-12">
                             <form role="form" method="post" id="formulario"
                                   action="
+
+
+
+
+
+
                                           {% url 'documentos:update2' object.pk %}{% if popup or next_page_url %}?{% endif %}{% if popup %}popup=1{% endif %}{% if next_page_url %}&{{ next_kwarg_name }}={{ next_page_url }}{% endif %}">
 
                                 <div class="form-group ">
@@ -199,7 +205,6 @@
                                 <div class="form-group">
                                     {{ form.rodape }}
                                 </div>
-                                <input type="submit" value="">
                             </form>
                         </div>
                     </div>
@@ -329,24 +334,68 @@
             return evt.returnValue = "{% trans "O documento possui modificações e ainda não foi salvo" %}";
         }
 
-        var newForm = $('<form>', {
-            'action': $('#formulario').attr('action'),
+
+        // Get some values from elements on the page:
+        var $unlockform = $('<form>', {
+            'action': $('#formulario').attr('action').replace(/\s/g, ""),
             'id': 'unlock'
         }).append($('<input>', {
             'name': 'desbloquear',
             'value': 'agora',
             'type': 'hidden'
         }));
-        newForm.submit();
+        $unlockform.submit(function (event) {
+                    // Stop form from submitting normally
+                    event.preventDefault();
+
+                    var conteudo = $unlockform.serializeArray();
+                    var url = $unlockform.attr("action");
+
+                    // Send the data using post
+                    // parametros url, data, callback, type
+                    // sendo que callback é sucess
+                    var posting = $.post(url, conteudo, 'JSON');
+
+                    // Put the results in a div
+                    posting.fail(function (jqXHR, textStatus, errorThrown) {
+
+                        var errors = jqXHR.responseJSON;
+
+                        console.log(errors);
+                        var msg = "Erro ao salvar documento" + errors.document_number + "\n";
+                        humane.log(msg, {
+                            timeout: 2500,
+                            clickToClose: true,
+                            addnCls: 'humane-error'
+                        });
+                    });
+                    // Put the results in a div
+                    posting.done(function (data, textStatus, jqXHR) {
+                        console.log("done data:", data);
+                        console.log("done textStatus:", textStatus);
+                        console.log("done jqXHR:", jqXHR);
+                        var content = $(data);
+
+                    });
+                    posting.always(function (data, textStatus, errorThrown) {
+                        console.log("always");
+
+                    });
+                }
+        );
+        $unlockform.submit();
+
+        alert('alguma coisa');
+
     }
 
-    {% if not debug %}
+{#    {% if not debug %}#}
         if (window.addEventListener) {
             window.addEventListener('beforeunload', beforeUnload, false);
         } else {
             window.attachEvent('onbeforeunload', beforeUnload);
         }
-    {% endif %}
+{#    {% endif %}#}
 
 
 
@@ -427,7 +476,7 @@
             // Get some values from elements on the page:
             var $form = $(this);
             var conteudo = $form.serializeArray();
-            var url = $form.attr("action");
+            var url = $form.attr("action").replace(/\s/g, "");
 
             clear_form_field_errors($form);
             requestRunning = true;

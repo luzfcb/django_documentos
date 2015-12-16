@@ -579,7 +579,7 @@ class AjaxFormPostMixin(object):
         return response
 
 
-class DocumentoLockMixin(object):
+class DocumentoLockMixin(generic.UpdateView, object):
     def get(self, request, *args, **kwargs):
         ret = super(DocumentoLockMixin, self).get(request, *args, **kwargs)
         if self.object and self.object.esta_ativo:
@@ -598,7 +598,24 @@ class DocumentoLockMixin(object):
                                                               bloqueado_por=request.user,
                                                               session_key=session.session_key,
                                                               expire_date=session.expire_date)
+                print('Bloqueado documento: ', documento_lock.documento.pk)
+
         return ret
+
+    def post(self, request, *args, **kwargs):
+        if 'desbloquear' in request.POST:
+            try:
+                d = DocumentoLock.objects.get(documento=self.object)
+                d.delete()
+                print('Deletado: ', d)
+            except DocumentoLock.DoesNotExist:
+                print('Documento nao existe')
+
+
+        ret = super(DocumentoLockMixin, self).post(request, *args, **kwargs)
+
+        return ret
+
 
 
 class AjaxUpdateTesteApagar(AjaxFormPostMixin,
