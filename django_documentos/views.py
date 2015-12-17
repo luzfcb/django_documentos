@@ -153,11 +153,11 @@ class DocumentoListView(generic.ListView):
         qs = super(DocumentoListView, self).get_queryset()
         # if self.request.user.is_authenticated():
 
-        qs = qs.filter(
-            (
-                Q(criado_por_id=self.request.user.pk) | Q(assinado_por_id=self.request.user.pk)
-            )
-        ).order_by('assinado_por')
+        # qs = qs.filter(
+        #     (
+        #         Q(criado_por_id=self.request.user.pk) | Q(assinado_por_id=self.request.user.pk)
+        #     )
+        # ).order_by('assinado_por')
 
         return qs
 
@@ -589,7 +589,7 @@ class DocumentoLockMixin(generic.UpdateView, object):
                     detail_url = reverse('documentos:detail', kwargs={'pk': self.object.pk})
                     messages.add_message(request, messages.INFO,
                                          'Documento está sendo editado por {} - Disponivel somente para visualização'.format(
-                                             self.__class__.__name__))
+                                             request.user.username))
                     return redirect(detail_url, permanent=False)
             except DocumentoLock.DoesNotExist:
                 from django.contrib.sessions.models import Session
@@ -603,14 +603,13 @@ class DocumentoLockMixin(generic.UpdateView, object):
         return ret
 
     def post(self, request, *args, **kwargs):
-        if 'desbloquear' in request.POST:
+        if request.is_ajax() and 'desbloquear' in request.POST:
             try:
-                d = DocumentoLock.objects.get(documento=self.object)
+                d = DocumentoLock.objects.get(documento=self.get_object())
                 d.delete()
                 print('Deletado: ', d)
             except DocumentoLock.DoesNotExist:
                 print('Documento nao existe')
-
 
         ret = super(DocumentoLockMixin, self).post(request, *args, **kwargs)
 
