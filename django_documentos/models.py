@@ -346,8 +346,10 @@ class DocumentoLock(models.Model):
     bloqueado_por = models.ForeignKey(to=USER_MODEL,
                                       related_name="%(app_label)s_%(class)s_bloqueado_por", null=True,
                                       blank=True, on_delete=models.SET_NULL, editable=False)
-
+    bloqueado_por_user_name = models.CharField(blank=True, max_length=500, editable=False)
+    bloqueado_por_full_name = models.CharField(blank=True, max_length=500, editable=False)
     session_key = models.CharField('session key', max_length=40, null=True,
+
                                    blank=True, editable=False)
 
     expire_date = models.DateTimeField('expire date')
