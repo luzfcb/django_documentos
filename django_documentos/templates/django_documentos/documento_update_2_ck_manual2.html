@@ -188,9 +188,6 @@
 
 
 
-
-
-
                                           {% url 'documentos:update2' object.pk %}{% if popup or next_page_url %}?{% endif %}{% if popup %}popup=1{% endif %}{% if next_page_url %}&{{ next_kwarg_name }}={{ next_page_url }}{% endif %}">
 
                                 <div class="form-group ">
@@ -389,13 +386,13 @@
 
     }
 
-{#    {% if not debug %}#}
-        if (window.addEventListener) {
-            window.addEventListener('beforeunload', beforeUnload, false);
-        } else {
-            window.attachEvent('onbeforeunload', beforeUnload);
-        }
-{#    {% endif %}#}
+    {#    {% if not debug %}#}
+    if (window.addEventListener) {
+        window.addEventListener('beforeunload', beforeUnload, false);
+    } else {
+        window.attachEvent('onbeforeunload', beforeUnload);
+    }
+    {#    {% endif %}#}
 
 
 
@@ -643,6 +640,65 @@
 
         }
     });
+
+
+    // Get some values from elements on the page:
+    var $revalidatelockform = $('<form>', {
+        'action': $('#formulario').attr('action').replace(/\s/g, ""),
+        'id': 'revalidar'
+    }).append($('<input>', {
+        'name': 'revalidar',
+        'value': 'agora',
+        'type': 'hidden'
+    }));
+    $revalidatelockform.submit(function (event) {
+                // Stop form from submitting normally
+                event.preventDefault();
+
+                var conteudo = $revalidatelockform.serializeArray();
+                var url = $revalidatelockform.attr("action");
+
+                // Send the data using post
+                // parametros url, data, callback, type
+                // sendo que callback é sucess
+                var posting = $.post(url, conteudo, 'JSON');
+
+                // Put the results in a div
+                posting.fail(function (jqXHR, textStatus, errorThrown) {
+
+                    var errors = jqXHR.responseJSON;
+
+                    console.log(errors);
+                    var msg = "Erro ao salvar documento" + errors.document_number + "\n";
+                    humane.log(msg, {
+                        timeout: 2500,
+                        clickToClose: true,
+                        addnCls: 'humane-error'
+                    });
+                });
+                // Put the results in a div
+                posting.done(function (data, textStatus, jqXHR) {
+                    console.log("done data:", data);
+                    console.log("done textStatus:", textStatus);
+                    console.log("done jqXHR:", jqXHR);
+                    var content = $(data);
+
+                });
+                posting.always(function (data, textStatus, errorThrown) {
+                    console.log("always");
+
+                });
+            }
+    );
+
+    function revalidar(){
+        $revalidatelockform.submit();
+    }
+
+
+    var timeout = setTimeout(revalidar,  {{ revalidate_lock_at_every_x_seconds }} * 1000);
+
+
 </script>
 {#<script>#}
 {#    function resizeToMinimum() {#}

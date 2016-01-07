@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function, unicode_literals
 import json
-
-
 import datetime
 import status
 from captcha.helpers import captcha_image_url
@@ -12,6 +10,7 @@ from django.contrib.auth.models import AnonymousUser
 from django.core import signing
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse, reverse_lazy
+from django.db import transaction
 from django.utils import timezone
 from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
@@ -20,15 +19,21 @@ from django.utils import six
 from django.views import generic
 from phantom_pdf import render_to_pdf
 from simple_history.views import HistoryRecordListViewMixin, RevertFromHistoryRecordViewMixin
+from braces.views import LoginRequiredMixin
 from .forms import (
     AssinarDocumento, DocumentoFormCreate, DocumentoFormUpdate2, DocumentoRevertForm, DocumetoValidarForm,
 )
 from .models import Documento, DocumentoLock
 from .samples_html import BIG_SAMPLE_HTML  # noqa
 from .utils import add_querystrings_to_url
-
-
 # from .models import DocumentoConteudo
+
+# import the logging library
+import logging
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
+
 
 class AjaxableResponseMixin(object):
     """
@@ -583,35 +588,50 @@ class AjaxFormPostMixin(object):
         return response
 
 
-class DocumentoLockMixin(object):
+class DocumentoLockMixin(generic.UpdateView):
     expire_time_in_seconds = 30
+    revalidate_lock_at_every_x_seconds = 15
 
     def create_lock(self, request, *args, **kwargs):
         from django.contrib.sessions.models import Session
         session = Session.objects.get(session_key=request.session.session_key)
-        expira_em = timezone.now() + timezone.timedelta(seconds=self.expire_time_in_seconds)
 
-        documento_lock = DocumentoLock.objects.create(documento=self.object,
-                                                      bloqueado_por=request.user,
-                                                      bloqueado_por_user_name=request.user.username,
-                                                      bloqueado_por_full_name=request.user.get_full_name(),
-                                                      session_key=session.session_key,
-                                                      expire_date=expira_em)
-        print('Bloqueado documento: ', documento_lock.documento.pk)
+        with transaction.atomic():
+            expira_em = timezone.now() + timezone.timedelta(seconds=self.expire_time_in_seconds)
+
+            documento_lock = DocumentoLock.objects.create(documento=self.object,
+                                                          bloqueado_por=request.user,
+                                                          bloqueado_por_user_name=request.user.username,
+                                                          bloqueado_por_full_name=request.user.get_full_name(),
+                                                          session_key=session.session_key,
+                                                          expire_date=expira_em)
+            msg = 'Bloqueado documento: {}'.format(documento_lock.documento.pk)
+            logger.debug(msg)
+            print(msg)
 
     def delete_lock(self, request, agora=timezone.now(), *args, **kwargs):
-        try:
-            documento_lock = DocumentoLock.objects.get(documento=self.get_object())
-            if agora > documento_lock.expire_date:
-                documento_lock.delete()
-            if documento_lock.bloqueado_por.pk == request.user.pk:
-                documento_lock.delete()
-                print('Deletado: ', documento_lock)
-        except DocumentoLock.DoesNotExist:
-            print('Documento nao existe')
+        with transaction.atomic():
+            try:
+                documento_lock = DocumentoLock.objects.get(documento=self.get_object())
+                if agora > documento_lock.expire_date:
+                    documento_lock.delete()
+                elif documento_lock.bloqueado_por.pk == request.user.pk:
+                    documento_lock.delete()
+                    msg = 'Deletado bloqueado documento: {}'.format(documento_lock.documento.pk)
+                    print(msg)
+                    logger.debug(msg)
+            except DocumentoLock.DoesNotExist:
+                logger.debug('Documento nao existe')
+                print('Documento nao existe')
 
-    def update_lock(self, user):
-        pass
+    def update_lock(self, request):
+        with transaction.atomic():
+            documento_lock = DocumentoLock.objects.get(documento=self.object)
+
+            if documento_lock.bloqueado_por.pk == request.user.pk:
+                expira_em = timezone.now() + timezone.timedelta(seconds=self.expire_time_in_seconds)
+                documento_lock.expire_date = expira_em
+                documento_lock.save()
 
     def get(self, request, *args, **kwargs):
         original_response = super(DocumentoLockMixin, self).get(request, *args, **kwargs)
@@ -629,9 +649,11 @@ class DocumentoLockMixin(object):
 
                 if documento_lock and not documento_lock.bloqueado_por.pk == request.user.pk:
                     detail_url = reverse('documentos:detail', kwargs={'pk': self.object.pk})
-                    messages.add_message(request, messages.INFO,
-                                         'Documento está sendo editado por {} - Disponivel somente para visualização'.format(
-                                             documento_lock.bloqueado_por_full_name or documento_lock.bloqueado_por_user_name))
+                    msg = 'Documento está sendo editado por {} - Disponivel somente para visualização'.format(
+                        documento_lock.bloqueado_por_full_name or documento_lock.bloqueado_por_user_name)
+                    messages.add_message(request, messages.INFO, msg)
+                    logger.debug(msg)
+                    print(msg)
                     return redirect(detail_url, permanent=False)
             except DocumentoLock.DoesNotExist:
                 self.create_lock(request)
@@ -640,17 +662,39 @@ class DocumentoLockMixin(object):
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax() and 'revalidar' in request.POST:
-            datetime.timedelta(minutes=5)
-            pass
+            self.update_lock(request)
+            # if self.request.is_ajax():
+            #     obj = self.get_object()
+            #     data = {}
+            #     for field in self.document_json_fields:
+            #         data[field] = getattr(obj, field)
+            #     data['errors'] = form.errors
+            #     data['success_url'] = self.get_success_url()
+            #     return JsonResponse(data=data)
+            # return response
 
         if request.is_ajax() and 'desbloquear' in request.POST:
             self.delete_lock(request)
+            # retornar Ajax
+
         ret = super(DocumentoLockMixin, self).post(request, *args, **kwargs)
 
         return ret
 
+    def get_context_data(self, **kwargs):
+        context = super(DocumentoLockMixin, self).get_context_data(**kwargs)
+        revalidate = 15
 
-class AjaxUpdateTesteApagar(AjaxFormPostMixin,
+        if self.revalidate_lock_at_every_x_seconds and self.revalidate_lock_at_every_x_seconds <= self.expire_time_in_seconds / 2:
+            revalidate = self.revalidate_lock_at_every_x_seconds
+        context.update({
+            'revalidate_lock_at_every_x_seconds': revalidate
+        })
+        return context
+
+
+class AjaxUpdateTesteApagar(LoginRequiredMixin,
+                            AjaxFormPostMixin,
                             DocumentoLockMixin,
                             DocumentoAssinadoRedirectMixin,
                             AuditavelViewMixin,
