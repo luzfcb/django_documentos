@@ -21,6 +21,7 @@ from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.contrib.auth import views as auth_views
 
 from django_documentos import django_documentos_urls
 
@@ -37,6 +38,9 @@ urlpatterns = [
         ),
     url(r'^autocomplete/', include('autocomplete_light.urls')),
     url(r'', include('django.contrib.auth.urls')),
+
+
+    url(r'^accounts/login/$', auth_views.login),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -7,6 +7,13 @@ O que é e como funciona o tal de "Operational Transformation" que o google docs
 http://operational-transformation.github.io/index.html
 
 
+ContentEditable:
+
+https://medium.com/@sstur/the-dom-is-not-a-datastore-7a17b10d6705
+https://medium.com/content-uneditable/contenteditable-the-good-the-bad-and-the-ugly-261a38555e9c
+https://medium.com/content-uneditable/fixing-contenteditable-1a9a5073c35d
+
+
 page CSS
 http://codepen.io/rafaelcastrocouto/pen/LFAes/
 
