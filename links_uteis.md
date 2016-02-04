@@ -92,3 +92,12 @@ https://github.com/saxix/django-concurrency
 
 https://github.com/gavinwahl/django-optimistic-lock
 
+Javascript, detectar inatividade, (com suporte a multiplas abas/janelas)
+
+http://stackoverflow.com/a/9564811/2975300
+
+blogpost: http://www.paulirish.com/2009/jquery-idletimer-plugin/
+code: https://github.com/thorst/jquery-idletimer
+
+https://github.com/kidh0/jquery.idle
+
