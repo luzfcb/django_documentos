@@ -24,6 +24,7 @@ django-angular
 # django-ckeditor
 # -e git://github.com/django-ckeditor/django-ckeditor.git@master#egg=django-ckeditor
 -e git://github.com/luzfcb/django-ckeditor.git@update-to-4.5.4#egg=django-ckeditor
+-e git+https://github.com/luzfcb/luzfcb_dj_simplelock.git@master#egg=luzfcb_dj_simplelock
 
 django-wysiwyg
 django-model-utils
@@ -34,3 +35,5 @@ django-debug-toolbar
 django-autocomplete-light
 git+git://github.com/dcramer/django-devserver#egg=django-devserver
 line_profiler
+
+

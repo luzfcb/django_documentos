@@ -150,6 +150,7 @@
     {#    <script src="http://cdn.ckeditor.com/4.5.2/full-all/ckeditor.js"></script>#}
     {#    <script src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>#}
     <script src="{% static "django_documentos/ckeditor/4.5.5/ckeditor-full-min/ckeditor.js" %}"></script>
+    <script src="{% static "luzfcb_dj_simplelock/js/jquery_csrftoken.js" %}"></script>
 
 </head>
 
@@ -184,11 +185,7 @@
                     <div class="center-block a4-pagina">
                         <div class="col-md-12">
                             <form role="form" method="post" id="formulario"
-                                  action="
-
-
-
-                                          {% url 'documentos:update2' object.pk %}{% if popup or next_page_url %}?{% endif %}{% if popup %}popup=1{% endif %}{% if next_page_url %}&{{ next_kwarg_name }}={{ next_page_url }}{% endif %}">
+                                  action="{% url 'documentos:update2' object.pk %}{% if popup or next_page_url %}?{% endif %}{% if popup %}popup=1{% endif %}{% if next_page_url %}&{{ next_kwarg_name }}={{ next_page_url }}{% endif %}">
 
                                 <div class="form-group ">
                                     {{ form.cabecalho }}
@@ -330,59 +327,6 @@
         if (item_nao_salvo) {
             return evt.returnValue = "{% trans "O documento possui modificações e ainda não foi salvo" %}";
         }
-
-
-        // Get some values from elements on the page:
-        var $unlockform = $('<form>', {
-            'action': $('#formulario').attr('action').replace(/\s/g, ""),
-            'id': 'unlock'
-        }).append($('<input>', {
-            'name': 'desbloquear',
-            'value': 'agora',
-            'type': 'hidden'
-        }));
-        $unlockform.submit(function (event) {
-                    // Stop form from submitting normally
-                    event.preventDefault();
-
-                    var conteudo = $unlockform.serializeArray();
-                    var url = $unlockform.attr("action");
-
-                    // Send the data using post
-                    // parametros url, data, callback, type
-                    // sendo que callback é sucess
-                    var posting = $.post(url, conteudo, 'JSON');
-
-                    // Put the results in a div
-                    posting.fail(function (jqXHR, textStatus, errorThrown) {
-
-                        var errors = jqXHR.responseJSON;
-
-                        console.log(errors);
-                        var msg = "Erro ao salvar documento" + errors.document_number + "\n";
-                        humane.log(msg, {
-                            timeout: 2500,
-                            clickToClose: true,
-                            addnCls: 'humane-error'
-                        });
-                    });
-                    // Put the results in a div
-                    posting.done(function (data, textStatus, jqXHR) {
-                        console.log("done data:", data);
-                        console.log("done textStatus:", textStatus);
-                        console.log("done jqXHR:", jqXHR);
-                        var content = $(data);
-
-                    });
-                    posting.always(function (data, textStatus, errorThrown) {
-                        console.log("always");
-
-                    });
-                }
-        );
-        $unlockform.submit();
-
-        alert('alguma coisa');
 
     }
 
@@ -552,62 +496,6 @@
     });
 
 
-    // This function gets cookie with a given name
-    function getCookie(name) {
-        var cookieValue = null;
-        if (document.cookie && document.cookie != '') {
-            var cookies = document.cookie.split(';');
-            for (var i = 0; i < cookies.length; i++) {
-                var cookie = jQuery.trim(cookies[i]);
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
-
-    var csrftoken = getCookie('csrftoken');
-
-    /*
-     The functions below will create a header with csrftoken
-     */
-
-    function csrfSafeMethod(method) {
-        console.log('csrfSafeMethod');
-        // these HTTP methods do not require CSRF protection
-        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-    }
-
-    function sameOrigin(url) {
-        console.log('sameOrigin');
-        // test that a given url is a same-origin URL
-        // url could be relative or scheme relative or absolute
-        var host = document.location.host; // host + port
-        var protocol = document.location.protocol;
-        var sr_origin = '//' + host;
-        var origin = protocol + sr_origin;
-        // Allow absolute or scheme relative URLs to same origin
-        return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
-                (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
-                    // or any other URL that isn't scheme relative or absolute i.e relative.
-                !(/^(\/\/|http:|https:).*/.test(url));
-    }
-
-    $.ajaxSetup({
-        beforeSend: function (xhr, settings) {
-            console.log('beforeSend');
-            if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
-                // Send the token to same-origin, relative URLs only.
-                // Send the token only if the method warrants CSRF protection
-                // Using the CSRFToken value acquired earlier
-                xhr.setRequestHeader("X-CSRFToken", csrftoken);
-            }
-        }
-    });
-
 
 </script>
 
@@ -642,64 +530,11 @@
     });
 
 
-    // Get some values from elements on the page:
-    var $revalidatelockform = $('<form>', {
-        'action': $('#formulario').attr('action').replace(/\s/g, ""),
-        'id': 'revalidar'
-    }).append($('<input>', {
-        'name': 'revalidar',
-        'value': 'agora',
-        'type': 'hidden'
-    }));
-    $revalidatelockform.submit(function (event) {
-                // Stop form from submitting normally
-                event.preventDefault();
-
-                var conteudo = $revalidatelockform.serializeArray();
-                var url = $revalidatelockform.attr("action");
-
-                // Send the data using post
-                // parametros url, data, callback, type
-                // sendo que callback é sucess
-                var posting = $.post(url, conteudo, 'JSON');
-
-                // Put the results in a div
-                posting.fail(function (jqXHR, textStatus, errorThrown) {
-
-                    var errors = jqXHR.responseJSON;
-
-                    console.log(errors);
-                    var msg = "Erro ao salvar documento" + errors.document_number + "\n";
-                    humane.log(msg, {
-                        timeout: 2500,
-                        clickToClose: true,
-                        addnCls: 'humane-error'
-                    });
-                });
-                // Put the results in a div
-                posting.done(function (data, textStatus, jqXHR) {
-                    console.log("done data:", data);
-                    console.log("done textStatus:", textStatus);
-                    console.log("done jqXHR:", jqXHR);
-                    var content = $(data);
-
-                });
-                posting.always(function (data, textStatus, errorThrown) {
-                    console.log("always");
-
-                });
-            }
-    );
-
-    function revalidar(){
-        $revalidatelockform.submit();
-    }
-
-
-    var timeout = setTimeout(revalidar,  {{ revalidate_lock_at_every_x_seconds }} * 1000);
 
 
 </script>
+
+{% include 'luzfcb_dj_simplelock/dj_simplelock.html' %}
 {#<script>#}
 {#    function resizeToMinimum() {#}
 {#        var minimum = [878, 600];#}

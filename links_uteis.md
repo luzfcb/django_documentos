@@ -101,3 +101,6 @@ code: https://github.com/thorst/jquery-idletimer
 
 https://github.com/kidh0/jquery.idle
 
+Dicas uteis:
+
+http://bonsaiden.github.io/JavaScript-Garden/ptbr/

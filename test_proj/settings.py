@@ -42,6 +42,7 @@ INSTALLED_APPS = (
 )
 
 INSTALLED_APPS = INSTALLED_APPS + (
+    'luzfcb_dj_simplelock.apps.DjSimpleLockAppConfig',
     'autocomplete_light',
     'simple_history',
 
