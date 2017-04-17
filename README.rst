@@ -1,3 +1,6 @@
+.. image:: https://badge.waffle.io/luzfcb/django_documentos.png?label=ready&title=Ready 
+ :target: https://waffle.io/luzfcb/django_documentos
+ :alt: 'Stories in Ready'
 =============================
 django_documentos
 =============================
